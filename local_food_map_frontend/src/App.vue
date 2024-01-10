@@ -21,16 +21,16 @@ export default {
 </script>
 
 <style>
-  @font-face {
-  font-family:'BMHANNAPro';
-  src: url('assets/fonts/BMHANNAPro.ttf') format('truetype');
-  font-weight: 400;
-  }
-
 #app {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
   justify-content: space-between;
 }
+
+@font-face {
+  font-family: 'BMJUA';
+  src: url('./assets/fonts/BMJUA_ttf.ttf') format('truetype');
+}
+
 </style>

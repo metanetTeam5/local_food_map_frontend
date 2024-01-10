@@ -2,9 +2,11 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Home from '../views/Home.vue'
-import Login from '../views/Login.vue'
-import Join from '../views/Join.vue'
-import StoreMap from '../views/StoreMap.vue'
+import Login from '../views/login&join/Login.vue'
+import Join from '../views/login&join/Join.vue'
+import StoreMap from '../views/store/StoreMap.vue'
+import PasswordReset from '../views/login&join/PasswordReset.vue'
+import IdReset from '../views/login&join/IdReset.vue'
 
 Vue.use(Router)
 
@@ -29,6 +31,16 @@ export default new Router({
       path: '/map',
       name: 'MapPage',
       component: StoreMap
+    },
+    {
+      path: '/password-reset',
+      name: 'PasswordResetPage',
+      component: PasswordReset
+    },
+    {
+      path: '/id-reset',
+      name: 'IdResetPage',
+      component: IdReset
     }
   ]
 })

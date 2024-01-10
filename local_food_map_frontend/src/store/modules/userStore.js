@@ -12,41 +12,55 @@ const userStore = new Vuex.Store({
     userId: '',
     userEmail: '',
     token: '',
-    searchResults: [], // 검색 결과 상태
-
+    searchResults: [],
+    userProfileImg: '',
   },
   mutations: {
-    login: function (state, payload){
-        state.userId = payload.userId
-        state.userEmail = payload.userEmail
-        state.token = payload.token
-        
+    login(state, payload) {
+      state.userId = payload.userId;
+      state.userEmail = payload.userEmail;
+      state.token = payload.token;
+      state.userProfileImg = payload.userProfileImg;
     },
-
-    loginCheck: function (state) {
-        if (!state.token){
-            router.push({
-                name: 'UserLogin'
-            }).catch(error => {
-                console.log(error)
-            })
-        }
+    logout(state) {
+      state.userId = '';
+      state.userEmail = '';
+      state.token = '';
+      state.userProfileImg = '';
+    },
+    loginCheck(state) {
+      if (!state.token) {
+        router.push({
+          name: 'UserLogin',
+        }).catch(error => {
+          console.log(error);
+        });
+      }
     },
     setSearchResults(state, results) {
       state.searchResults = results;
     },
   },
+  getters: {
+    isLoggedIn(state) {
+      return !!state.token;
+    },
+    userProfileImg(state) {
+      return state.userProfileImg;
+    },
+    userId(state) {
+      return state.userId;
+    },
+    
+  },
   actions: {
     async searchPlaces({ commit }, searchQuery) {
       try {
-        
         var ps = new kakao.maps.services.Places();
         ps.keywordSearch(searchQuery, (data, status) => {
           if (status === kakao.maps.services.Status.OK) {
-            
             commit('setSearchResults', data);
           } else {
-            
             commit('setSearchResults', []);
           }
         });
@@ -55,7 +69,7 @@ const userStore = new Vuex.Store({
         commit('setSearchResults', []);
       }
     },
-  }
-});  
+  },
+});
 
 export default userStore;

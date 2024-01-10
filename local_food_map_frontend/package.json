@@ -1,5 +1,5 @@
 {
-  "name": "local-food-map",
+  "name": "local-asia-food-map",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -14,7 +14,6 @@
     "core-js": "^3.8.3",
     "swiper": "^11.0.5",
     "vue": "^2.7.16",
-    "vue-flickity": "^1.2.1",
     "vue-router": "^3.5.2",
     "vuex": "^3.6.2"
   },
