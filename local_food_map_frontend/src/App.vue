@@ -1,23 +1,36 @@
 <template>
   <div id="app">
-    <img src="./assets/logo.png">
+    <AppHeader/>
     <router-view/>
+    <AppFooter/>
   </div>
 </template>
 
 <script>
+import AppHeader from './components/common/Header.vue'
+import AppFooter from './components/common/Footer.vue'
+
+
 export default {
-  name: 'App'
+  name: 'App',
+  components: {
+    AppHeader,
+    AppFooter
+  }
 }
 </script>
 
 <style>
+  @font-face {
+  font-family:'BMHANNAPro';
+  src: url('assets/fonts/BMHANNAPro.ttf') format('truetype');
+  font-weight: 400;
+  }
+
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  justify-content: space-between;
 }
 </style>
