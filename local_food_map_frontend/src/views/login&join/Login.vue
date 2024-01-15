@@ -25,7 +25,7 @@
         <input
           type="email"
           v-model="loginData.email"
-          placeholder="이메일을 입력"
+          placeholder="이메일 입력"
         />
         <span class="input-icon"><i class="fa fa-envelope"></i></span>
       </div>
@@ -43,14 +43,21 @@
         <router-link to="/id-reset" class="reset-psw">아이디 찾기</router-link>
         <router-link to="/password-reset" class="reset-psw"
           >비밀번호 찾기</router-link
-        ><br><router-link to="/join" class="reset-psw"
-          >회원가입</router-link
-        >
-        
+        ><br /><router-link to="/join" class="reset-psw">회원가입</router-link>
       </div>
-      
+
+      <b-form-group id="input-group-3" class="saveid">
+        <b-form-checkbox
+          v-model="status"
+          value="remember"
+          unchecked-value="not_remember"
+        >
+          아이디 저장
+        </b-form-checkbox>
+      </b-form-group>
+
       <div class="seperator"><b>or</b></div>
-      
+
       <p>Social Login</p>
       <div class="social-icon">
         <button type="button">
@@ -65,7 +72,6 @@
 
 <script>
 import axios from "axios";
-import userStore from "../../store/modules/userStore";
 
 export default {
   name: "UserLogin",
@@ -76,7 +82,16 @@ export default {
         password: "",
       },
       loginType: "user",
+      status: "not_remember",
     };
+  },
+  created() {
+    if (localStorage.getItem("rememberid") !== null) {
+      this.status = "remember";
+      this.loginData.email = localStorage.getItem("rememberid");
+    } else {
+      this.status = "not_remember";
+    }
   },
   methods: {
     setLoginType(type) {
@@ -84,23 +99,33 @@ export default {
     },
     async submitForm() {
       try {
-        const endpoint = this.loginType === "user" 
-          ? process.env.VUE_APP_API_ENDPOINT_USER 
-          : process.env.VUE_APP_API_ENDPOINT_BUSINESS;
+        const endpoint =
+          this.loginType === "user"
+            ? process.env.VUE_APP_API_ENDPOINT_USER
+            : process.env.VUE_APP_API_ENDPOINT_BUSINESS;
 
         let response = await axios.post(endpoint, this.loginData);
+        sessionStorage.setItem("token", response.data.token);
+        sessionStorage.setItem("userId", response.data.userId);
+        sessionStorage.setItem("userEmail", response.data.userEmail);
 
-        userStore.commit("login", response.data);
-        console.log("로그인 성공");
-        this.$router.push({ name: "Home" });
+        this.checkRememberId();
+        this.$router.push({ name: "HomePage" });
+        this.$router.go(0);
       } catch (error) {
-        console.log("로그인 실패");
         if (error.response) {
           console.error("Error:", error.response.data);
-          alert("로그인 실패: " + error.response.data.message);
+          alert("로그인 실패: " + error.response.data);
         } else {
           console.error("Error:", error.message);
         }
+      }
+    },
+    checkRememberId() {
+      if (this.status == "not_remember") {
+        localStorage.removeItem("rememberid");
+      } else {
+        localStorage.setItem("rememberid", this.loginData.email);
       }
     },
   },
@@ -112,12 +137,9 @@ export default {
 };
 </script>
 
-
 <style>
-
-
-*{
-  font-family: 'BMHANNAPro';
+* {
+  font-family: "BMHANNAPro";
 }
 
 .user-type-buttons {
@@ -138,10 +160,9 @@ export default {
 }
 
 .user-type-btn:not(.active):hover {
-  background-color:  #fc8d05;
+  background-color: #fc8d05;
   color: rgb(0, 0, 0);
   letter-spacing: 1px;
- 
 }
 
 .user-type-btn.active {
@@ -151,7 +172,6 @@ export default {
 }
 
 .login-form {
-color: #000000;
   background: #fff;
   width: 450px;
   border-radius: 6px;
@@ -179,6 +199,7 @@ color: #000000;
 }
 
 .form-group {
+  color: #000000;
   float: left;
   width: 100%;
   margin: 0 0 15px;
@@ -211,16 +232,15 @@ color: #000000;
   color: #000000;
 }
 
-
 .login-form .login-btn {
-  background:#fff;
+  background: #fff;
   padding: 11px 50px;
   border-color: hsl(40, 91%, 86%);
   color: #5e5e5e;
   text-align: center;
   margin: 0 auto;
   font-size: 20px;
-  border: 3px solid  #fce205;
+  border: 3px solid #fce205;
   border-radius: 44px;
   width: 100%;
   height: 56px;
@@ -228,16 +248,16 @@ color: #000000;
 }
 
 .login-form .login-btn:hover {
-  background-color:  #fc8d05;
+  background-color: #fc8d05;
   border: none;
   color: #ffffff;
   letter-spacing: 2px;
-  transform: scale(1.2);
+  /* transform: scale(1.2); */
 }
 
-.login-form .login-btn:active {
+/* .login-form .login-btn:active {
   transform: scale(1.5);
-}
+} */
 
 .login-form .reset-psw {
   float: left;
@@ -248,12 +268,22 @@ color: #000000;
   text-align: center;
   margin-top: 11px;
 }
+.saveid {
+  float: right;
+  width: 100%;
+  text-decoration: none;
+  color: #e59e04;
+  font-size: 14px;
+  text-align: center;
+  margin-top: 11px;
+}
+
 .login-form .social-icon button {
   font-size: 20px;
   color: white;
   height: 50px;
   width: 50px;
-  background:  #fcd305;
+  background: #fcd305;
   border-radius: 60%;
   margin: 0px 10px;
   border: none;
@@ -265,7 +295,7 @@ color: #000000;
 .login-form .seperator {
   float: left;
   width: 100%;
-  border-top: 1px solid  #ffc30e;
+  border-top: 1px solid #ffc30e;
   text-align: center;
   margin: 50px 0 0;
 }
@@ -310,7 +340,6 @@ color: #000000;
   font-weight: bold;
 }
 
-
 .reset-links {
   display: flex;
   flex-direction: row;
@@ -320,7 +349,6 @@ color: #000000;
 .reset-psw {
   margin-right: 10px;
 }
-
 
 @media screen and (max-width: 767px) {
   .login-form {
