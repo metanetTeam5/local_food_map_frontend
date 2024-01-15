@@ -27,6 +27,13 @@ export default {
   min-height: 100vh;
   justify-content: space-between;
 }
+  
+@font-face {
+font-family:'BMHANNAPro';
+  src: url('assets/fonts/BMHANNAPro.ttf') format('truetype');
+  font-weight: 400;
+  }
+
 
 @font-face {
   font-family: 'BMJUA';
