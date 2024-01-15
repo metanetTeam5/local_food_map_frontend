@@ -7,6 +7,10 @@ import Join from "../views/login&join/Join.vue";
 import StoreMap from "../views/store/StoreMap.vue";
 import PasswordReset from "../views/login&join/PasswordReset.vue";
 import IdReset from "../views/login&join/IdReset.vue";
+import Reservation from "../views/reservation/Reservation.vue";
+import Payment from "../views/payment/Payment.vue";
+import Result from "../views/payment/Result.vue";
+import StoreDetail from "../views/store/StoreDetail.vue";
 import MemberMyPage from "../views/member/MemberMyPage";
 import MemberFavorites from "../views/member/MemberFavorites";
 
@@ -43,6 +47,26 @@ export default new Router({
       path: "/id-reset",
       name: "IdResetPage",
       component: IdReset,
+    },
+    {
+      path: "/reservation",
+      name: "ReservationPage",
+      component: Reservation,
+    },
+    {
+      path: "/payment",
+      name: "PaymentPage",
+      component: Payment,
+    },
+    {
+      path: "/store",
+      name: "StoreDetail",
+      component: StoreDetail,
+    },
+    {
+      path: "/result",
+      name: "ResultPage",
+      component: Result,
     },
     {
       path: "/mypage",
