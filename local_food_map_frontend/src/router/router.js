@@ -7,6 +7,9 @@ import Join from '../views/login&join/Join.vue'
 import StoreMap from '../views/store/StoreMap.vue'
 import PasswordReset from '../views/login&join/PasswordReset.vue'
 import IdReset from '../views/login&join/IdReset.vue'
+import Reservation from '../views/reservation/Reservation.vue'
+import Payment from'../views/payment/Payment.vue'
+import Result from'../views/payment/Result.vue'
 import StoreDetail from '../views/store/StoreDetail.vue'
 
 Vue.use(Router)
@@ -44,12 +47,25 @@ export default new Router({
       component: IdReset
     },
     {
+
       path: '/store',
       name: 'storeDetailPage',
       component: StoreDetail
     },
-    
 
-  
+      path:'/reservation',
+      name: 'ReservationPage',
+      component: Reservation
+    },
+    {
+      path:'/payment',
+      name: 'PaymentPage',
+      component: Payment
+    },
+    {
+      path:'/result',
+      name: 'ResultPage',
+      component: Result
+    }
   ]
 })
