@@ -22,6 +22,7 @@
             v-for="restaurant in searchResults"
             :key="restaurant.restId"
             class="list-group-item list-group-item-action py-3 lh-tight"
+            @click="goToStoreDetail(restaurant.restId)"
           >
             <div class="col-10 mb-1 small">
               <div class="sidebar-item">
