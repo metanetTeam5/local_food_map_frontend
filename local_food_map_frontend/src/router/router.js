@@ -7,10 +7,13 @@ import Join from '../views/login&join/Join.vue'
 import StoreMap from '../views/store/StoreMap.vue'
 import PasswordReset from '../views/login&join/PasswordReset.vue'
 import IdReset from '../views/login&join/IdReset.vue'
-import Reservation from '../views/reservation/Reservation.vue'
-import Payment from'../views/payment/Payment.vue'
-import Result from'../views/payment/Result.vue'
-import StoreDetail from '../views/store/StoreDetail.vue'
+import NoticeSearch from '../views/notice/NoticeSearch.vue'
+import NoticeDetail from '../views/notice/NoticeDetail.vue'
+import AdminLogin from '../views/admin/AdminLogin.vue'
+import AdminDashboard from '../views/admin/AdminDashboard.vue'
+import AdminNotice from '../views/admin/AdminNotice.vue'
+import AdminNoticeDetail from '../views/admin/AdminNoticeDetail.vue'
+import AdminNoticeEdit from '../views/admin/AdminNoticeEdit.vue'
 
 Vue.use(Router)
 
@@ -47,24 +50,41 @@ export default new Router({
       component: IdReset
     },
     {
-      path:'/reservation',
-      name: 'ReservationPage',
-      component: Reservation
+      path: '/notice',
+      name: 'Notice',
+      component: NoticeSearch
     },
     {
-      path:'/payment',
-      name: 'PaymentPage',
-      component: Payment
+      path: '/notice/:id',
+      name: 'NoticeDetail',
+      component: NoticeDetail,
+      props: true,
     },
     {
-      path:'/store',
-      name: 'StoreDetail',
-      component: StoreDetail
+      path: '/admin',
+      name: 'AdminLogin',
+      component: AdminLogin
     },
     {
-      path:'/result',
-      name: 'ResultPage',
-      component: Result
+      path: '/admin/dashboard',
+      name: 'AdminDashboard',
+      component: AdminDashboard
+    },
+    {
+      path: '/admin/notice',
+      name: 'AdminNotice',
+      component: AdminNotice
+    },
+    {
+      path: '/admin/notice/:id',
+      name: 'AdminNoticeDetail',
+      component: AdminNoticeDetail
+    },
+    {
+      path: '/admin/notice/edit/:id',
+      name: 'AdminNoticeEdit',
+      component: AdminNoticeEdit,
+      props: true
     }
   ]
 })
