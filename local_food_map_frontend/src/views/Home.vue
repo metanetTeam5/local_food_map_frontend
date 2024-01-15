@@ -19,7 +19,7 @@
       </div>
       <div class="button-container">
         <router-link to="/map" class="round-button">지도에서 검색</router-link>
-        <button class="round-button">현 위치로 설정</button>
+        <router-link to="/" class="round-button">현 위치로 설정</router-link>
       </div>
     </div>
   </div>
