@@ -1,7 +1,6 @@
 <template>
   <div class="container-fluid">
     <div class="row">
-      <!-- 사이드바 영역 -->
       <div
         class="d-flex flex-column align-items-stretch flex-shrink-0 bg-white"
         style="width: 380px"
@@ -16,9 +15,12 @@
           <span class="fs-5 fw-semibold">List group</span>
         </a>
         <div class="list-group list-group-flush border-bottom scrollarea">
-          <!-- 각 list-group-item 요소들 -->
+          <div class="sidebar-search-result" v-if="searchResults.length === 0">
+            검색 결과가 없습니다.
+          </div>
           <a
-            href="#"
+            v-for="restaurant in searchResults"
+            :key="restaurant.restId"
             class="list-group-item list-group-item-action py-3 lh-tight"
           >
             <div class="col-10 mb-1 small">
@@ -27,166 +29,25 @@
                   <div
                     class="d-flex w-100 align-items-center justify-content-between"
                   >
-                    <strong class="mb-1">돈천동돈까스</strong>
+                    <strong class="mb-1">{{ restaurant.restName }}</strong>
                   </div>
-                  <p>#돈까스</p>
-                  <p>129m</p>
-                  <p>⭐4.1 리뷰(33개) ❤️ 300</p>
-                  <p>"일본식 돈까스"</p>
+                  <p>{{ restaurant.restCategory }}</p>
+                  <p>{{ restaurant.restKeyword }}</p>
+                  <p>위치: {{ restaurant.restLocationName }}</p>
                 </div>
                 <div class="sidebar-image">
                   <img
                     src="../../assets/images/food2.png"
-                    alt="돈천동돈까스 이미지"
+                    alt="레스토랑 이미지"
                   />
                 </div>
               </div>
             </div>
           </a>
-          <a
-            href="#"
-            class="list-group-item list-group-item-action py-3 lh-tight"
-          >
-            <div
-              class="d-flex w-100 align-items-center justify-content-between"
-            >
-              <strong class="mb-1">List group item heading</strong>
-            </div>
-            <div class="col-10 mb-1 small">
-              Some placeholder content in a paragraph below the heading and
-              date.
-            </div>
-          </a>
-
-          <a
-            href="#"
-            class="list-group-item list-group-item-action py-3 lh-tight"
-            aria-current="true"
-          >
-            <div
-              class="d-flex w-100 align-items-center justify-content-between"
-            >
-              <strong class="mb-1">List group item heading</strong>
-            </div>
-            <div class="col-10 mb-1 small">
-              Some placeholder content in a paragraph below the heading and
-              date.
-            </div>
-          </a>
-          <a
-            href="#"
-            class="list-group-item list-group-item-action py-3 lh-tight"
-          >
-            <div
-              class="d-flex w-100 align-items-center justify-content-between"
-            >
-              <strong class="mb-1">List group item heading</strong>
-            </div>
-            <div class="col-10 mb-1 small">
-              Some placeholder content in a paragraph below the heading and
-              date.
-            </div>
-          </a>
-          <a
-            href="#"
-            class="list-group-item list-group-item-action py-3 lh-tight"
-          >
-            <div
-              class="d-flex w-100 align-items-center justify-content-between"
-            >
-              <strong class="mb-1">List group item heading</strong>
-            </div>
-            <div class="col-10 mb-1 small">
-              Some placeholder content in a paragraph below the heading and
-              date.
-            </div>
-          </a>
-          <a
-            href="#"
-            class="list-group-item list-group-item-action py-3 lh-tight"
-            aria-current="true"
-          >
-            <div
-              class="d-flex w-100 align-items-center justify-content-between"
-            >
-              <strong class="mb-1">List group item heading</strong>
-            </div>
-            <div class="col-10 mb-1 small">
-              Some placeholder content in a paragraph below the heading and
-              date.
-            </div>
-          </a>
-          <a
-            href="#"
-            class="list-group-item list-group-item-action py-3 lh-tight"
-          >
-            <div
-              class="d-flex w-100 align-items-center justify-content-between"
-            >
-              <strong class="mb-1">List group item heading</strong>
-            </div>
-            <div class="col-10 mb-1 small">
-              Some placeholder content in a paragraph below the heading and
-              date.
-            </div>
-          </a>
-          <a
-            href="#"
-            class="list-group-item list-group-item-action py-3 lh-tight"
-          >
-            <div
-              class="d-flex w-100 align-items-center justify-content-between"
-            >
-              <strong class="mb-1">List group item heading</strong>
-            </div>
-            <div class="col-10 mb-1 small">
-              Some placeholder content in a paragraph below the heading and
-              date.
-            </div>
-          </a>
-          <a
-            href="#"
-            class="list-group-item list-group-item-action py-3 lh-tight"
-            aria-current="true"
-          >
-            <div
-              class="d-flex w-100 align-items-center justify-content-between"
-            >
-              <strong class="mb-1">List group item heading</strong>
-            </div>
-            <div class="col-10 mb-1 small">
-              Some placeholder content in a paragraph below the heading and
-              date.
-            </div>
-          </a>
-          <a
-            href="#"
-            class="list-group-item list-group-item-action py-3 lh-tight"
-          >
-            <div
-              class="d-flex w-100 align-items-center justify-content-between"
-            >
-              <strong class="mb-1">List group item heading</strong>
-            </div>
-            <div class="col-10 mb-1 small">
-              Some placeholder content in a paragraph below the heading and
-              date.
-            </div>
-          </a>
-          <a
-            href="#"
-            class="list-group-item list-group-item-action py-3 lh-tight"
-          >
-            <div
-              class="d-flex w-100 align-items-center justify-content-between"
-            >
-              <strong class="mb-1">List group item heading</strong>
-            </div>
-            <div class="col-10 mb-1 small">
-              Some placeholder content in a paragraph below the heading and
-              date.
-            </div>
-          </a>
+          <b-modal id="location-access-denied-modal" title="위치 정보 접근">
+            위치 정보 접근이 거부되었습니다. 지도 기능을 완전히 활용하려면 위치
+            정보 접근을 허용해주세요.
+          </b-modal>
         </div>
       </div>
 
@@ -195,37 +56,63 @@
   </div>
 </template>
 <script>
-import { mapState, mapActions } from 'vuex';
+import { mapState, mapActions } from "vuex";
+// import { apiService } from "../../js/apiService.js";
 /* eslint-disable no-redeclare */
 /* global kakao */
-
 
 export default {
   name: "MapPage",
   computed: {
-    ...mapState(['searchResults']),
+    ...mapState(["searchResults"]),
   },
+  // watch: {
+  //   searchResults(newResults) {
+  //     this.clearMarkers();
+  //     newResults.forEach((place) => {
+  //       this.displayMarker(place);
+  //     });
+  //   },
+  // },
   watch: {
     searchResults(newResults) {
       this.clearMarkers();
-      newResults.forEach(place => {
+      if (newResults.length > 0) {
+        const firstResult = newResults[0];
+        this.map.setCenter(
+          new kakao.maps.LatLng(
+            firstResult.restLocationY,
+            firstResult.restLocationX
+          )
+        );
+      }
+      newResults.forEach((place) => {
         this.displayMarker(place);
       });
     },
   },
   data() {
     return {
-      map: null,  
-      markers: [],  
-      infowindow: new kakao.maps.InfoWindow({ zIndex: 1 }), 
+      map: null,
+      markers: [],
+      // infowindow: new kakao.maps.InfoWindow({ zIndex: 1 }),
+      infowindow: null,
+      result: {},
     };
+  },
+  created() {
+    const searchQuery = this.$route.query.search;
+    this.fetchSearchResults(searchQuery);
   },
   mounted() {
     this.initMap();
     this.getUserLocation();
- 
   },
   methods: {
+    ...mapActions(["fetchSearchResults"]),
+    goToStoreDetail(restId) {
+      this.$router.push({ name: "StoreDetail", params: { restId } });
+    },
     getUserLocation() {
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(
@@ -233,7 +120,11 @@ export default {
             this.initMap(position.coords.latitude, position.coords.longitude);
           },
           (error) => {
-            console.error('위치 정보 오류: ', error.message);
+            if (error.code === error.PERMISSION_DENIED) {
+              // 사용자가 위치 정보 접근을 거부한 경우
+              this.showLocationAccessDeniedAlert();
+            }
+            console.error("위치 정보 오류: ", error.message);
             this.initMap(); // 기본 위치로 초기화
           }
         );
@@ -242,25 +133,54 @@ export default {
         this.initMap(); // 기본 위치로 초기화
       }
     },
-    ...mapActions(['searchPlaces']), 
-    initMap(lat = 33.450701, lng = 126.570667) {
-      var mapContainer = document.getElementById('map'),
-          mapOption = {
-              center: new kakao.maps.LatLng(lat, lng),
-              level: 3
-          };
-      this.map = new kakao.maps.Map(mapContainer, mapOption);
+    showLocationAccessDeniedAlert() {
+      // alert(
+      //   "위치 정보 접근이 거부되었습니다. 지도 기능을 완전히 활용하려면 위치 정보 접근을 허용해주세요."
+      // );
+      this.$bvModal.show("location-access-denied-modal");
     },
-    displayMarker(place) {
+
+    ...mapActions(["searchPlaces"]),
+    initMap(lat = 33.450701, lng = 126.570667) {
+      var mapContainer = document.getElementById("map"),
+        mapOption = {
+          center: new kakao.maps.LatLng(lat, lng),
+          level: 3,
+        };
+      this.map = new kakao.maps.Map(mapContainer, mapOption);
+      this.infowindow = new kakao.maps.InfoWindow({ zIndex: 1 }); // infowindow 생성
+      // 검색 결과를 기반으로 마커 생성
+      this.searchResults.forEach((place) => {
+        this.displayMarker(place);
+      });
+    },
+    displayMarker(restaurant) {
       var marker = new kakao.maps.Marker({
         map: this.map,
-        position: new kakao.maps.LatLng(place.y, place.x)
+        position: new kakao.maps.LatLng(
+          restaurant.restLocationY,
+          restaurant.restLocationX
+        ),
       });
 
-      kakao.maps.event.addListener(marker, 'click', () => {
-        this.infowindow.setContent('<div style="padding:5px;">' + place.place_name + '</div>');
-        this.infowindow.open(this.map, marker);
+      var infowindow = new kakao.maps.InfoWindow({
+        content: `<div style="padding:5px;">${restaurant.restName}</div>`,
       });
+
+      kakao.maps.event.addListener(marker, "mouseover", () => {
+        infowindow.open(this.map, marker);
+      });
+
+      kakao.maps.event.addListener(marker, "mouseout", () => {
+        infowindow.close();
+      });
+
+      // kakao.maps.event.addListener(marker, "click", () => {
+      //   this.infowindow.setContent(
+      //     '<div style="padding:5px;">' + restaurant.restName + "</div>"
+      //   );
+      //   // this.infowindow.open(this.map, marker);
+      // });
 
       this.markers.push(marker);
     },
@@ -270,15 +190,13 @@ export default {
       }
       this.markers = [];
     },
-    
-  }
-
+  },
 };
 </script>
 
 
   
-  <style scoped>
+<style >
 #map {
   /* 지도의 크기 설정 */
   width: 100%;
@@ -288,6 +206,10 @@ export default {
 .col-10 {
   flex: 0 0 83.333333%;
   max-width: 100%;
+}
+.sidebar-search-result {
+  margin-top: 30px;
+  padding: 20px;
 }
 .sidebar-content p {
   margin-top: 5px;

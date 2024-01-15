@@ -115,8 +115,9 @@ export default {
 
 <style>
 
+
 *{
-  font-family: 'BMJUA';
+  font-family: 'BMHANNAPro';
 }
 
 .user-type-buttons {
@@ -150,6 +151,7 @@ export default {
 }
 
 .login-form {
+color: #000000;
   background: #fff;
   width: 450px;
   border-radius: 6px;
@@ -183,6 +185,7 @@ export default {
   position: relative;
 }
 .login-form input {
+  color: #000000;
   width: 100%;
   padding: 5px;
   height: 56px;

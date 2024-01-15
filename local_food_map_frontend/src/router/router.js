@@ -47,6 +47,12 @@ export default new Router({
       component: IdReset
     },
     {
+
+      path: '/store',
+      name: 'storeDetailPage',
+      component: StoreDetail
+    },
+
       path:'/reservation',
       name: 'ReservationPage',
       component: Reservation
@@ -55,11 +61,6 @@ export default new Router({
       path:'/payment',
       name: 'PaymentPage',
       component: Payment
-    },
-    {
-      path:'/store',
-      name: 'StoreDetail',
-      component: StoreDetail
     },
     {
       path:'/result',
