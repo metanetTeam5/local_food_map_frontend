@@ -30,9 +30,13 @@
               </button>
             </div>
           </form>
-          <div class="navbar-nav ml-auto">
+          <div class="navbar-nav ml-auto" v-if="!login">
             <router-link class="nav-link" to="/login">로그인</router-link>
             <router-link class="nav-link" to="/join">회원가입</router-link>
+          </div>
+          <div class="navbar-nav ml-auto" v-else>
+            <span class="nav-link" @click="logout">로그아웃</span>
+            <router-link class="nav-link" to="/mypage">마이페이지</router-link>
           </div>
         </div>
       </div>
@@ -41,13 +45,32 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   name: "AppHeader",
   data() {
     return {
       isCollapsed: true,
       searchQuery: "",
+      login: false,
     };
+  },
+  created() {
+    let checkLogin = sessionStorage.getItem("token");
+    if (checkLogin !== "" && checkLogin !== null && checkLogin !== undefined) {
+      this.login = true;
+    } else {
+      this.login = false;
+    }
+  },
+  mounted() {
+    let checkLogin = sessionStorage.getItem("token");
+    if (checkLogin !== "" && checkLogin !== null && checkLogin !== undefined) {
+      this.login = true;
+    } else {
+      this.login = false;
+    }
   },
   methods: {
     async searchPlaces() {
@@ -60,7 +83,10 @@ export default {
       console.log("검색 시작: ", searchParams);
 
       try {
-        await this.$store.dispatch("fetchSearchResults", this.searchQuery.trim());
+        await this.$store.dispatch(
+          "fetchSearchResults",
+          this.searchQuery.trim()
+        );
         console.log("검색 성공, MapPage로 이동");
 
         if (this.$router.currentRoute.name !== "MapPage") {
@@ -68,6 +94,49 @@ export default {
         }
       } catch (error) {
         console.error("검색 중 오류 발생: ", error);
+      }
+    },
+    async logout() {
+      let token = sessionStorage.getItem("token");
+      if (token === null) {
+        alert("로그아웃 되었습니다.");
+        this.$router.push({ name: "HomePage" });
+        this.$router.go();
+      } else {
+        try {
+          await axios.post(
+            process.env.VUE_APP_API_ENDPOINT + "/member/logout",
+            null,
+            {
+              headers: {
+                "X-AUTH-TOKEN": token.toString(),
+              },
+            }
+          );
+
+          sessionStorage.clear();
+
+          alert("로그아웃 되었습니다.");
+
+          if (this.$route.path === "/") {
+            this.$router.go(0);
+          } else {
+            this.$router.push({ name: "HomePage" });
+            this.$router.go(0);
+          }
+        } catch (error) {
+          sessionStorage.clear();
+
+          alert("로그아웃 되었습니다.");
+
+          if (this.$route.path === "/") {
+            this.$router.go(0);
+          } else {
+            this.$router.push({ name: "HomePage" });
+            this.$router.go(0);
+          }
+          console.error("Error:", error.message);
+        }
       }
     },
   },
