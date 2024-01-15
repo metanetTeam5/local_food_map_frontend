@@ -53,6 +53,7 @@ export default {
   width: 100%; 
   z-index: 1000;
   background: #FCE7BC;
+  font-family: 'BMHANNAPro';
 }
 
 a {

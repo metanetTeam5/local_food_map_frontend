@@ -7,6 +7,7 @@ import Join from '../views/login&join/Join.vue'
 import StoreMap from '../views/store/StoreMap.vue'
 import PasswordReset from '../views/login&join/PasswordReset.vue'
 import IdReset from '../views/login&join/IdReset.vue'
+import StoreDetail from '../views/store/StoreDetail.vue'
 
 Vue.use(Router)
 
@@ -41,6 +42,14 @@ export default new Router({
       path: '/id-reset',
       name: 'IdResetPage',
       component: IdReset
-    }
+    },
+    {
+      path: '/store',
+      name: 'storeDetailPage',
+      component: StoreDetail
+    },
+    
+
+  
   ]
 })

@@ -9,6 +9,16 @@
         "src/*"
       ]
     },
+    "include": [
+      "src/**/*.ts",
+      "src/**/*.d.ts",
+      "src/**/*.tsx",
+      "src/**/*.js",
+      "src/**/*.vue"
+    ],
+    "exclude": [
+      "node_modules"
+    ],
     "lib": [
       "esnext",
       "dom",
