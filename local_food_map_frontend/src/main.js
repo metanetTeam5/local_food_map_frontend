@@ -1,19 +1,19 @@
-import Vue from 'vue'
-import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
-import App from './App.vue'
-import router from './router/router';
-import './assets/css/main.css';  
-import userStore from './store/modules/userStore';
+import Vue from "vue";
+import { BootstrapVue, IconsPlugin } from "bootstrap-vue";
+import App from "./App.vue";
+import router from "./router/router";
+import "./assets/css/main.css";
+import userStore from "./store/modules/userStore";
 
 // Install BootstrapVue
-Vue.use(BootstrapVue)
+Vue.use(BootstrapVue);
 // Optionally install the BootstrapVue icon components plugin
-Vue.use(IconsPlugin)
+Vue.use(IconsPlugin);
 
-Vue.config.productionTip = false
+Vue.config.productionTip = false;
 
 new Vue({
-  router, 
+  router,
   userStore,
-  render: h => h(App),
-}).$mount('#app')
+  render: (h) => h(App),
+}).$mount("#app");

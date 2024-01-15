@@ -3,7 +3,10 @@
     <nav id="header" class="navbar navbar-expand-lg navbar-light bg-light">
       <div class="container-fluid">
         <a class="navbar-brand" href="/home"
-          ><img src="../../assets/images/아맛무 로고.png" alt="Logo" style="height: 55px"
+          ><img
+            src="../../assets/images/아맛무 로고.png"
+            alt="Logo"
+            style="height: 55px"
         /></a>
         <!-- <button
           class="navbar-toggler"
@@ -35,9 +38,13 @@
           </form>
 
           <!-- Header.vue -->
-          <div class="navbar-nav ml-auto">
+          <div class="navbar-nav ml-auto" v-if="!login">
             <router-link class="nav-link" to="/login">로그인</router-link>
             <router-link class="nav-link" to="/join">회원가입</router-link>
+          </div>
+          <div class="navbar-nav ml-auto" v-else>
+            <span class="nav-link" @click="logout">로그아웃</span>
+            <router-link class="nav-link" to="/mypage">마이페이지</router-link>
           </div>
         </div>
       </div>
@@ -47,7 +54,8 @@
 
 <script>
 /* eslint-disable no-redeclare */
-/* global kakao */ 
+/* global kakao */
+import axios from "axios";
 
 export default {
   name: "AppHeader",
@@ -58,10 +66,25 @@ export default {
       infowindow: new kakao.maps.InfoWindow({ zIndex: 1 }), // 인포윈도우
       isCollapsed: true,
       searchQuery: "",
+      login: false,
     };
+  },
+  created() {
+    let checkLogin = sessionStorage.getItem("token");
+    if (checkLogin !== "" && checkLogin !== null && checkLogin !== undefined) {
+      this.login = true;
+    } else {
+      this.login = false;
+    }
   },
   mounted() {
     this.loadKakaoMapScript();
+    let checkLogin = sessionStorage.getItem("token");
+    if (checkLogin !== "" && checkLogin !== null && checkLogin !== undefined) {
+      this.login = true;
+    } else {
+      this.login = false;
+    }
   },
   methods: {
     loadKakaoMapScript() {
@@ -120,7 +143,51 @@ export default {
       this.markers = [];
     },
     searchPlaces() {
-      this.$store.dispatch('searchPlaces', this.searchQuery);
+      this.$store.dispatch("searchPlaces", this.searchQuery);
+    },
+
+    async logout() {
+      let token = sessionStorage.getItem("token");
+      if (token === null) {
+        alert("로그아웃 되었습니다.");
+        this.$router.push({ name: "HomePage" });
+        this.$router.go();
+      } else {
+        try {
+          await axios.post(
+            process.env.VUE_APP_API_ENDPOINT + "/member/logout",
+            null,
+            {
+              headers: {
+                "X-AUTH-TOKEN": token.toString(),
+              },
+            }
+          );
+
+          sessionStorage.clear();
+
+          alert("로그아웃 되었습니다.");
+
+          if (this.$route.path === "/") {
+            this.$router.go(0);
+          } else {
+            this.$router.push({ name: "HomePage" });
+            this.$router.go(0);
+          }
+        } catch (error) {
+          sessionStorage.clear();
+
+          alert("로그아웃 되었습니다.");
+
+          if (this.$route.path === "/") {
+            this.$router.go(0);
+          } else {
+            this.$router.push({ name: "HomePage" });
+            this.$router.go(0);
+          }
+          console.error("Error:", error.message);
+        }
+      }
     },
   },
 };
@@ -141,13 +208,13 @@ export default {
 .search-container {
   margin-left: 180px;
   width: 800px;
-  font-family: 'BMHANNAPro';
+  font-family: "BMHANNAPro";
 }
 
 .search-input {
   width: 100%;
   outline: none;
-  font-family: 'BMHANNAPro';
+  font-family: "BMHANNAPro";
 }
 
 input[type="search"]::-webkit-search-cancel-button {
@@ -168,46 +235,48 @@ input[type="search"]::-webkit-search-cancel-button {
 .search-button:hover,
 .search-input:hover {
   border: none;
-  font-family: 'BMHANNAPro';
+  font-family: "BMHANNAPro";
 }
 
 .search-button:focus,
 .search-input:focus {
   border: none;
-  font-family: 'BMHANNAPro';
+  font-family: "BMHANNAPro";
 }
 
 .btn {
-  padding: 0.5rem 1rem; 
-  font-size: 0.8rem; 
+  padding: 0.5rem 1rem;
+  font-size: 0.8rem;
 }
 
 .search-button {
-  width: 3.5rem; 
-  height: 3rem; 
-  font-family: 'BMHANNAPro';
+  width: 3.5rem;
+  height: 3rem;
+  font-family: "BMHANNAPro";
 }
 
 .search-button img {
   width: 100%;
-  height: auto; 
-  font-family: 'BMHANNAPro';
+  height: auto;
+  font-family: "BMHANNAPro";
 }
 
 .bg-light {
-    background-color: #FEFEF8!important;
+  background-color: #fefef8 !important;
 }
 
 .navbar-nav .nav-link {
+  cursor: pointer;
   margin-right: 20px;
   color: #000000;
-  font-family: 'BMHANNAPro';
+  font-family: "BMHANNAPro";
 }
 .navbar-nav .nav-link:focus {
   outline: none;
 }
 
 .navbar-nav .nav-link:hover {
+  cursor: pointer;
   color: #000000;
 }
 

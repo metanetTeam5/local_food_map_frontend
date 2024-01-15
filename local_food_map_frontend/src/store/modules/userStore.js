@@ -1,19 +1,19 @@
 /* eslint-disable no-redeclare */
 
 /* global kakao */
-import router from '@/router/router';
+import router from "@/router/router";
 
-import Vue from 'vue';
-import Vuex from 'vuex';
+import Vue from "vue";
+import Vuex from "vuex";
 
 Vue.use(Vuex);
 const userStore = new Vuex.Store({
   state: {
-    userId: '',
-    userEmail: '',
-    token: '',
+    userId: "",
+    userEmail: "",
+    token: "",
     searchResults: [],
-    userProfileImg: '',
+    userProfileImg: "",
   },
   mutations: {
     login(state, payload) {
@@ -23,18 +23,20 @@ const userStore = new Vuex.Store({
       state.userProfileImg = payload.userProfileImg;
     },
     logout(state) {
-      state.userId = '';
-      state.userEmail = '';
-      state.token = '';
-      state.userProfileImg = '';
+      state.userId = "";
+      state.userEmail = "";
+      state.token = "";
+      state.userProfileImg = "";
     },
     loginCheck(state) {
       if (!state.token) {
-        router.push({
-          name: 'UserLogin',
-        }).catch(error => {
-          console.log(error);
-        });
+        router
+          .push({
+            name: "UserLogin",
+          })
+          .catch((error) => {
+            console.log(error);
+          });
       }
     },
     setSearchResults(state, results) {
@@ -51,7 +53,6 @@ const userStore = new Vuex.Store({
     userId(state) {
       return state.userId;
     },
-    
   },
   actions: {
     async searchPlaces({ commit }, searchQuery) {
@@ -59,14 +60,14 @@ const userStore = new Vuex.Store({
         var ps = new kakao.maps.services.Places();
         ps.keywordSearch(searchQuery, (data, status) => {
           if (status === kakao.maps.services.Status.OK) {
-            commit('setSearchResults', data);
+            commit("setSearchResults", data);
           } else {
-            commit('setSearchResults', []);
+            commit("setSearchResults", []);
           }
         });
       } catch (error) {
         console.error("검색 중 오류 발생:", error);
-        commit('setSearchResults', []);
+        commit("setSearchResults", []);
       }
     },
   },
