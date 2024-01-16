@@ -1,8 +1,8 @@
 // router.js
-import AdminNoticeDelete from '../views/admin/AdminNoticeDelete.vue'
-import AdminNoticeCreate from '../views/admin/AdminNoticeCreate.vue'
-import StoreReview from '../views/review/StoreReview.vue'
-import ReviewCreate from '../views/review/ReviewCreate.vue'
+import AdminNoticeDelete from '../views/admin/AdminNoticeDelete.vue';
+import AdminNoticeCreate from '../views/admin/AdminNoticeCreate.vue';
+import StoreReview from '../views/review/StoreReview.vue';
+import ReviewCreate from '../views/review/ReviewCreate.vue';
 import Vue from 'vue';
 import Router from 'vue-router';
 import Home from '../views/Home.vue';
@@ -26,6 +26,9 @@ import AdminNoticeDetail from '../views/admin/AdminNoticeDetail.vue';
 import AdminNoticeEdit from '../views/admin/AdminNoticeEdit.vue';
 import MemberReviews from '../views/member/MemberReviews';
 import MemberReservations from '../views/member/MemberReservations';
+import BmanReservations from '../views/bman/BmanReservations';
+import BmanInfo from '../views/bman/BmanInfo';
+import BmanJoin from '../views/bman/BmanJoin';
 
 Vue.use(Router);
 
@@ -99,20 +102,19 @@ export default new Router({
       props: true,
     },
     {
-
       path: '/admin/notice/delete/:id',
       name: 'AdminNoticeDelete',
       component: AdminNoticeDelete,
-      props: true
+      props: true,
     },
     {
       path: '/admin/notice/create',
       name: 'AdminNoticeCreate',
-      component: AdminNoticeCreate
+      component: AdminNoticeCreate,
     },
     {
-      path: "/reservation",
-      name: "ReservationPage",
+      path: '/reservation',
+      name: 'ReservationPage',
 
       component: Reservation,
     },
@@ -142,17 +144,16 @@ export default new Router({
       component: MemberFavorites,
     },
 
-
     {
-      path: "/review/restaurant/:id",
-      name: "StoreReview",
-      component: StoreReview
+      path: '/review/restaurant/:id',
+      name: 'StoreReview',
+      component: StoreReview,
     },
     {
-      path: "/review-create/:resvId/:restId",
-      name: "ReviewCreate",
+      path: '/review-create/:resvId/:restId',
+      name: 'ReviewCreate',
       component: ReviewCreate,
-      props: true
+      props: true,
     },
 
     {
@@ -165,6 +166,20 @@ export default new Router({
       name: 'MemberReservations',
       component: MemberReservations,
     },
-
+    {
+      path: '/bman/reservations',
+      name: 'BmanReservations',
+      component: BmanReservations,
+    },
+    {
+      path: '/bman/join',
+      name: 'BmanJoin',
+      component: BmanJoin,
+    },
+    {
+      path: '/bman/info',
+      name: 'BmanInfo',
+      component: BmanInfo,
+    },
   ],
 });
