@@ -19,21 +19,22 @@
   </template>
   
   <script>
-	import axios from 'axios';
+    import axios from 'axios';
 
   export default {
+	props: ['resvId', 'restId'],
     data() {
       return {
+		review: {
+			revwStarRate: 0,
+			revwContent: '',
+			restId: this.$route.params.restId
+		},
+		selectedFile: null,
+		// selectedReservationId: this.resvId,
+		selectedReservationId: this.$route.params.resvId,
         // isReviewFormVisible: false,
-		isReviewFormVisible: true,
-        review: {
-          revwStarRate: 0,
-          revwContent: '',
-          restId: 3
-        //   restId: null
-        },
-        selectedFile: null,
-        selectedReservationId: null
+        isReviewFormVisible: true,
       };
     },
     methods: {
@@ -49,12 +50,13 @@
         const formData = new FormData();
         formData.append('review', new Blob([JSON.stringify(this.review)], { type: 'application/json' }));
         formData.append('file', this.selectedFile);
+		console.log(this.review);
   
         try {
-			let token = sessionStorage.getItem("token");
-		// const response = await axios.post(`http://localhost:8088/reviewimage/reservation/${this.selectedReservationId}`, formData);
-		const response = await axios.post(`http://localhost:8088/reviewimage/reservation/3`, formData,
-		{
+            let token = sessionStorage.getItem("token");
+        // const response = await axios.post(`http://localhost:8088/reviewimage/reservation/${this.selectedReservationId}`, formData);
+        const response = await axios.post(`http://localhost:8088/reviewimage/reservation/${this.selectedReservationId}`, formData,
+        {
               headers: {
                 "X-AUTH-TOKEN": token.toString(),
               },
