@@ -4,19 +4,18 @@ import { useRouter } from 'vue-router/types/composables';
     <div v-if="notice">
         <AdminSidebar />
         <div class="board-container">
-			<h1 class="board-title">{{ notice.notiTitle }}</h1>
-			<div class="board-meta">
-				<span class="board-date">{{ notice.notiCreateDate | formatDate }}</span>
-				<span class="board-author">{{ notice.membNickname }}</span>
-			</div>
-			<div class="board-buttons">
-				<button @click="editNotice" class="board-button">수정</button>
-				<button @click="deleteNotice" class="board-button">삭제</button>
-			</div>
-			<hr class="board-divider" />
-			<div class="board-content">{{ notice.notiContent }}</div>
-
-
+            <h1 class="board-title">{{ notice.notiTitle }}</h1>
+            <div class="board-meta">
+                <span class="board-date">{{ notice.notiCreateDate | formatDate }}</span>
+                <span class="board-author">작성자: {{ notice.membNickname }}</span>
+            </div>
+            <div class="board-buttons">
+                <button @click="editNotice" class="board-button">수정</button>
+                <button @click="deleteNotice" class="board-button">삭제</button>
+            </div>
+            <hr class="board-divider" />
+            <br/>
+            <div class="board-content">{{ notice.notiContent }}</div>
         </div>
     </div>
   </template>
@@ -33,7 +32,7 @@ import { useRouter } from 'vue-router/types/composables';
         author: '작성자'
       };
     },
-	components: {
+    components: {
         AdminSidebar
     },
     mounted() {
@@ -80,9 +79,9 @@ import { useRouter } from 'vue-router/types/composables';
   <style scoped>
   .board-container {
     width: 100%;
-    max-width: 800px;
+    max-width: 600px;
     margin: 0 auto;
-    padding: 20px;
+    padding: 50px 20px 20px;
     box-sizing: border-box;
   }
   

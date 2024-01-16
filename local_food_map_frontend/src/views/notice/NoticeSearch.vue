@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="content-area">
 		<b-container fluid class="pt-5 mb-4">
       <b-row>
         <b-col>
@@ -96,11 +96,15 @@
     margin-bottom: 1rem;
   }
   .pt-5 {
-  padding-top: 70px; /* 헤더의 높이에 맞게 조정하세요 */
-}
-.mb-4 {
-  margin-bottom: 1.5rem;
-}
+    padding-top: 70px; /* 헤더의 높이에 맞게 조정하세요 */
+  }
+  .mb-4 {
+    margin-bottom: 1.5rem;
+  }
+  .content-area {
+    padding-top: 50px;        /* 상단 여백을 50px로 설정 */
+  }
+
   </style>
   
 
