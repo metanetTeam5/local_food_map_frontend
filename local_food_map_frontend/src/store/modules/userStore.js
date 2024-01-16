@@ -41,6 +41,13 @@ const userStore = new Vuex.Store({
     setSearchResults(state, results) {
       state.searchResults = results;
     },
+    toggleSearchMessage(state, show) {
+      state.showSearchMessage = show;
+    },
+    setSearchMessage(state, message) {
+      state.searchMessageText = message;
+    },
+  
   },
   getters: {
     isLoggedIn(state) {

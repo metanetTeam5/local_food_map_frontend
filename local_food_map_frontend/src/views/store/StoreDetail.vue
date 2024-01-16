@@ -58,9 +58,9 @@
           </div>
         </li>
         <li class="list-group-item">
-          <p>{{ restaurant.restLocationName }}</p>
-          <p>현재 위치에서 126m</p>
-          <p>{{ restaurant.restPhoneNumber }}</p>
+          <p>📍 {{ restaurant.restLocationName }}</p>
+          <p>🗺️ 현재 위치에서 126m</p>
+          <p>📞 {{ restaurant.restPhoneNumber }}</p>
           <p>{{ restaurant.restKeyword }}</p>
         </li>
       </ul>
@@ -71,7 +71,7 @@
         <div class="card-title-store">
           <h5 class="card-title store-title">영업시간</h5>
           <div class="card-title-store-title2">
-            <h5 class="card-title store-title">🕒영업 중</h5>
+            <h5 class="card-title store-title">⏰ 영업 중</h5>
           </div>
         </div>
         <div class="store-category-date">
@@ -110,64 +110,68 @@
       </div>
     </div>
 
-    <!-- 네 번째 Store Card (방문자 평가) -->
 
-    <div
-      class="card store-card"
-      v-for="reviewItem in review"
-      :key="reviewItem.revwId"
-    >
-      <div class="card-body">
-        <div v-if="review.length > 0" class="review-section">
-          <div class="card-title-store">
-            <h5 class="card-title store-title">
-              {{ review.length }}건의 방문자 평가
-            </h5>
-          </div>
-
-          <div class="row d-flex">
-            <div class="">
-              <img class="profile-pic" :src="reviewItem.membProfileImg" />
-            </div>
-            <div class="d-flex flex-column">
-              <h3 class="mt-2 mb-0">{{ reviewItem.membNickname }}</h3>
-
-              <div>
-                <p class="text-left">
-                  <!--리뷰별점-->
-                  <span class="text-muted">{{ reviewItem.revwStarRate }}</span>
-                  <span class="fa fa-star star-active ml-3"></span>
-                  <span class="fa fa-star star-active"></span>
-                  <span class="fa fa-star star-active"></span>
-                  <span class="fa fa-star star-active"></span>
-                  <span class="fa fa-star star-inactive"></span>
-                </p>
-              </div>
-            </div>
-            <p class="text-muted pt-5 pt-sm-3">
-              {{ reviewItem.revwCreateDate }}
+  <!-- 네 번째 Store Card (방문자 평가) -->
+  <div
+    v-for="reviewItem in review"
+    :key="reviewItem.revwId"
+    class="card store-card"
+  >
+    <!-- 리뷰 내용 표시 -->
+    <div class="card-body">
+      <div class="card-title-store">
+        <h5 class="card-title store-title">{{ review.length }}건의 방문자 평가</h5>
+      </div>
+      <div class="row d-flex">
+        <div class="">
+          <img class="profile-pic" :src="reviewItem.membProfileImg" />
+        </div>
+        <div class="d-flex flex-column">
+          <h3 class="mt-2 mb-0">{{ reviewItem.membNickname }}</h3>
+          <div>
+            <p class="text-left">
+              <!-- 리뷰별 점수 -->
+              <span class="text-muted">{{ reviewItem.revwStarRate }}</span>
+              <span class="fa fa-star star-active ml-3"></span>
+              <span class="fa fa-star star-active"></span>
+              <span class="fa fa-star star-active"></span>
+              <span class="fa fa-star star-active"></span>
+              <span class="fa fa-star star-inactive"></span>
             </p>
           </div>
-          <div class="row text-left">
-            <p class="content">{{ reviewItem.revwContent }}</p>
-          </div>
-          <div class="row text-left">
-            <img class="pic" :src="reviewItem.revwImg" />
-            <img class="pic" :src="reviewItem.revwImg" />
-            <img class="pic" :src="reviewItem.revwImg" />
-          </div>
         </div>
+        <p class="text-muted pt-5 pt-sm-3">{{ reviewItem.revwCreateDate }}</p>
       </div>
-    </div>
-
-    <!-- 페이지 하단 부분 -->
-    <div class="container-fluid px-1 py-5 mx-auto">
-      <div class="row justify-content-center">
-        <div class="col-xl-7 col-lg-8 col-md-10 col-12 text-center mb-5"></div>
+      <div class="row text-left">
+        <p class="content">{{ reviewItem.revwContent }}</p>
+      </div>
+      <div class="row text-left">
+        <img class="pic" :src="reviewItem.revwImg" />
+        <img class="pic" :src="reviewItem.revwImg" />
+        <img class="pic" :src="reviewItem.revwImg" />
       </div>
     </div>
   </div>
+
+  <div v-if="review.length === 0" class="card store-card">
+    <div class="card-body">
+      <div class="review-section">
+        <div class="card-title-store">
+          <h5 class="card-title store-title">아직 작성된 리뷰가 없습니다.</h5>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 페이지 하단 부분 -->
+  <div class="container-fluid px-1 py-5 mx-auto">
+    <div class="row justify-content-center">
+      <div class="col-xl-7 col-lg-8 col-md-10 col-12 text-center mb-5"></div>
+    </div>
+  </div>
+  </div>
 </template>
+
 
 <script>
 import Modal from "./modal/Modal.vue";

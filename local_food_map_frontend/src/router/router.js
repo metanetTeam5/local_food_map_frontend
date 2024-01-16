@@ -152,7 +152,7 @@ export default new Router({
       path: "/review/create",
       name: "ReviewCreate",
       component: ReviewCreate
-    }
+    },
 
     {
       path: '/mypage/reviews',
