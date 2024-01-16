@@ -149,9 +149,10 @@ export default new Router({
       component: StoreReview
     },
     {
-      path: "/review/create",
+      path: "/review-create/:resvId/:restId",
       name: "ReviewCreate",
-      component: ReviewCreate
+      component: ReviewCreate,
+      props: true
     },
 
     {

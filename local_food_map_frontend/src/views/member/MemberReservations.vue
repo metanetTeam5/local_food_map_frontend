@@ -83,7 +83,7 @@
                   >
                     리뷰 보러가기
                   </button>
-                  <button v-else @click="registerReview(resv.resvId)">
+                  <button v-else @click="registerReview(resv)">
                     리뷰 작성하기
                   </button>
                 </td>
@@ -97,12 +97,17 @@
 </template>
 
 <script>
+// import router from '@/router/router';
 import axios from 'axios';
 
 export default {
+  props: ['resvId', 'restId'],
   name: 'MemberReservations',
   data() {
     return {
+      review: {
+        restId: this.restId
+      },
       isLoading: true,
       reservationList: [],
     };
@@ -135,9 +140,19 @@ export default {
       }
     },
     async getReview() {},
-    async registerReview() {},
+    async registerReview(resv) {
+        console.log(resv);
+    //     this.$router.push({
+    //     name: 'ReviewCreate',
+    //     params: { resvId: resv.resvId, restId: resv.restId }
+    //   })
+    
+    this.$router.push('/review-create/' + resv.resvId + '/' + resv.restId)
+    },
   },
   mounted() {
+    this.review.restId = this.restId;
+    this.selectedReservationId = this.resvId;
     this.getReservations();
   },
 };
