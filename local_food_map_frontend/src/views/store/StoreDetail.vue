@@ -191,7 +191,7 @@ export default {
     };
   },
   created() {
-    const restId = 123;
+    const restId = this.$route.params.restId;
     const memberId = 111;
     // const reviewId = 111;
     //식당 정보 가져오기
