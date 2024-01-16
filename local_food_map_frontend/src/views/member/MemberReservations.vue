@@ -21,7 +21,7 @@
                 class="nav-link align-middle px-0"
                 to="/mypage/reservations"
               >
-                <div class="ms-1 d-none d-sm-inline menu-span">
+                <div class="ms-1 d-none d-sm-inline menu-span selected-menu">
                   예약 내역
                 </div></router-link
               >
@@ -41,7 +41,7 @@
                 class="nav-link align-middle px-0"
                 to="/mypage/favorites"
               >
-                <div class="ms-1 d-none d-sm-inline menu-span selected-menu">
+                <div class="ms-1 d-none d-sm-inline menu-span">
                   나의 찜
                 </div></router-link
               >
@@ -50,17 +50,17 @@
         </div>
       </div>
       <div class="col py-3">
-        <h2>나의 찜 관리</h2>
+        <h2>예약 내역</h2>
         <div v-if="isLoading">로딩중</div>
         <div v-else>
           <div>
             <table>
-              <tr v-for="(fav, index) in favoriteList" :key="index">
+              <tr v-for="(resv, index) in reservationList" :key="index">
                 <td>
                   <img
-                    v-if="fav.profileImg"
+                    v-if="resv.restImg"
                     class="profile"
-                    :src="fav.profileImg"
+                    :src="resv.restImg"
                     alt="식당 이미지"
                   />
                   <img
@@ -69,14 +69,22 @@
                     src="../../assets/images/아맛무 로고.png"
                     alt="기본 식당 이미지"
                   />
-                  {{ fav.restName }}
+                  식당 이름 : {{ resv.restName }} <br />
+                  예약 날짜/시간 : {{ resv.resvDate }} {{ resv.resvHour }}
                   <br />
-                  {{ fav.restKeyword }}
+                  인원 수 : {{ resv.resvHeadCount }} <br />
+                  예약 한 날짜 : {{ resv.resvCreateDate }} <br />
+                  예약금 : {{ resv.resvPayAmount }} <br />
+                  요청사항 : {{ resv.resvRequirement }} <br />
+                  예약 상태 : {{ resv.resvStatus }}
                   <button
-                    @click="deleteFavorite(fav.restId)"
-                    class="heart-button"
+                    v-if="resv.reviewCreated"
+                    @click="getReview(resv.revwId)"
                   >
-                    찜 버튼
+                    리뷰 보러가기
+                  </button>
+                  <button v-else @click="registerReview(resv.resvId)">
+                    리뷰 작성하기
                   </button>
                 </td>
               </tr>
@@ -89,78 +97,55 @@
 </template>
 
 <script>
-import axios from "axios";
+import axios from 'axios';
 
 export default {
-  name: "MemberFavorites",
+  name: 'MemberReservations',
   data() {
     return {
       isLoading: true,
-      favoriteList: [],
+      reservationList: [],
     };
   },
   methods: {
-    async getFavorites() {
-      let token = sessionStorage.getItem("token");
+    async getReservations() {
+      let token = sessionStorage.getItem('token');
       if (token !== null) {
         let response;
         try {
           response = await axios.get(
-            process.env.VUE_APP_API_ENDPOINT + "/restaurant/favorites",
+            process.env.VUE_APP_API_ENDPOINT + '/member/reservation/list',
             {
               headers: {
-                "X-AUTH-TOKEN": token.toString(),
+                'X-AUTH-TOKEN': token.toString(),
               },
             }
           );
-
-          this.favoriteList = response.data;
+          console.log(response.data);
+          this.reservationList = response.data;
 
           this.isLoading = false;
         } catch (error) {
           console.error(error);
         }
       } else {
-        alert("로그인 후 이용 가능합니다.");
-        this.$router.push({ name: "HomePage" });
+        alert('로그인 후 이용 가능합니다.');
+        this.$router.push({ name: 'HomePage' });
         this.$router.go(0);
       }
     },
-    async deleteFavorite(restId) {
-      let token = sessionStorage.getItem("token");
-      let userId = sessionStorage.getItem("userId");
-      let response;
-      try {
-        response = await axios.delete(
-          process.env.VUE_APP_API_ENDPOINT + "/restaurant/favorite",
-          {
-            data: {
-              membId: userId,
-              restId: restId,
-            },
-            headers: {
-              "X-AUTH-TOKEN": token.toString(),
-            },
-          }
-        );
-        console.log(response.data);
-
-        this.$router.go(0);
-      } catch (error) {
-        console.error(error);
-        alert("찜 삭제 실패");
-      }
-    },
+    async getReview() {},
+    async registerReview() {},
   },
   mounted() {
-    this.getFavorites();
+    this.getReservations();
   },
 };
 </script>
 
 <style>
 * {
-  font-family: "BMHANNAPro";
+  font-family: 'BMHANNAPro';
 }
 .mypage-container {
   margin-top: 70px;
@@ -336,7 +321,7 @@ p {
 }
 
 .placehold-text:before {
-  content: "@naver.com";
+  content: '@naver.com';
   position: absolute; /*before은 inline 요소이기 때문에 span으로 감싸줌 */
   right: 20px;
   top: 13px;
@@ -367,7 +352,7 @@ p {
 }
 
 .member-footer div a:after {
-  content: "|";
+  content: '|';
   font-size: 10px;
   color: #bbb;
   margin-right: 5px;

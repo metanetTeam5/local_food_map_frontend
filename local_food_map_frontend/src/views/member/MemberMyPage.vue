@@ -10,29 +10,40 @@
             id="menu"
           >
             <li class="nav-item">
-              <a class="nav-link align-middle px-0" href="/mypage/"
-                ><div class="ms-1 d-none d-sm-inline menu-span selected-menu">
+              <router-link class="nav-link align-middle px-0" to="/mypage">
+                <div class="ms-1 d-none d-sm-inline menu-span selected-menu">
                   개인정보수정
-                </div></a
+                </div></router-link
               >
             </li>
             <li class="nav-item">
-              <a class="nav-link align-middle px-0" href="/mypage/"
-                ><div class="ms-1 d-none d-sm-inline menu-span">
-                  주문내역
-                </div></a
+              <router-link
+                class="nav-link align-middle px-0"
+                to="/mypage/reservations"
+              >
+                <div class="ms-1 d-none d-sm-inline menu-span">
+                  예약 내역
+                </div></router-link
               >
             </li>
             <li class="nav-item">
-              <a class="nav-link align-middle px-0" href="/mypage/"
-                ><div class="ms-1 d-none d-sm-inline menu-span">
-                  리뷰관리
-                </div></a
+              <router-link
+                class="nav-link align-middle px-0"
+                to="/mypage/reviews"
+              >
+                <div class="ms-1 d-none d-sm-inline menu-span">
+                  리뷰 관리
+                </div></router-link
               >
             </li>
             <li class="nav-item">
-              <a class="nav-link align-middle px-0" href="/mypage/favorites"
-                ><div class="ms-1 d-none d-sm-inline menu-span">나의 찜</div></a
+              <router-link
+                class="nav-link align-middle px-0"
+                to="/mypage/favorites"
+              >
+                <div class="ms-1 d-none d-sm-inline menu-span">
+                  나의 찜
+                </div></router-link
               >
             </li>
           </ul>
@@ -241,6 +252,7 @@ export default {
             }
           );
           this.setMemberInfo(response);
+          console.log(response.data);
 
           this.isLoading = false;
         } catch (error) {
@@ -395,6 +407,12 @@ export default {
       this.phoneNumber = response.data.phoneNumber;
       this.profileImg = response.data.profileImg;
       this.createdDate = response.data.createDate;
+    },
+
+    async beforeRouteUpdate(to, from, next) {
+      await this.getInfo();
+
+      next();
     },
   },
   mounted() {
