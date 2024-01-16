@@ -16,16 +16,19 @@ export const apiService = {
   getReserveById(reserveId) {
     return axios.get(`${API_BASE_URL}/reservation/${reserveId}`);
   },
-  getMenuById(menuId) {
-    return axios.get(`${API_BASE_URL}/Menu/${menuId}`);
+  getMenuById(restId) {
+    return axios.get(`${API_BASE_URL}/menu/list/${restId}`);
   },
   getMemberById(memberId) {
     return axios.get(`${API_BASE_URL}/member/profileimg/${memberId}`);
   },
   searchRestaurants(searchKeyword) {
     return axios.get(`${API_BASE_URL}/restaurant/search/${searchKeyword}`);
-
-
+  },
+  getRestaurantsByPage(page) {
+    return axios.get(`${API_BASE_URL}/restaurant/all`, {
+      params: { page: page }
+    });
   },
 
   

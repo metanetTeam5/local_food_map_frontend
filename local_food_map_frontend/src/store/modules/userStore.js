@@ -69,7 +69,7 @@ const userStore = new Vuex.Store({
     async fetchSearchResults({ commit }, searchQuery) {
       try {
         const response = await apiService.searchRestaurants(searchQuery);
-        console.log("검색 성공:", response.data); // 성공 메시지
+        console.log("검색 성공:", response.data); 
         commit('setSearchResults', response.data);
       } catch (error) {
         console.error("검색 중 오류 발생:", error);

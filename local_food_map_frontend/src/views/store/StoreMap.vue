@@ -18,35 +18,65 @@
           <div class="sidebar-search-result" v-if="searchResults.length === 0">
             검색 결과가 없습니다.
           </div>
+       
           <a
-
-            v-for="restaurant in searchResults"
+            v-for="restaurant in paginatedSearchResults"
             :key="restaurant.restId"
             class="list-group-item list-group-item-action py-3 lh-tight"
             @click="goToStoreDetail(restaurant.restId)"
           >
-
+          
             <div class="col-10 mb-1 small">
               <div class="sidebar-item">
                 <div class="sidebar-content">
                   <div
                     class="d-flex w-100 align-items-center justify-content-between"
                   >
-                    <strong class="mb-1">{{ restaurant.restName }}</strong>
+                    <h4>{{ restaurant.restName }}</h4>
                   </div>
-                  <p>{{ restaurant.restCategory }}</p>
+                  <div class="store-cate">
+                  <p>{{ restaurant.restCategory }}</p></div>
+                  <div class="store-loca">
+                  <p>위치: {{ restaurant.restLocationName }}</p></div>
+                  <div class="store-hash">
                   <p>{{ restaurant.restKeyword }}</p>
-                  <p>위치: {{ restaurant.restLocationName }}</p>
+                </div>
+                
                 </div>
                 <div class="sidebar-image">
                   <img
-                    src="../../assets/images/food2.png"
-                    alt="레스토랑 이미지"
+                    :src="restaurant.restImg"
+                    class="card-img-top"
+                    alt="가게 이미지"
                   />
                 </div>
               </div>
             </div>
           </a>
+          <!-- 페이지네이션 버튼 -->
+          <div class="pagination-buttons">
+            <button
+              @click="changePage(currentPage - 1)"
+              :disabled="currentPage === 1"
+            >
+              &lt;
+            </button>
+            <button
+              v-for="page in totalPages"
+              :key="page"
+              @click="changePage(page)"
+              :class="{ selected: currentPage === page }"
+            >
+              {{ page }}
+            </button>
+            <button
+              @click="changePage(currentPage + 1)"
+              :disabled="currentPage === totalPages"
+            >
+              &gt;
+            </button>
+          </div>
+
           <b-modal id="location-access-denied-modal" title="위치 정보 접근">
             위치 정보 접근이 거부되었습니다. 지도 기능을 완전히 활용하려면 위치
             정보 접근을 허용해주세요.
@@ -60,23 +90,13 @@
 </template>
 <script>
 import { mapState, mapActions } from "vuex";
-// import { apiService } from "../../js/apiService.js";
+import { apiService } from "../../js/apiService.js";
 /* eslint-disable no-redeclare */
 /* global kakao */
 
 export default {
   name: "MapPage",
-  computed: {
-    ...mapState(["searchResults"]),
-  },
-  // watch: {
-  //   searchResults(newResults) {
-  //     this.clearMarkers();
-  //     newResults.forEach((place) => {
-  //       this.displayMarker(place);
-  //     });
-  //   },
-  // },
+
   watch: {
     searchResults(newResults) {
       this.clearMarkers();
@@ -101,11 +121,28 @@ export default {
       // infowindow: new kakao.maps.InfoWindow({ zIndex: 1 }),
       infowindow: null,
       result: {},
+      currentPage: 1,
+      itemsPerPage: 6,
     };
   },
+  computed: {
+    ...mapState(["searchResults"]),
+    totalPages() {
+      return Math.ceil(this.searchResults.length / this.itemsPerPage);
+    },
+
+    paginatedSearchResults() {
+      const start = (this.currentPage - 1) * this.itemsPerPage;
+      const end = start + this.itemsPerPage;
+      return this.searchResults.slice(start, end);
+    },
+  },
   created() {
-    const searchQuery = this.$route.query.search;
-    this.fetchSearchResults(searchQuery);
+    // const searchQuery = this.$route.query.search;
+    // this.fetchSearchResults(searchQuery);
+    this.displaySearchResults();
+    // 컴포넌트가 생성될 때 초기 데이터 로드
+    this.fetchPageData(this.currentPage);
   },
   mounted() {
     this.initMap();
@@ -113,6 +150,14 @@ export default {
   },
   methods: {
     ...mapActions(["fetchSearchResults"]),
+
+    displaySearchResults() {
+      this.clearMarkers();
+      this.searchResults.forEach((place) => {
+        this.displayMarker(place);
+      });
+    },
+
     goToStoreDetail(restId) {
       this.$router.push({ name: "StoreDetail", params: { restId } });
     },
@@ -152,18 +197,50 @@ export default {
         };
       this.map = new kakao.maps.Map(mapContainer, mapOption);
       this.infowindow = new kakao.maps.InfoWindow({ zIndex: 1 }); // infowindow 생성
-      // 검색 결과를 기반으로 마커 생성
-      this.searchResults.forEach((place) => {
-        this.displayMarker(place);
-      });
+
+      // 마커 이미지 경로 설정
+      var MarkimageSrc = require("../../assets/images/로고마크표시.png");
+
+      // 마커 이미지 사이즈 및 옵션 설정
+      var MarkimageSize = new kakao.maps.Size(50, 53);
+      var MarkimageOption = { offset: new kakao.maps.Point(27, 69) };
+
+      // 마커 이미지 생성
+      var markerImage = new kakao.maps.MarkerImage(
+        MarkimageSrc,
+        MarkimageSize,
+        MarkimageOption
+      );
+
+      // 이미지 로드 완료 후 마커 생성
+      var image = new Image();
+      image.onload = () => {
+        this.searchResults.forEach((place) => {
+          this.displayMarker(place, markerImage);
+        });
+      };
+      image.onerror = () => {
+        console.error("마커 이미지 로드 실패");
+      };
+      image.src = MarkimageSrc;
     },
-    displayMarker(restaurant) {
+
+    displayMarker(restaurant, markerImage) {
       var marker = new kakao.maps.Marker({
         map: this.map,
         position: new kakao.maps.LatLng(
           restaurant.restLocationY,
           restaurant.restLocationX
         ),
+        image: markerImage,
+      });
+
+      var infowindow = new kakao.maps.InfoWindow({
+        content: `<div style="padding:5px;">${restaurant.restName}</div>`,
+      });
+
+      kakao.maps.event.addListener(marker, "click", () => {
+        this.goToStoreDetail(restaurant.restId);
       });
 
       var infowindow = new kakao.maps.InfoWindow({
@@ -178,13 +255,6 @@ export default {
         infowindow.close();
       });
 
-      // kakao.maps.event.addListener(marker, "click", () => {
-      //   this.infowindow.setContent(
-      //     '<div style="padding:5px;">' + restaurant.restName + "</div>"
-      //   );
-      //   // this.infowindow.open(this.map, marker);
-      // });
-
       this.markers.push(marker);
     },
     clearMarkers() {
@@ -193,6 +263,35 @@ export default {
       }
       this.markers = [];
     },
+
+    async fetchPageData(page) {
+      try {
+        const response = await apiService.getRestaurantsByPage(page);
+
+        // 페이지에 해당하는 식당 데이터를 처리
+        this.restaurants = response.data.restaurants;
+
+        // 마지막 페이지 번호 업데이트 (서버에서 제공하는 경우)
+        this.lastPage = Math.ceil(response.data.totalItems / this.itemsPerPage); // 'totalItems'는 예시, 실제 필드명에 맞게 조정
+      } catch (error) {
+        console.error("데이터 로드 중 오류 발생:", error);
+        // 오류 처리 로직
+      }
+    },
+
+    changePage(pageNumber) {
+      this.currentPage = pageNumber;
+    },
+    prevPage() {
+      if (this.startPage === 1) return;
+      this.startPage -= 10;
+      this.changePage(this.startPage);
+    },
+    nextPage() {
+      if (this.startPage + 10 > this.lastPage) return;
+      this.startPage += 10;
+      this.changePage(this.startPage);
+    },
   },
 };
 </script>
@@ -200,11 +299,16 @@ export default {
 
   
 <style >
+
 #map {
   /* 지도의 크기 설정 */
   width: 100%;
   flex-grow: 1; /* 남은 공간을 채움 */
   height: 100vh;
+}
+.list-group {
+  height: 100vh; /* 뷰포트 높이에 맞춤 */
+  overflow-y: auto; /* 내용이 넘칠 경우 스크롤 허용 */
 }
 .col-10 {
   flex: 0 0 83.333333%;
@@ -242,6 +346,33 @@ export default {
 .sidebar-image img {
   max-width: 100%; /* 이미지 너비 조정 */
   height: 150px;
+}
+.active {
+  color: red;
+}
+
+.pagination-buttons button {
+  border: none;
+  background: none;
+  cursor: pointer;
+  color: black;
+}
+
+.pagination-buttons button:hover {
+  color: rgb(255, 89, 0);
+}
+
+.pagination-buttons button.selected,
+.pagination-buttons button:disabled {
+  color: rgb(255, 89, 0);
+}
+
+.store-hash{
+  color:rgb(255, 181, 70)
+}
+
+.store-cate, .store-loca, .store-hash {
+  font-size: 14px;
 }
 </style>
   

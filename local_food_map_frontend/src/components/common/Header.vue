@@ -73,29 +73,27 @@ export default {
     }
   },
   methods: {
+
     async searchPlaces() {
-      if (this.searchQuery.trim() === "") {
-        console.warn("검색어를 입력해주세요.");
-        return;
-      }
+  if (this.searchQuery.trim() === "") {
+    console.warn("검색어를 입력해주세요.");
+    return;
+  }
 
-      const searchParams = { query: this.searchQuery.trim() };
-      console.log("검색 시작: ", searchParams);
+  try {
+    await this.$store.dispatch("fetchSearchResults", this.searchQuery.trim());
+    console.log("검색 성공, MapPage로 이동");
 
-      try {
-        await this.$store.dispatch(
-          "fetchSearchResults",
-          this.searchQuery.trim()
-        );
-        console.log("검색 성공, MapPage로 이동");
+    if (this.$router.currentRoute.name !== "MapPage") {
+      // this.$router.push({ name: "MapPage", query: { query: this.searchQuery.trim() } });
+      this.$router.push({ name: "MapPage" });
+    }
+  } catch (error) {
+    console.error("검색 중 오류 발생: ", error);
+  }
+},
 
-        if (this.$router.currentRoute.name !== "MapPage") {
-          this.$router.push({ name: "MapPage" });
-        }
-      } catch (error) {
-        console.error("검색 중 오류 발생: ", error);
-      }
-    },
+
     async logout() {
       let token = sessionStorage.getItem("token");
       if (token === null) {
