@@ -24,13 +24,26 @@
             </template>
         </b-table>
     
-        <b-pagination
+        <!-- <b-pagination
             v-model="currentPage"
             :total-rows="rows"
             :per-page="perPage"
             aria-controls="my-table"
             class="my-0"
         ></b-pagination>
+        <b-button variant="primary" @click="createNewNotice">글쓰기</b-button> -->
+
+      <!-- Flex container for pagination and button -->
+      <div class="d-flex justify-content-between align-items-center my-3">
+        <b-pagination
+          v-model="currentPage"
+          :total-rows="rows"
+          :per-page="perPage"
+          aria-controls="my-table"
+          class="my-0"
+        ></b-pagination>
+        <b-button variant="primary" @click="createNewNotice">글쓰기</b-button>
+      </div>
       </div>
     </div>
   </template>
@@ -79,14 +92,17 @@
       },
       navigateToDetail(item) {
         this.$router.push({ name: 'AdminNoticeDetail', params: {id: item.notiId}});
-      }
+      },
+      createNewNotice() {
+      this.$router.push({ name: 'AdminNoticeCreate' }); // Replace with your actual route
+    }
     },
     filters: {
     formatDate(value) {
       if (value) {
         return value.split('T')[0]; // ISO 문자열에서 날짜 부분만 추출
       }
-    }
+    },
   }
   };
   </script>

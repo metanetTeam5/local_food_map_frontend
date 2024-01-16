@@ -1,4 +1,8 @@
 // router.js
+import AdminNoticeDelete from '../views/admin/AdminNoticeDelete.vue'
+import AdminNoticeCreate from '../views/admin/AdminNoticeCreate.vue'
+import StoreReview from '../views/review/StoreReview.vue'
+import ReviewCreate from '../views/review/ReviewCreate.vue'
 import Vue from 'vue';
 import Router from 'vue-router';
 import Home from '../views/Home.vue';
@@ -95,8 +99,21 @@ export default new Router({
       props: true,
     },
     {
-      path: '/reservation',
-      name: 'ReservationPage',
+
+      path: '/admin/notice/delete/:id',
+      name: 'AdminNoticeDelete',
+      component: AdminNoticeDelete,
+      props: true
+    },
+    {
+      path: '/admin/notice/create',
+      name: 'AdminNoticeCreate',
+      component: AdminNoticeCreate
+    },
+    {
+      path: "/reservation",
+      name: "ReservationPage",
+
       component: Reservation,
     },
     {
@@ -124,6 +141,19 @@ export default new Router({
       name: 'MemberFavorites',
       component: MemberFavorites,
     },
+
+
+    {
+      path: "/review/restaurant/:id",
+      name: "StoreReview",
+      component: StoreReview
+    },
+    {
+      path: "/review/create",
+      name: "ReviewCreate",
+      component: ReviewCreate
+    }
+
     {
       path: '/mypage/reviews',
       name: 'MemberReviews',
@@ -134,5 +164,6 @@ export default new Router({
       name: 'MemberReservations',
       component: MemberReservations,
     },
+
   ],
 });

@@ -1,7 +1,7 @@
 
 import { useRouter } from 'vue-router/types/composables';
 <template>
-    <div>
+    <div v-if="notice">
         <AdminSidebar />
         <div class="board-container">
 			<h1 class="board-title">{{ notice.notiTitle }}</h1>
@@ -43,6 +43,7 @@ import { useRouter } from 'vue-router/types/composables';
       async fetchNoticeDetail() {
         try {
           const response = await axios.get(`http://localhost:8088/notice/${this.$route.params.id}`);
+          console.log(response.data);
           this.notice = response.data;
         } catch (error) {
           console.error('Error fetching notice detail:', error);
@@ -51,8 +52,19 @@ import { useRouter } from 'vue-router/types/composables';
       editNotice() {
         this.$router.push({ name: 'AdminNoticeEdit', params: { id: this.notice.notiId } });
       },
-      deleteNotice() {
-
+      async deleteNotice() {
+        const confirmDelete = confirm('정말로 삭제하시겠습니까?');
+        if (!confirmDelete) {
+          return;
+        }
+        try {
+          await axios.delete(`http://localhost:8088/admin/notice/${this.notice.notiId}`);
+          alert('공지사항이 삭제되었습니다.');
+          this.$router.push({ name: 'AdminNotice' });
+        } catch (error) {
+          console.error('Error deleting notice:', error);
+        }
+        
       },
     },
     filters: {

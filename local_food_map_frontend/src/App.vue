@@ -38,10 +38,10 @@ export default {
       // return this.$route.path !== '/admin/dashboard';
       // const pathsToHideFooter = ['/admin/dashboard', '/admin/notice', '/admin/notice/:id'];
       // return !pathsToHideFooter.includes(this.$route.path);
-      const shouldHideHeader =
+      const shouldHideFooter =
         this.$route.path === "/admin/dashboard" ||
-        this.$route.path.startsWith("/admin/notice/");
-      return !shouldHideHeader;
+        this.$route.path.startsWith("/admin/notice");
+      return !shouldHideFooter;
     },
   },
 };

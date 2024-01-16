@@ -1,5 +1,5 @@
 <template>
-    <div class="notice-edit-container">
+    <div class="notice-create-container">
       <h1>공지사항 수정</h1>
       <form @submit.prevent="submitForm">
         <div class="form-group">
@@ -10,7 +10,7 @@
           <label for="notiContent">내용</label>
           <textarea id="notiContent" v-model="notice.notiContent" required></textarea>
         </div>
-        <button type="submit">수정하기</button>
+        <button type="submit">작성완료</button>
       </form>
     </div>
   </template>
@@ -28,23 +28,30 @@
       };
     },
     created() {
-      this.fetchNotice();
+    //   this.fetchNotice();
     },
     methods: {
-      async fetchNotice() {
-        try {
-        //   const response = await this.$axios.get(`API_ENDPOINT/notice/${this.$route.params.id}`);
-          const response = await axios.get(`http://localhost:8088/notice/${this.$route.params.id}`);
-          this.notice = response.data;
-        } catch (error) {
-          console.error('Error fetching notice:', error);
-        }
-      },
+    //   async fetchNotice() {
+    //     try {
+    //     //   const response = await this.$axios.get(`API_ENDPOINT/notice/${this.$route.params.id}`);
+    //       const response = await axios.get(`http://localhost:8088/notice/${this.$route.params.id}`);
+    //       this.notice = response.data;
+    //     } catch (error) {
+    //       console.error('Error fetching notice:', error);
+    //     }
+    //   },
       async submitForm() {
         try {
-          await axios.put(`http://localhost:8088/admin/notice/${this.$route.params.id}`, this.notice);
-          alert('공지사항이 수정되었습니다.');
-          this.$router.push({ name: 'AdminNoticeDetail', params: { id: this.$route.params.id } });
+          let token = sessionStorage.getItem("token");
+          
+          await axios.post(`http://localhost:8088/admin/notice`, this.notice,
+            {
+              headers: {
+                "X-AUTH-TOKEN": token.toString(),
+              },
+            });
+          alert('공지사항이 생성되었습니다.');
+          this.$router.push({ name: 'AdminNotice' });
         } catch (error) {
           console.error('Error updating notice:', error);
         }
@@ -54,7 +61,7 @@
   </script>
   
   <style scoped>
-  .notice-edit-container {
+  .notice-create-container {
     /* 스타일링 */
   }
   .form-group {
