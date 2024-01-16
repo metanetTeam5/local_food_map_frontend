@@ -1,7 +1,8 @@
 <template>
   <div class="store-container">
     <div class="card store-card">
-      <img src="../../assets/images/food3.png" class="card-img-top" alt="..." />
+      <img :src="restaurant.restImg" class="card-img-top" alt="가게 이미지" />
+
       <!-- <img class="card-img-top" :src="review[0].revwImg" /> -->
       <div class="card-body">
         <h5 class="card-title store-title">{{ restaurant.restName }}</h5>
@@ -77,7 +78,9 @@
           <p>[오늘]</p>
           <p>오늘날짜(일)</p>
           <p>
-            영업시간:{{ restaurant.restOpenTime }}-{{restaurant.restCloseTime}}
+            영업시간:{{ restaurant.restOpenTime }}-{{
+              restaurant.restCloseTime
+            }}
           </p>
           <div class="store-opentime">
             <!-- <p>{{ storeDetails.restOpentime }}</p> -->
@@ -87,15 +90,15 @@
       <ul class="list-group list-group-flush">
         <li class="list-group-item">
           <h5 class="card-title store-menu">메뉴정보</h5>
-          <div class="card-store-menu">
-            <!-- <p>{{ Menu.menuName }}</p>
-            <p>{{ Menu.menuName }}</p>
-            <p>{{ Menu.menuName }}</p> -->
-          </div>
-          <div class="card-store-menu-price">
-            <p>원</p>
-            <p>원</p>
-            <p>원</p>
+          <div v-if="menu && menu.length">
+            <div
+              v-for="menuItem in menu"
+              :key="menuItem.id"
+              class="menu-item-container"
+            >
+              <p class="menu-name">{{ menuItem.menuName }}</p>
+              <p class="menu-price">{{ menuItem.menuPrice }}원</p>
+            </div>
           </div>
         </li>
       </ul>
@@ -103,28 +106,36 @@
     <!-- 세 번째 Store Card -->
     <div class="card store-card">
       <div class="card-body">
-        <div id="map"></div>
+        <div id="map" style="width: 100%; height: 400px"></div>
       </div>
     </div>
 
     <!-- 네 번째 Store Card (방문자 평가) -->
-    <div class="card store-card">
+
+    <div
+      class="card store-card"
+      v-for="reviewItem in review"
+      :key="reviewItem.revwId"
+    >
       <div class="card-body">
-        <div class="card-title-store">
-          <h5 class="card-title store-title">
-            {{ review.length }}건의 방문자 평가
-          </h5>
-        </div>
-        <div class="card-body">
+        <div v-if="review.length > 0" class="review-section">
+          <div class="card-title-store">
+            <h5 class="card-title store-title">
+              {{ review.length }}건의 방문자 평가
+            </h5>
+          </div>
+
           <div class="row d-flex">
             <div class="">
-              <img class="profile-pic" :src="member.profileImg" />
+              <img class="profile-pic" :src="reviewItem.membProfileImg" />
             </div>
             <div class="d-flex flex-column">
-              <h3>{{ member.nickname }}</h3>
+              <h3 class="mt-2 mb-0">{{ reviewItem.membNickname }}</h3>
+
               <div>
                 <p class="text-left">
-                  <span class="text-muted">{{ review[0].revwStarRate }}</span>
+                  <!--리뷰별점-->
+                  <span class="text-muted">{{ reviewItem.revwStarRate }}</span>
                   <span class="fa fa-star star-active ml-3"></span>
                   <span class="fa fa-star star-active"></span>
                   <span class="fa fa-star star-active"></span>
@@ -133,19 +144,17 @@
                 </p>
               </div>
             </div>
-            <div class="ml-auto">
-              <p class="text-muted pt-5 pt-sm-3">
-                {{ review[0].revwCreateDate }}
-              </p>
-            </div>
+            <p class="text-muted pt-5 pt-sm-3">
+              {{ reviewItem.revwCreateDate }}
+            </p>
           </div>
           <div class="row text-left">
-            <p class="content">{{ review[0].revwContent }}</p>
+            <p class="content">{{ reviewItem.revwContent }}</p>
           </div>
           <div class="row text-left">
-            <img class="pic" :src="review[0].revwImg" />
-            <img class="pic" :src="review[0].revwImg" />
-            <img class="pic" :src="review[0].revwImg" />
+            <img class="pic" :src="reviewItem.revwImg" />
+            <img class="pic" :src="reviewItem.revwImg" />
+            <img class="pic" :src="reviewItem.revwImg" />
           </div>
         </div>
       </div>
@@ -186,19 +195,31 @@ export default {
       restaurant: {},
       review: {},
       member: {},
-      // favorite:{},
-      // menu:{},
+      menu: {},
     };
+  },
+  computed: {
+    averageStarRate() {
+      if (!this.review || this.review.length === 0) {
+        return 0;
+      }
+      const total = this.review.reduce(
+        (acc, item) => acc + item.revwStarRate,
+        0
+      );
+      return total / this.review.length;
+    },
   },
   created() {
     const restId = this.$route.params.restId;
-    const memberId = 111;
-    // const reviewId = 111;
+    const memberId = this.$route.params.memberId;
     //식당 정보 가져오기
     apiService
       .getRestaurantById(restId)
       .then((response) => {
         this.restaurant = response.data;
+        this.restLocationX = response.data.restLocationX; // 가게의 경도 정보
+        this.restLocationY = response.data.restLocationY; // 가게의 위도 정보
       })
       .catch((error) => {
         console.error(error);
@@ -212,14 +233,25 @@ export default {
       .catch((error) => {
         console.error("리뷰 정보를 불러오는데 실패했습니다:", error);
       });
-      //멤버 정보 가져오기 
-      apiService
+    //멤버 정보 가져오기
+    apiService
       .getMemberById(memberId)
       .then((response) => {
         this.member = response.data;
+        return this.$store.state.user.id;
       })
       .catch((error) => {
         console.error("멤버 정보를 불러오는데 실패했습니다:", error);
+      });
+    //메뉴 정보 가져오기
+    apiService
+      .getMenuById(restId)
+      .then((response) => {
+        console.log(response.data);
+        this.menu = response.data;
+      })
+      .catch((error) => {
+        console.error("메뉴 정보를 불러오는데 실패했습니다:", error);
       });
   },
   async mounted() {
@@ -227,7 +259,7 @@ export default {
       "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
     );
     this.initializeMap();
-    // await this.fetchData();
+    this.createMap();
   },
   methods: {
     openModal() {
@@ -258,17 +290,45 @@ export default {
       kakao.maps.load(() => {
         if (navigator.geolocation) {
           navigator.geolocation.getCurrentPosition(
-            (position) => {
-              let container = document.getElementById("map");
-              let options = {
+            () => {
+              // 'map' 변수를 여기에서 정의합니다.
+              const mapContainer = document.getElementById("map");
+              const options = {
                 center: new kakao.maps.LatLng(
-                  position.coords.latitude,
-                  position.coords.longitude
+                    this.restLocationY,
+                    this.restLocationX
                 ),
                 level: 3,
               };
-              new kakao.maps.Map(container, options);
-              // 추가적인 지도 기능 구현
+              const map = new kakao.maps.Map(mapContainer, options);
+
+              // 가게의 위치를 동적으로 설정합니다.
+              const restLocationX = 127.007798; // 가게의 경도 정보
+              const restLocationY = 37.575863; // 가게의 위도 정보
+
+              // 마커 이미지 경로 설정
+              var MarkimageSrc = require("../../assets/images/로고마크표시.png");
+
+              // 마커 이미지 사이즈 및 옵션 설정
+              var MarkimageSize = new kakao.maps.Size(50, 53);
+              var MarkimageOption = { offset: new kakao.maps.Point(27, 69) };
+
+              const markerImage = new kakao.maps.MarkerImage(
+                MarkimageSrc,
+                MarkimageSize,
+                MarkimageOption
+              );
+
+              // 마커 생성 및 지도에 추가
+              const markerPosition = new kakao.maps.LatLng(
+                restLocationY,
+                restLocationX
+              );
+              const marker = new kakao.maps.Marker({
+                position: markerPosition,
+                image: markerImage,
+              });
+              marker.setMap(map);
             },
             (error) => {
               console.error("Geolocation failed: " + error.message);
@@ -282,6 +342,7 @@ export default {
   },
 };
 </script>
+
 <style>
 * {
   font-family: "BMHANNAPro";
@@ -304,7 +365,8 @@ export default {
 }
 
 .card {
-  height: 100%;
+  /* height: 100%; */
+  min-height: 200px;
   width: 60%;
   position: relative;
   display: flex;
@@ -317,8 +379,13 @@ export default {
   border-radius: 0.25rem;
 }
 .card-img-top {
-  max-width: 100%;
-  height: auto;
+  width: 100%;
+  height: 300px;
+  object-fit: cover;
+}
+
+.card-title p {
+  text-size: 20px;
 }
 
 .card-title-store {
@@ -333,7 +400,6 @@ export default {
 
 .store-category,
 .store-category-date {
-  
   display: flex;
   align-items: center;
   margin-right: -10px;
@@ -549,6 +615,30 @@ td {
 .vote {
   cursor: pointer;
 }
+.menu-item-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.menu-name,
+.menu-price {
+  margin: 0;
+}
+
+.list-group-flush {
+  height: 100%;
+}
+
+@media (max-width: 768px) {
+  .card {
+    /* 모바일 화면에서 적용될 스타일 */
+    min-height: 150px; /* 모바일 화면에서 최소 높이 조정 */
+  }
+  /* 필요한 경우 다른 요소들에 대한 스타일 조정 */
+}
+
 @media (max-width: 768px) {
   .store-card {
     max-width: 100%; /* 모바일 화면에서 카드 너비 조정 */
