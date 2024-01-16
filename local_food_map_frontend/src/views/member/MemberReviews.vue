@@ -31,7 +31,7 @@
                 class="nav-link align-middle px-0"
                 to="/mypage/reviews"
               >
-                <div class="ms-1 d-none d-sm-inline menu-span">
+                <div class="ms-1 d-none d-sm-inline menu-span selected-menu">
                   리뷰 관리
                 </div></router-link
               >
@@ -41,7 +41,7 @@
                 class="nav-link align-middle px-0"
                 to="/mypage/favorites"
               >
-                <div class="ms-1 d-none d-sm-inline menu-span selected-menu">
+                <div class="ms-1 d-none d-sm-inline menu-span">
                   나의 찜
                 </div></router-link
               >
@@ -50,34 +50,30 @@
         </div>
       </div>
       <div class="col py-3">
-        <h2>나의 찜 관리</h2>
+        <h2>리뷰</h2>
         <div v-if="isLoading">로딩중</div>
         <div v-else>
           <div>
             <table>
-              <tr v-for="(fav, index) in favoriteList" :key="index">
+              <tr v-for="(rev, index) in reviewList" :key="index">
                 <td>
                   <img
-                    v-if="fav.profileImg"
+                    v-if="rev.revwImg"
                     class="profile"
-                    :src="fav.profileImg"
+                    :src="rev.revwImg"
                     alt="식당 이미지"
                   />
                   <img
                     v-else
                     class="profile"
                     src="../../assets/images/아맛무 로고.png"
-                    alt="기본 식당 이미지"
+                    alt="기본 리뷰 이미지"
                   />
-                  {{ fav.restName }}
-                  <br />
-                  {{ fav.restKeyword }}
-                  <button
-                    @click="deleteFavorite(fav.restId)"
-                    class="heart-button"
-                  >
-                    찜 버튼
-                  </button>
+                  식당 이름 : {{ rev.restName }}<br />
+                  별점 : {{ rev.revwStarRate }}<br />
+                  리뷰 내용 : {{ rev.revwContent }}<br />
+                  작성 날짜 : {{ rev.revwCreateDate }}<br />
+                  <button @click="deleteReview(rev.revwId)">삭제</button>
                 </td>
               </tr>
             </table>
@@ -92,29 +88,29 @@
 import axios from "axios";
 
 export default {
-  name: "MemberFavorites",
+  name: "MemberReviews",
   data() {
     return {
       isLoading: true,
-      favoriteList: [],
+      reviewList: [],
     };
   },
   methods: {
-    async getFavorites() {
+    async getReviews() {
       let token = sessionStorage.getItem("token");
       if (token !== null) {
         let response;
         try {
           response = await axios.get(
-            process.env.VUE_APP_API_ENDPOINT + "/restaurant/favorites",
+            process.env.VUE_APP_API_ENDPOINT + "/review/myreviews",
             {
               headers: {
                 "X-AUTH-TOKEN": token.toString(),
               },
             }
           );
-
-          this.favoriteList = response.data;
+          console.log(response.data);
+          this.reviewList = response.data;
 
           this.isLoading = false;
         } catch (error) {
@@ -126,18 +122,13 @@ export default {
         this.$router.go(0);
       }
     },
-    async deleteFavorite(restId) {
+    async deleteReview(revwId) {
       let token = sessionStorage.getItem("token");
-      let userId = sessionStorage.getItem("userId");
       let response;
       try {
         response = await axios.delete(
-          process.env.VUE_APP_API_ENDPOINT + "/restaurant/favorite",
+          process.env.VUE_APP_API_ENDPOINT + "/review/delete/" + revwId,
           {
-            data: {
-              membId: userId,
-              restId: restId,
-            },
             headers: {
               "X-AUTH-TOKEN": token.toString(),
             },
@@ -153,7 +144,7 @@ export default {
     },
   },
   mounted() {
-    this.getFavorites();
+    this.getReviews();
   },
 };
 </script>

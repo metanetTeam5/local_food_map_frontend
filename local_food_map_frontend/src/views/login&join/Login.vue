@@ -31,6 +31,7 @@
       </div>
       <div class="form-group">
         <input
+          class="password-input"
           type="password"
           v-model="loginData.password"
           placeholder="비밀번호 입력"
@@ -47,13 +48,16 @@
       </div>
 
       <b-form-group id="input-group-3" class="saveid">
-        <b-form-checkbox
-          v-model="status"
-          value="remember"
-          unchecked-value="not_remember"
-        >
-          아이디 저장
-        </b-form-checkbox>
+        <div class="checkbox-input">
+          <input
+            type="checkbox"
+            v-model="status"
+            value="remember"
+            style="height: 14px"
+            unchecked-value="not_remember"
+          />
+        </div>
+        이메일 저장
       </b-form-group>
 
       <div class="seperator"><b>or</b></div>
@@ -129,17 +133,12 @@ export default {
       }
     },
   },
-  mounted() {
-    this.loadExternalCSS(
-      "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
-    );
-  },
 };
 </script>
 
 <style>
-* {
-  font-family: "BMHANNAPro";
+.password-input {
+  font-family: "BMJUA_ttf";
 }
 
 .user-type-buttons {
@@ -349,7 +348,9 @@ export default {
 .reset-psw {
   margin-right: 10px;
 }
-
+.checkbox-input {
+  margin-left: -30px;
+}
 @media screen and (max-width: 767px) {
   .login-form {
     width: 90%;
