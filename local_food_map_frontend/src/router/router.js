@@ -20,6 +20,10 @@ import AdminDashboard from '../views/admin/AdminDashboard.vue'
 import AdminNotice from '../views/admin/AdminNotice.vue'
 import AdminNoticeDetail from '../views/admin/AdminNoticeDetail.vue'
 import AdminNoticeEdit from '../views/admin/AdminNoticeEdit.vue'
+import AdminNoticeDelete from '../views/admin/AdminNoticeDelete.vue'
+import AdminNoticeCreate from '../views/admin/AdminNoticeCreate.vue'
+import StoreReview from '../views/review/StoreReview.vue'
+import ReviewCreate from '../views/review/ReviewCreate.vue'
 
 Vue.use(Router);
 
@@ -93,6 +97,17 @@ export default new Router({
       props: true
     },
     {
+      path: '/admin/notice/delete/:id',
+      name: 'AdminNoticeDelete',
+      component: AdminNoticeDelete,
+      props: true
+    },
+    {
+      path: '/admin/notice/create',
+      name: 'AdminNoticeCreate',
+      component: AdminNoticeCreate
+    },
+    {
       path: "/reservation",
       name: "ReservationPage",
       component: Reservation,
@@ -122,5 +137,16 @@ export default new Router({
       name: "MemberFavorites",
       component: MemberFavorites,
     },
+
+    {
+      path: "/review/restaurant/:id",
+      name: "StoreReview",
+      component: StoreReview
+    },
+    {
+      path: "/review/create",
+      name: "ReviewCreate",
+      component: ReviewCreate
+    }
   ],
 });

@@ -26,7 +26,7 @@
   
   <script>
   import axios from "axios";
-  import userStore from "../../store/modules/userStore";
+  // import userStore from "../../store/modules/userStore";
   
   export default {
     name: "AdminLogin",
@@ -36,17 +36,40 @@
           email: "",
           password: "",
         },
+        loginType: "admin",
+        // status: "not_remember",                    ??
       };
     },
+    created() {
+      if (localStorage.getItem("rememberid") !== null) {
+        this.status = "remember";
+        this.loginData.email = localStorage.getItem("rememberid");
+      } else {
+        this.status = "not_remember";
+      }
+    },
     methods: {
+      setLoginType(type) {
+        this.loginType = type;
+      },
       async submitForm() {
         try {
-          const endpoint = process.env.VUE_APP_API_ENDPOINT_ADMIN; // 관리자 로그인 API 엔드포인트
+          // const endpoint = process.env.VUE_APP_API_ENDPOINT_ADMIN; // 관리자 로그인 API 엔드포인트
+          const endpoint = "http://localhost:8088/member/admin/login";
+
+          console.log(endpoint);
+          console.log(this.loginData);
           let response = await axios.post(endpoint, this.loginData);
+          sessionStorage.setItem("token", response.data.token);
+          sessionStorage.setItem("userId", response.data.userId);
+          sessionStorage.setItem("userEmail", response.data.userEmail);
   
-          userStore.commit("login", response.data);
-          console.log("관리자 로그인 성공");
-          this.$router.push({ name: "AdminDashboard" }); // 성공 시 이동할 경로
+          // userStore.commit("login", response.data);
+
+          // console.log("관리자 로그인 성공");
+
+          // this.checkRememberId();
+          this.$router.push({ name: "AdminNotice" }); // 성공 시 이동할 경로
         } catch (error) {
           console.log("로그인 실패");
           if (error.response) {
@@ -57,8 +80,19 @@
           }
         }
       },
+      // checkRememberId() {
+      //   if (this.status == "not_remember") {
+      //     localStorage.removeItem("rememberid");
+      //   } else {
+      //     localStorage.setItem("rememberid", this.loginData.email);
+      //   }
+      // }
     },
-    // 나머지는 동일
+    mounted() {
+    // this.loadExternalCSS(
+    //   "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    // );
+  },
   };
   </script>
   
