@@ -42,7 +42,7 @@
                 to="/bman/reviews"
               >
                 <div class="ms-1 d-none d-sm-inline menu-span">
-                  리뷰 삭제 요청
+                  리뷰 관리
                 </div></router-link
               >
             </li>

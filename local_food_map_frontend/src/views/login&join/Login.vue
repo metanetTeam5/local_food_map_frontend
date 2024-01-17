@@ -118,6 +118,7 @@ export default {
           this.$router.push({ name: 'HomePage' });
           this.$router.go(0);
         } else {
+          sessionStorage.setItem('bmId', response.data.bmId);
           this.$router.push({ name: 'BmanReservations' });
           this.$router.go(0);
         }
