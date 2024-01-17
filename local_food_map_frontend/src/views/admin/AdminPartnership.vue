@@ -107,7 +107,7 @@ export default {
 				const response = await axios.get('http://localhost:8088/bm/admin/request/list');
 				this.rows = response.data.length; // 총 데이터 수 업데이트
 				this.businessmans = response.data;		// this.notices = response.data;
-				console.log(this.businessmans);
+				// console.log(this.businessmans);
 			} catch (error) {
 				console.error('Error fetching bmans:', error);
 			}

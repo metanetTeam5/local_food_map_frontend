@@ -74,7 +74,7 @@ export default {
 				const response = await axios.get('http://localhost:8088/admin/review/delete/list');
 				this.rows = response.data.length; // 총 데이터 수 업데이트
 				this.reviews = response.data;		// this.notices = response.data;
-				console.log(this.reviews);
+				// console.log(this.reviews);
 			} catch (error) {
 				console.error('Error fetching notices:', error);
 			}
