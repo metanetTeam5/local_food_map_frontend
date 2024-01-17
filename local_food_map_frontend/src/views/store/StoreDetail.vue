@@ -299,8 +299,8 @@ export default {
               const mapContainer = document.getElementById("map");
               const options = {
                 center: new kakao.maps.LatLng(
-                    this.restLocationY,
-                    this.restLocationX
+                  this.restLocationY,
+                  this.restLocationX
                 ),
                 level: 3,
               };
@@ -654,4 +654,3 @@ td {
   /* 필요한 경우 다른 요소들에 대한 스타일 조정 */
 }
 </style>
-    
