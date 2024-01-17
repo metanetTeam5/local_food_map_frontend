@@ -5,63 +5,51 @@
 
       <!-- <img class="card-img-top" :src="review[0].revwImg" /> -->
       <div class="card-body">
-        <h5 class="card-title store-title">{{ restaurant.restName }}</h5>
+        <h2 class="card-title store-title">{{ restaurant.restName }}</h2>
         <div class="store-category">
           <p>{{ restaurant.restStation }}</p>
           <p>{{ restaurant.restCategory }}</p>
         </div>
         <div class="store-score">
           <p>평균별점</p>
-          <p class="text-left">
-            <span class="text-muted"
-              ><p>{{ restaurant.restMaxResv }}점</p></span
-            >
+          <p class="text-left"></p>
+
+          <p>{{ restaurant.restMaxResv }}점</p>
+          <div class="store-star">
             <span class="fa fa-star star-active ml-3"></span>
             <span class="fa fa-star star-active"></span>
             <span class="fa fa-star star-active"></span>
             <span class="fa fa-star star-active"></span>
             <span class="fa fa-star star-inactive"></span>
-          </p>
+          </div>
         </div>
       </div>
       <ul class="list-group list-group-flush">
         <li class="list-group-item">
           <div class="button-container">
             <!-- 버튼들 -->
-            <div class="button-container">
-              <button id="show-modal" @click="showModal = true">
-                모달버튼
-              </button>
-              <button id="show-favorite-modal" @click="showLikeModal = true">
-                즐겨찾기 모달
-              </button>
-              <button id="show-reserve-modal" @click="showReserveModal = true">
-                예약 모달
-              </button>
-              <button id="show-share-modal" @click="showShareModal = true">
-                공유 모달
-              </button>
-
-              <Modal v-if="showModal" @close="showModal = false">
-                <h3 slot="header">식당이름</h3>
-              </Modal>
-              <Like v-if="showLikeModal" @close="showLikeModal = false"></Like>
-              <ShareModal
-                v-if="showShareModal"
-                @close="showShareModal = false"
-              ></ShareModal>
-              <ReserveModal
-                v-if="showReserveModal"
-                @close="showReserveModal = false"
-              ></ReserveModal>
-            </div>
+            <!--하트버튼-->
+            <button class="button button-like">
+              <i class="fa fa-calendar-plus"></i>
+              <span>예약</span>
+            </button>
+            <button class="button button-like" @click="copyToClipboard">
+              <i class="fa fa-share"></i>
+              <span>공유</span>
+            </button>
+            <button class="button button-like">
+              <i class="fa fa-heart"></i>
+              <span>Like</span>
+            </button>
           </div>
         </li>
         <li class="list-group-item">
-          <p>📍 {{ restaurant.restLocationName }}</p>
-          <p>🗺️ 현재 위치에서 126m</p>
-          <p>📞 {{ restaurant.restPhoneNumber }}</p>
-          <p>{{ restaurant.restKeyword }}</p>
+          <div class="store-info">
+            <p>📍 {{ restaurant.restLocationName }}</p>
+            <p>🗺️ 현재 위치에서 126m</p>
+            <p>📞 {{ restaurant.restPhoneNumber }}</p>
+            <p>{{ restaurant.restKeyword }}</p>
+          </div>
         </li>
       </ul>
     </div>
@@ -69,14 +57,13 @@
     <div class="card store-card">
       <div class="card-body">
         <div class="card-title-store">
-          <h5 class="card-title store-title">영업시간</h5>
-          <div class="card-title-store-title2">
-            <h5 class="card-title store-title">⏰ 영업 중</h5>
+          <div class="card-open">
+            <h4 class="card-title store-title">영업시간</h4>
           </div>
         </div>
         <div class="store-category-date">
           <p>[오늘]</p>
-          <p>오늘날짜(일)</p>
+          <p id="today-date">{{ todayDate }}</p>
           <p>
             영업시간:{{ restaurant.restOpenTime }}-{{
               restaurant.restCloseTime
@@ -89,7 +76,7 @@
       </div>
       <ul class="list-group list-group-flush">
         <li class="list-group-item">
-          <h5 class="card-title store-menu">메뉴정보</h5>
+          <h4 class="card-title store-menu">메뉴정보</h4>
           <div v-if="menu && menu.length">
             <div
               v-for="menuItem in menu"
@@ -110,83 +97,112 @@
       </div>
     </div>
 
+    <!-- 네 번째 Store Card (방문자 평가) -->
+    <!-- 
+    <div
+      class="card store-card"
+      v-for="reviewItem in review"
+      :key="reviewItem.revwId"
+    > -->
+    <div class="card store-card">
+      <div class="card-body">
+        <!-- 리뷰가 있는 경우 -->
+        <div v-if="review && review.length > 0">
+          <div class="card-title-store">
+            <h5 class="card-title store-title">
+              {{ review.length }}건의 방문자 평가
+            </h5>
+          </div>
 
-  <!-- 네 번째 Store Card (방문자 평가) -->
-  <div
-    v-for="reviewItem in review"
-    :key="reviewItem.revwId"
-    class="card store-card"
-  >
-    <!-- 리뷰 내용 표시 -->
-    <div class="card-body">
-      <div class="card-title-store">
-        <h5 class="card-title store-title">{{ review.length }}건의 방문자 평가</h5>
-      </div>
-      <div class="row d-flex">
-        <div class="">
-          <img class="profile-pic" :src="reviewItem.membProfileImg" />
-        </div>
-        <div class="d-flex flex-column">
-          <h3 class="mt-2 mb-0">{{ reviewItem.membNickname }}</h3>
-          <div>
-            <p class="text-left">
-              <!-- 리뷰별 점수 -->
-              <span class="text-muted">{{ reviewItem.revwStarRate }}</span>
-              <span class="fa fa-star star-active ml-3"></span>
-              <span class="fa fa-star star-active"></span>
-              <span class="fa fa-star star-active"></span>
-              <span class="fa fa-star star-active"></span>
-              <span class="fa fa-star star-inactive"></span>
-            </p>
+          <!-- 개별 리뷰 항목 반복 -->
+          <div
+            v-for="reviewItem in review"
+            :key="reviewItem.revwId"
+            class="review-section"
+          >
+            <!-- 리뷰 프로필 및 정보 -->
+            <div class="profile">
+              <div class="profile-info">
+                <img class="profile-pic" :src="reviewItem.membProfileImg" />
+                <div class="profile-details">
+                  <h3 class="mt-2 mb-0">{{ reviewItem.membNickname }}</h3>
+                  <div class="review-info">
+                    <span class="text-muted">{{
+                      reviewItem.revwStarRate
+                    }}</span>
+                    <span class="fa fa-star star-active ml-3"></span>
+                    <span class="fa fa-star star-active"></span>
+                    <span class="fa fa-star star-active"></span>
+                    <span class="fa fa-star star-active"></span>
+                    <span class="fa fa-star star-inactive"></span>
+                    <p class="profile-write">{{ reviewItem.revwCreateDate }}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 리뷰 이미지 -->
+            <div class="review--images">
+              <!-- <img
+              class="pic"
+              v-for="(item, index) in review"
+              :key="index"
+              :src="item.revwImg"
+              :class="{
+                pic: index < 3,
+                'special-pic': index === 3 && review.length > 4,
+              }"
+              @click="index === 3 && review.length > 4 ? openModal() : null"
+            /> -->
+              <img
+                v-for="(img, index) in reviewItem.revwImgs"
+                :key="index"
+                :src="img"
+                :class="{
+                  pic: index < 4,
+                  'special-pic': index === 3 && reviewItem.revwImgs.length > 4,
+                }"
+                @click="
+                  index === 3 && reviewItem.revwImgs.length > 4
+                    ? openModal()
+                    : null
+                "
+              />
+            </div>
           </div>
         </div>
-        <p class="text-muted pt-5 pt-sm-3">{{ reviewItem.revwCreateDate }}</p>
-      </div>
-      <div class="row text-left">
-        <p class="content">{{ reviewItem.revwContent }}</p>
-      </div>
-      <div class="row text-left">
-        <img class="pic" :src="reviewItem.revwImg" />
-        <img class="pic" :src="reviewItem.revwImg" />
-        <img class="pic" :src="reviewItem.revwImg" />
-      </div>
-    </div>
-  </div>
 
-  <div v-if="review.length === 0" class="card store-card">
-    <div class="card-body">
-      <div class="review-section">
-        <div class="card-title-store">
-          <h5 class="card-title store-title">아직 작성된 리뷰가 없습니다.</h5>
+        <!-- 리뷰가 없는 경우 -->
+        <div v-else>
+          <p>작성된 리뷰가 없습니다.</p>
         </div>
       </div>
     </div>
-  </div>
 
-  <!-- 페이지 하단 부분 -->
-  <div class="container-fluid px-1 py-5 mx-auto">
-    <div class="row justify-content-center">
-      <div class="col-xl-7 col-lg-8 col-md-10 col-12 text-center mb-5"></div>
+    <!-- 모달 창 -->
+    <Modal v-if="showRivewModal" @close="showRivewModal = false">
+      <div v-for="(item, index) in review" :key="index">
+        <img :src="item.revwImg" class="modal-pic" />
+      </div>
+    </Modal>
+
+    <!-- 페이지 하단 부분 -->
+    <div class="container-fluid px-1 py-5 mx-auto">
+      <div class="row justify-content-center">
+        <div class="col-xl-7 col-lg-8 col-md-10 col-12 text-center mb-5"></div>
+      </div>
     </div>
-  </div>
   </div>
 </template>
 
-
 <script>
 import Modal from "./modal/Modal.vue";
-import Like from "./modal/LikeModal.vue";
-import ShareModal from "./modal/ShareModal.vue";
-import ReserveModal from "./modal/ReserveModal.vue";
 import { apiService } from "../../js/apiService.js";
 
 export default {
   name: "storeDetailPage",
   components: {
     Modal,
-    Like,
-    ShareModal,
-    ReserveModal,
   },
   data() {
     return {
@@ -196,10 +212,15 @@ export default {
       showFavoriteModal: false,
       showReserveModal: false,
       showShareModal: false,
-      restaurant: {},
+      restaurant: {
+        restLocationName: "가게 위치 정보",
+      },
       review: {},
       member: {},
       menu: {},
+      todayDate: "",
+      showRivewModal: false,
+      isLiked: false,
     };
   },
   computed: {
@@ -214,6 +235,7 @@ export default {
       return total / this.review.length;
     },
   },
+
   created() {
     const restId = this.$route.params.restId;
     const memberId = this.$route.params.memberId;
@@ -232,7 +254,8 @@ export default {
     apiService
       .getReviewById(restId)
       .then((response) => {
-        this.review = response.data;
+        // this.review = response.data;
+        this.review = this.processImageData(response.data);
       })
       .catch((error) => {
         console.error("리뷰 정보를 불러오는데 실패했습니다:", error);
@@ -260,14 +283,49 @@ export default {
   },
   async mounted() {
     this.loadExternalCSS(
+      "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+    );
+    this.loadExternalCSS(
       "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
     );
     this.initializeMap();
     this.createMap();
+    this.getTodayDate();
   },
   methods: {
+    processImageData(reviewData) {
+      return reviewData.map((item) => {
+        // 이미지 URL이 쉼표로 구분되어 있다고 가정
+        item.revwImgs = item.revwImg.split(","); // 문자열을 배열로 변환
+        return item;
+      });
+    },
+    toggleLike() {
+      this.isLiked = !this.isLiked;
+    },
+    copyToClipboard() {
+      const textarea = document.createElement("textarea");
+      document.body.appendChild(textarea);
+      textarea.value = this.restaurant.restLocationName;
+      textarea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textarea);
+      alert('주소가 복사 되었습니다!');
+    },
+    getTodayDate() {
+      var today = new Date();
+      var month = today.getMonth() + 1; // 월은 0부터 시작하므로 1을 더해줌
+      var day = today.getDate();
+
+      // 날짜를 원하는 형식으로 조합
+      var formattedDate = month + "/" + day + "일";
+
+      this.todayDate = formattedDate; // 데이터 속성에 오늘의 날짜 저장
+    },
+
     openModal() {
       this.showModal = true;
+      this.showRivewModal = true;
     },
     closeModals() {
       this.showModal = false;
@@ -287,7 +345,7 @@ export default {
       const script = document.createElement("script");
       script.onload = () => this.createMap();
       script.src =
-        "https://dapi.kakao.com/v2/maps/sdk.js?appkey=8f2894d655e069f08b65d82fbde8b6f3&autoload=false";
+        "https://dapi.kakao.com/v2/maps/sdk.js?appkey=4ee6fa1017dfbe37aa5850be2d9c3350&autoload=false";
       document.head.appendChild(script);
     },
     createMap() {
@@ -333,6 +391,9 @@ export default {
                 image: markerImage,
               });
               marker.setMap(map);
+
+              // 지도의 중심을 마커의 위치로 설정합니다.
+              map.setCenter(markerPosition);
             },
             (error) => {
               console.error("Geolocation failed: " + error.message);
@@ -364,7 +425,7 @@ export default {
 }
 
 .store-card {
-  width: 100%; /* 카드가 부모 컨테이너의 전체 너비를 차지하도록 설정 */
+  width: 100%;
   margin-bottom: 20px;
 }
 
@@ -377,10 +438,20 @@ export default {
   flex-direction: column;
   min-width: 0;
   word-wrap: break-word;
-  background-color: #fff;
+  background-color: #c80000;
   background-clip: border-box;
   border: 1px solid rgba(0, 0, 0, 0.125);
   border-radius: 0.25rem;
+}
+
+.card {
+  border-radius: 5px;
+  background-color: #b30000;
+  padding-left: 60px;
+  padding-right: 60px;
+  margin-top: 30px;
+  padding-top: 30px;
+  padding-bottom: 30px;
 }
 .card-img-top {
   width: 100%;
@@ -395,32 +466,35 @@ export default {
 .card-title-store {
   display: flex;
   align-items: center;
+  justify-content: space-between;
 }
 
-.card-title-store-title2 {
-  /* margin-left: right; */
-  width: 50%;
+.store-category {
+  display: flex;
+  align-items: center;
+  margin-right: -30px;
 }
 
-.store-category,
 .store-category-date {
   display: flex;
   align-items: center;
-  margin-right: -10px;
+  margin-right: -30px;
 }
 
 .store-category p {
   margin-right: 10px;
+  font-size: 16px;
+  color: #979a9b;
 }
 
 .store-category-date p {
   margin-right: 10px;
+  font-size: 17px;
 }
 .store-opentime {
-  width: 80%;
-}
-.store-opentime p {
-  text-align: right;
+  /* width: 10%; */
+  flex-grow: 1; /* 남은 공간을 모두 차지 */
+  text-align: right; /* 오른쪽 정렬 */
 }
 
 .store-category p:not(:last-child)::after {
@@ -429,6 +503,9 @@ export default {
   color: #333;
 }
 
+.store-star {
+  margin-bottom: 13px;
+}
 .store-score {
   display: flex;
   align-items: center;
@@ -437,6 +514,7 @@ export default {
 
 .store-score p {
   margin-right: 5px;
+  font-size: 15px;
 }
 .store-score-star p {
   margin-right: 1px;
@@ -444,6 +522,7 @@ export default {
 .store-score i {
   margin-left: 10px;
 }
+
 .card-store-menu {
   width: 700px;
   display: inline-block;
@@ -469,25 +548,27 @@ export default {
   margin-top: 1em;
 }
 
-.button-container {
+.modal-button-container {
   margin-left: 25px;
   height: 50px;
   align-content: center;
 }
-.button-container button {
+.modal-button-container button {
   margin-top: 8px;
   margin-right: 30px;
   padding: 5px 10px;
-  background-color: #dadada;
+  background-color: none;
   color: #fff;
   border: none;
   cursor: pointer;
   border-radius: 5px;
   width: 120px;
 }
-
+.button-container button {
+  margin-right: 25px;
+}
 .button-container button i {
-  margin-right: 8px;
+  margin-right: 10px;
 }
 
 .map {
@@ -498,16 +579,6 @@ export default {
   display: flex;
   align-items: center; /* 세로 중앙 정렬 */
   padding: 10px 0; /* 리뷰 항목 위아래 패딩 */
-}
-
-.card {
-  border-radius: 5px;
-  background-color: #fff;
-  padding-left: 60px;
-  padding-right: 60px;
-  margin-top: 30px;
-  padding-top: 30px;
-  padding-bottom: 30px;
 }
 
 .rating-box {
@@ -602,18 +673,41 @@ td {
 .content {
   font-size: 18px;
 }
-
-.profile-pic {
-  width: 90px;
-  height: 90px;
-  border-radius: 100%;
-  margin-right: 30px;
+.profile-write {
+  margin-left: 17px;
+  margin-top: 13px; /* 작성 날짜의 텍스트를 아래로 내리는 간격을 조정할 수 있습니다. */
+  color: #858585;
 }
 
-.pic {
-  width: 80px;
-  height: 80px;
+.profile {
+  display: flex;
+  align-items: center;
+}
+
+.profile-info {
+  display: flex;
+  align-items: flex-start;
+}
+
+.profile-pic {
+  height: 100px;
   margin-right: 10px;
+  border-radius: 100%;
+}
+
+.profile-details {
+  display: flex;
+  flex-direction: column;
+}
+
+.review-info {
+  display: flex;
+  align-items: center;
+  width: 200px;
+}
+
+.review-info span.text-muted {
+  margin-right: 5px;
 }
 
 .vote {
@@ -629,10 +723,129 @@ td {
 .menu-name,
 .menu-price {
   margin: 0;
+  font-size: 17px;
 }
 
 .list-group-flush {
   height: 100%;
+}
+
+.store-info p {
+  font-size: 15px;
+}
+
+.card-open {
+  display: flex;
+}
+
+.pic {
+  width: 170px;
+  height: 180px;
+  margin-right: 10px;
+  object-fit: cover;
+}
+
+.special-pic {
+  position: relative;
+  filter: brightness(50%); /* 이미지를 어둡게 처리 */
+}
+
+.special-pic::after {
+  content: "+"; /* 추가 텍스트 */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  font-size: 24px;
+  /* 필요한 추가 스타일 */
+}
+
+.modal-pic {
+  /* 모달 내 이미지 스타일 */
+  width: 100%;
+  height: auto;
+  margin-bottom: 10px;
+}
+
+.review--images {
+  width: 100%;
+  margin-top: 40px;
+}
+/*하트버튼*/
+
+.button-like {
+  border: 2px solid #8a8a8a;
+  background-color: transparent;
+  text-decoration: none;
+  padding: 1px;
+  position: relative;
+  vertical-align: middle;
+  text-align: center;
+  display: inline-block;
+  border-radius: 3rem;
+  color: #8a8a8a;
+  transition: all ease 0.4s;
+  width: 80px; /* 버튼의 가로 크기 */
+  height: 30px; /* 버튼의 세로 크기 */
+}
+
+.button-like span {
+  margin-left: 0.5rem;
+}
+
+.button-like .fa,
+.button-like span {
+  transition: all ease 0.4s;
+  font-size: 0.9rem;
+}
+
+.button-like:focus {
+  background-color: transparent;
+}
+
+.button-like:focus .fa,
+.button-like:focus span {
+  color: #8a8a8a;
+}
+
+.button-like:hover {
+  border-color: #ff2b8a;
+  background-color: transparent;
+}
+
+.button-like:hover .fa,
+.button-like:hover span {
+  color: #ff2b8a;
+}
+
+.liked {
+  background-color: #ff2b8a;
+  border-color: #ff2b8a;
+}
+
+.liked .fa,
+.liked span {
+  color: #fefefe;
+}
+
+.liked:focus {
+  background-color: #cc4b37;
+}
+
+.liked:focus .fa,
+.liked:focus span {
+  color: #fefefe;
+}
+
+.liked:hover {
+  background-color: #cc4b37;
+  border-color: #cc4b37;
+}
+
+.liked:hover .fa,
+.liked:hover span {
+  color: #fefefe;
 }
 
 @media (max-width: 768px) {

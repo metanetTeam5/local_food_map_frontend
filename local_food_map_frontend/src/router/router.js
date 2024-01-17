@@ -32,6 +32,7 @@ import BmanInfo from '../views/bman/BmanInfo';
 import BmanJoin from '../views/bman/BmanJoin';
 import BmanReviews from '../views/bman/BmanReviews';
 
+
 Vue.use(Router);
 
 export default new Router({
@@ -107,7 +108,7 @@ export default new Router({
       path: "/admin/notice/delete/:id",
       name: "AdminNoticeDelete",
       component: AdminNoticeDelete,
-      props: true,
+      props: true
     },
     {
       path: "/admin/notice/create",
@@ -127,7 +128,6 @@ export default new Router({
     {
       path: '/reservation',
       name: 'ReservationPage',
-
       component: Reservation,
     },
     {
@@ -156,16 +156,16 @@ export default new Router({
       component: MemberFavorites,
     },
 
+
     {
-      path: '/review/restaurant/:id',
-      name: 'StoreReview',
-      component: StoreReview,
+      path: "/review/restaurant/:id",
+      name: "StoreReview",
+      component: StoreReview
     },
     {
-      path: '/review-create/:resvId/:restId',
-      name: 'ReviewCreate',
-      component: ReviewCreate,
-      props: true,
+      path: "/review/create",
+      name: "ReviewCreate",
+      component: ReviewCreate
     },
     {
       path: "/mypage/reviews",

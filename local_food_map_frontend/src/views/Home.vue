@@ -74,6 +74,7 @@ export default {
   data() {
     return {
       menulists: [
+
         { menutext: "공지사항", link: "/notice" },
         { menutext: "서비스 소개", link: "/introduce" },
       ],
@@ -86,11 +87,13 @@ export default {
     goToStoreDetail(restId) {
       this.$router.push({ name: "StoreDetailPage", params: { restId } });
     },
+
     goToPage(target) {
       if (this.$router.currentRoute.path !== target) {
         this.$router.push(target);
       }
     },
+
     async requestLocationAccess() {
       this.locationLoading = true;
 
@@ -152,6 +155,10 @@ export default {
 
 <style scoped>
 * {
+
+  box-sizing: border-box; 
+  overflow-x: hidden
+
   box-sizing: border-box;
   overflow-x: hidden;
 }
@@ -237,6 +244,7 @@ a {
   width: 90%;
   max-width: 800px;
   margin-top: 300px;
+
 }
 .button-container3 {
   font-size: 20px;
@@ -282,3 +290,4 @@ img {
   border-radius: 10%;
 }
 </style>
+
