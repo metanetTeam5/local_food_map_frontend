@@ -30,7 +30,7 @@ export default {
 
       const shouldHideHeader =
         this.$route.path === "/admin/dashboard" ||
-        this.$route.path.startsWith("/admin/notice");
+        this.$route.path.startsWith("/admin/");
       return !shouldHideHeader;
     },
     showFooter() {
@@ -40,7 +40,7 @@ export default {
       // return !pathsToHideFooter.includes(this.$route.path);
       const shouldHideFooter =
         this.$route.path === "/admin/dashboard" ||
-        this.$route.path.startsWith("/admin/notice");
+        this.$route.path.startsWith("/admin/");
       return !shouldHideFooter;
     },
   },

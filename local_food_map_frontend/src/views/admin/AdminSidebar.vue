@@ -6,6 +6,8 @@
       <ul>
         <li><router-link to="/">🗿 사이트 바로가기</router-link></li>
         <li><router-link to="/admin/notice">🗿 공지사항 관리</router-link></li>
+        <li><router-link to="/admin/blackreview">🗿 악성 리뷰 관리</router-link></li>
+        <li><router-link to="/admin/partnership">🗿 제휴 리뷰 관리</router-link></li>
         <!-- 추가 링크 -->
       </ul>
     </div>
