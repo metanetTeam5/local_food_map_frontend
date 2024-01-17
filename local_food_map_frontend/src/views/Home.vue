@@ -34,8 +34,8 @@
         <img src="../assets/images/koreanfood.jpg" alt="한식" />
       </button>
       <button class="round-button2" @click="searchPlaces('중식')">
-        중식 <img src="../assets/images/chinesefood.avif" alt="중식" />
-      </button>
+        중식 <img src="../assets/images/chinesefood.png" alt="중식" /></button
+      >ㅊ
       <button class="round-button2" @click="searchPlaces('일식')">
         일식
         <img src="../assets/images/japanesefood.png" alt="일식" />
@@ -228,17 +228,6 @@ a {
   text-align: center;
   margin: 0;
   font-size: 25px;
-}
-
-.swiper-area {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: relative;
-  top: 100px;
-  background: #ffffff;
-  width: 90%;
-  font-family: "BMHANNAPro";
 }
 .button-container2 {
   font-size: 20px;
