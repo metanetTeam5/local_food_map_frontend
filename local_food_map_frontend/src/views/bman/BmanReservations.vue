@@ -5,44 +5,44 @@
         <div
           class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 min-vh-100"
         >
+          <div
+            class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start"
+          >
+            <router-link to="/bman/reservations">
+              <img
+                src="../../assets/images/아맛무 로고.png"
+                class="img-fluid"
+              />
+            </router-link>
+          </div>
           <ul
             class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start"
             id="menu"
           >
             <li class="nav-item">
-              <router-link class="nav-link align-middle px-0" to="/mypage">
-                <div class="ms-1 d-none d-sm-inline menu-span">
-                  개인정보수정
-                </div></router-link
-              >
-            </li>
-            <li class="nav-item">
               <router-link
                 class="nav-link align-middle px-0"
-                to="/mypage/reservations"
+                to="/bman/reservations"
               >
                 <div class="ms-1 d-none d-sm-inline menu-span selected-menu">
-                  예약 내역
+                  예약 조회
+                </div></router-link
+              >
+            </li>
+            <li class="nav-item">
+              <router-link class="nav-link align-middle px-0" to="/bman/info">
+                <div class="ms-1 d-none d-sm-inline menu-span">
+                  식당 정보 수정
                 </div></router-link
               >
             </li>
             <li class="nav-item">
               <router-link
                 class="nav-link align-middle px-0"
-                to="/mypage/reviews"
+                to="/bman/reviews"
               >
                 <div class="ms-1 d-none d-sm-inline menu-span">
                   리뷰 관리
-                </div></router-link
-              >
-            </li>
-            <li class="nav-item">
-              <router-link
-                class="nav-link align-middle px-0"
-                to="/mypage/favorites"
-              >
-                <div class="ms-1 d-none d-sm-inline menu-span">
-                  나의 찜
                 </div></router-link
               >
             </li>
@@ -50,42 +50,34 @@
         </div>
       </div>
       <div class="col py-3">
-        <h2>예약 내역</h2>
+        <h2>예약 조회</h2>
         <div v-if="isLoading">로딩중</div>
         <div v-else>
           <div>
-            <table>
+            <h2>전체 예약 {{ totalReservation }}개</h2>
+            <table class="table">
+              <tr>
+                <th>예약자</th>
+                <th>인원</th>
+                <th>예약일자</th>
+                <th>연락처</th>
+                <th>요청사항</th>
+              </tr>
               <tr v-for="(resv, index) in reservationList" :key="index">
                 <td>
-                  <img
-                    v-if="resv.restImg"
-                    class="profile"
-                    :src="resv.restImg"
-                    alt="식당 이미지"
-                  />
-                  <img
-                    v-else
-                    class="profile"
-                    src="../../assets/images/아맛무 로고.png"
-                    alt="기본 식당 이미지"
-                  />
-                  식당 이름 : {{ resv.restName }} <br />
-                  예약 날짜/시간 : {{ resv.resvDate }} {{ resv.resvHour }}
-                  <br />
-                  인원 수 : {{ resv.resvHeadCount }} <br />
-                  예약 한 날짜 : {{ resv.resvCreateDate }} <br />
-                  예약금 : {{ resv.resvPayAmount }} <br />
-                  요청사항 : {{ resv.resvRequirement }} <br />
-                  예약 상태 : {{ resv.resvStatus }}
-                  <button
-                    v-if="resv.reviewCreated"
-                    @click="getReview(resv.revwId)"
-                  >
-                    리뷰 보러가기
-                  </button>
-                  <button v-else @click="registerReview(resv)">
-                    리뷰 작성하기
-                  </button>
+                  {{ resv.membEmail }}
+                </td>
+                <td>
+                  {{ resv.headCount }}
+                </td>
+                <td>
+                  {{ resv.resvDate }}
+                </td>
+                <td>
+                  {{ resv.phoneNumber }}
+                </td>
+                <td>
+                  {{ resv.requirement }}
                 </td>
               </tr>
             </table>
@@ -97,29 +89,25 @@
 </template>
 
 <script>
-// import router from '@/router/router';
 import axios from 'axios';
 
 export default {
-  props: ['resvId', 'restId'],
-  name: 'MemberReservations',
+  name: 'BmanReservations',
   data() {
     return {
-      review: {
-        restId: this.restId
-      },
       isLoading: true,
       reservationList: [],
+      totalReservation: 0,
     };
   },
   methods: {
-    async getReservations() {
+    async getReviews() {
       let token = sessionStorage.getItem('token');
       if (token !== null) {
         let response;
         try {
           response = await axios.get(
-            process.env.VUE_APP_API_ENDPOINT + '/member/reservation/list',
+            process.env.VUE_APP_API_ENDPOINT + '/member/reservation/bm/list',
             {
               headers: {
                 'X-AUTH-TOKEN': token.toString(),
@@ -128,6 +116,7 @@ export default {
           );
           console.log(response.data);
           this.reservationList = response.data;
+          this.totalReservation = this.reservationList.length;
 
           this.isLoading = false;
         } catch (error) {
@@ -139,21 +128,29 @@ export default {
         this.$router.go(0);
       }
     },
-    async getReview() {},
-    async registerReview(resv) {
-        console.log(resv);
-    //     this.$router.push({
-    //     name: 'ReviewCreate',
-    //     params: { resvId: resv.resvId, restId: resv.restId }
-    //   })
-    
-    this.$router.push('/review-create/' + resv.resvId + '/' + resv.restId)
+    async deleteReview(revwId) {
+      let token = sessionStorage.getItem('token');
+      let response;
+      try {
+        response = await axios.delete(
+          process.env.VUE_APP_API_ENDPOINT + '/review/delete/' + revwId,
+          {
+            headers: {
+              'X-AUTH-TOKEN': token.toString(),
+            },
+          }
+        );
+        console.log(response.data);
+
+        this.$router.go(0);
+      } catch (error) {
+        console.error(error);
+        alert('찜 삭제 실패');
+      }
     },
   },
   mounted() {
-    this.review.restId = this.restId;
-    this.selectedReservationId = this.resvId;
-    this.getReservations();
+    this.getReviews();
   },
 };
 </script>
@@ -398,5 +395,8 @@ p {
 }
 .heart-button {
   float: right;
+}
+.sidebar-logo {
+  width: 576px;
 }
 </style>

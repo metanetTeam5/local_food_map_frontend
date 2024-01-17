@@ -1,49 +1,43 @@
 <template>
     <div>
       <AdminSidebar />
-      <div class="content">
-        <b-form-input
-            v-model="searchQuery"
-            type="search"
-            placeholder="검색..."
-            class="mb-3"
-        ></b-form-input>
-    
-        <b-table
-            striped
-            hover
-            :items="notices"
-            :fields="fields"
-            :per-page="perPage"
-            :current-page="currentPage"
-            :filter="searchQuery"
-            @row-clicked="navigateToDetail"
-        >
-            <template v-slot:cell(index)="data">
-            {{ data.index + 1 }}
-            </template>
-        </b-table>
-    
-        <!-- <b-pagination
-            v-model="currentPage"
-            :total-rows="rows"
-            :per-page="perPage"
-            aria-controls="my-table"
-            class="my-0"
-        ></b-pagination>
-        <b-button variant="primary" @click="createNewNotice">글쓰기</b-button> -->
-
-      <!-- Flex container for pagination and button -->
-      <div class="d-flex justify-content-between align-items-center my-3">
-        <b-pagination
-          v-model="currentPage"
-          :total-rows="rows"
-          :per-page="perPage"
-          aria-controls="my-table"
-          class="my-0"
-        ></b-pagination>
-        <b-button variant="primary" @click="createNewNotice">글쓰기</b-button>
-      </div>
+        <div class="content">
+          <div class="content-area">
+            <b-form-input
+              v-model="searchQuery"
+              type="search"
+              placeholder="검색..."
+              class="mb-3">
+            </b-form-input>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <b-table
+              striped
+              hover
+              :items="notices"
+              :fields="fields"
+              :per-page="perPage"
+              :current-page="currentPage"
+              :filter="searchQuery"
+              @row-clicked="navigateToDetail">
+              <template v-slot:cell(index)="data">
+                {{ data.index + 1 }}
+              </template>
+            </b-table>
+            <div class="d-flex justify-content-between align-items-center my-3">
+              <b-pagination
+                v-model="currentPage"
+                :total-rows="rows"
+                :per-page="perPage"
+                aria-controls="my-table"
+                class="my-0">
+              </b-pagination>
+              <b-button variant="primary" @click="createNewNotice">글쓰기</b-button>
+          </div>
+        </div>
       </div>
     </div>
   </template>
@@ -111,6 +105,14 @@
   .content {
     margin-left: 250px; /* 사이드바의 너비에 맞게 조정 */
   }
+
+  .content-area {
+    padding-top: 150px; /* 상단 여백 설정 */
+    max-width: 800px;
+    margin: 0 auto;
+    width: 100%;
+  }
+
   .mb-3 {
     margin-bottom: 1rem;
   }

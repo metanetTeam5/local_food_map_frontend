@@ -130,7 +130,6 @@ export default {
         console.log("검색 성공, MapPage로 이동");
 
         if (this.$router.currentRoute.name !== "MapPage") {
-          // this.$router.push({ name: "MapPage", query: { query: this.searchQuery.trim() } });
           this.$router.push({ name: "MapPage" });
         }
       } catch (error) {
