@@ -157,7 +157,7 @@ export default {
 * {
 
   box-sizing: border-box; 
-  overflow-x: hidden
+  overflow-x: hidden;
 
   box-sizing: border-box;
   overflow-x: hidden;
