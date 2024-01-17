@@ -29,6 +29,7 @@ import MemberReservations from '../views/member/MemberReservations';
 import BmanReservations from '../views/bman/BmanReservations';
 import BmanInfo from '../views/bman/BmanInfo';
 import BmanJoin from '../views/bman/BmanJoin';
+import BmanReviews from '../views/bman/BmanReviews';
 
 Vue.use(Router);
 
@@ -180,6 +181,11 @@ export default new Router({
       path: '/bman/info',
       name: 'BmanInfo',
       component: BmanInfo,
+    },
+    {
+      path: '/bman/reviews',
+      name: 'BmanReviews',
+      component: BmanReviews,
     },
   ],
 });

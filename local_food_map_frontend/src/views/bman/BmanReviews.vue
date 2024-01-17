@@ -24,7 +24,7 @@
                 class="nav-link align-middle px-0"
                 to="/bman/reservations"
               >
-                <div class="ms-1 d-none d-sm-inline menu-span selected-menu">
+                <div class="ms-1 d-none d-sm-inline menu-span">
                   예약 조회
                 </div></router-link
               >
@@ -41,7 +41,7 @@
                 class="nav-link align-middle px-0"
                 to="/bman/reviews"
               >
-                <div class="ms-1 d-none d-sm-inline menu-span">
+                <div class="ms-1 d-none d-sm-inline menu-span selected-menu">
                   리뷰 관리
                 </div></router-link
               >
@@ -50,34 +50,36 @@
         </div>
       </div>
       <div class="col py-3">
-        <h2>예약 조회</h2>
+        <h2>리뷰 관리</h2>
         <div v-if="isLoading">로딩중</div>
         <div v-else>
           <div>
-            <h2>전체 예약 {{ totalReservation }}개</h2>
             <table class="table">
               <tr>
-                <th>예약자</th>
-                <th>인원</th>
-                <th>예약일자</th>
-                <th>연락처</th>
-                <th>요청사항</th>
+                <th>작성자 아이디</th>
+                <th>작성자 닉네임</th>
+                <th>리뷰 내용</th>
+                <th>리뷰 별점</th>
+                <th>작성 날짜</th>
               </tr>
-              <tr v-for="(resv, index) in reservationList" :key="index">
+              <tr v-for="(revw, index) in reviewList" :key="index">
                 <td>
-                  {{ resv.membEmail }}
+                  {{ revw.membEmail }}
                 </td>
                 <td>
-                  {{ resv.headCount }}
+                  {{ revw.membNickname }}
                 </td>
                 <td>
-                  {{ resv.resvDate }}
+                  {{ revw.revwContent }}
                 </td>
                 <td>
-                  {{ resv.phoneNumber }}
+                  {{ revw.revwStarRate }}
                 </td>
                 <td>
-                  {{ resv.requirement }}
+                  {{ revw.revwCreateDate }}
+                </td>
+                <td>
+                  <button @click="deleteReview(revw.revwId)">삭제 요청</button>
                 </td>
               </tr>
             </table>
@@ -92,12 +94,11 @@
 import axios from 'axios';
 
 export default {
-  name: 'BmanReservations',
+  name: 'BmanReviews',
   data() {
     return {
       isLoading: true,
-      reservationList: [],
-      totalReservation: 0,
+      reviewList: [],
     };
   },
   methods: {
@@ -107,7 +108,7 @@ export default {
         let response;
         try {
           response = await axios.get(
-            process.env.VUE_APP_API_ENDPOINT + '/member/reservation/bm/list',
+            process.env.VUE_APP_API_ENDPOINT + '/bm/review/list',
             {
               headers: {
                 'X-AUTH-TOKEN': token.toString(),
@@ -115,8 +116,7 @@ export default {
             }
           );
           console.log(response.data);
-          this.reservationList = response.data;
-          this.totalReservation = this.reservationList.length;
+          this.reviewList = response.data;
 
           this.isLoading = false;
         } catch (error) {
@@ -129,23 +129,22 @@ export default {
       }
     },
     async deleteReview(revwId) {
-      let token = sessionStorage.getItem('token');
+      let bmId = sessionStorage.getItem('bmId');
+
       let response;
       try {
-        response = await axios.delete(
-          process.env.VUE_APP_API_ENDPOINT + '/review/delete/' + revwId,
+        response = await axios.post(
+          process.env.VUE_APP_API_ENDPOINT + '/bm/review/delete/' + revwId,
           {
-            headers: {
-              'X-AUTH-TOKEN': token.toString(),
-            },
+            bmanId: bmId,
           }
         );
         console.log(response.data);
-
+        alert('리뷰 삭제 요청 완료');
         this.$router.go(0);
       } catch (error) {
         console.error(error);
-        alert('찜 삭제 실패');
+        alert('리뷰 삭제 요청 실패');
       }
     },
   },
