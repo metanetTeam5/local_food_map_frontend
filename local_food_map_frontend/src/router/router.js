@@ -23,6 +23,8 @@ import AdminDashboard from '../views/admin/AdminDashboard.vue';
 import AdminNotice from '../views/admin/AdminNotice.vue';
 import AdminNoticeDetail from '../views/admin/AdminNoticeDetail.vue';
 import AdminNoticeEdit from '../views/admin/AdminNoticeEdit.vue';
+import AdminBlackReview from '../views/admin/AdminBlackReview.vue';
+import AdminPartnership from '../views/admin/AdminPartnership.vue';
 import MemberReviews from '../views/member/MemberReviews';
 import MemberReservations from '../views/member/MemberReservations';
 import BmanReservations from '../views/bman/BmanReservations';
@@ -113,6 +115,16 @@ export default new Router({
       component: AdminNoticeCreate,
     },
     {
+      path: '/admin/blackreview',
+      name: AdminBlackReview,
+      component: AdminBlackReview
+    },
+    {
+      path: '/admin/partnership',
+      name: AdminPartnership,
+      component: AdminPartnership
+    },
+    {
       path: '/reservation',
       name: 'ReservationPage',
 
@@ -185,5 +197,6 @@ export default new Router({
       name: 'BmanReviews',
       component: BmanReviews,
     },
+
   ],
 });
