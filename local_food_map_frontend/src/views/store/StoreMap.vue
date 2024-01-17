@@ -18,13 +18,14 @@
           <div class="sidebar-search-result" v-if="searchResults.length === 0">
             검색 결과가 없습니다.
           </div>
-
+       
           <a
             v-for="restaurant in paginatedSearchResults"
             :key="restaurant.restId"
             class="list-group-item list-group-item-action py-3 lh-tight"
             @click="goToStoreDetail(restaurant.restId)"
           >
+          
             <div class="col-10 mb-1 small">
               <div class="sidebar-item">
                 <div class="sidebar-content">
@@ -34,14 +35,13 @@
                     <h4>{{ restaurant.restName }}</h4>
                   </div>
                   <div class="store-cate">
-                    <p>{{ restaurant.restCategory }}</p>
-                  </div>
+                  <p>{{ restaurant.restCategory }}</p></div>
                   <div class="store-loca">
-                    <p>위치: {{ restaurant.restLocationName }}</p>
-                  </div>
+                  <p>위치: {{ restaurant.restLocationName }}</p></div>
                   <div class="store-hash">
-                    <p>{{ restaurant.restKeyword }}</p>
-                  </div>
+                  <p>{{ restaurant.restKeyword }}</p>
+                </div>
+                
                 </div>
                 <div class="sidebar-image">
                   <img
@@ -112,7 +112,6 @@ export default {
       newResults.forEach((place) => {
         this.displayMarker(place);
       });
-      this.$store.commit("toggleSearchMessage", false); // 검색 결과가 있을 때 메시지 숨기기
     },
   },
   data() {
@@ -148,6 +147,7 @@ export default {
   mounted() {
     this.initMap();
     this.getUserLocation();
+    this.restoreState();
   },
   methods: {
     ...mapActions(["fetchSearchResults"]),
@@ -158,23 +158,29 @@ export default {
         this.displayMarker(place);
       });
     },
+    saveState() {
+      sessionStorage.setItem('currentPage', JSON.stringify(this.currentPage));
+    },
+    restoreState() {
+      const savedPage = JSON.parse(sessionStorage.getItem('currentPage'));
+      if (savedPage) {
+        this.currentPage = savedPage;
+      }
+    },
 
+
+    changePage(pageNumber) {
+      this.currentPage = pageNumber;
+      this.saveState(); // 페이지 변경 시 상태 저장
+    },
     goToStoreDetail(restId) {
       this.$router.push({ name: "StoreDetail", params: { restId } });
     },
-    
     getUserLocation() {
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(
           (position) => {
-            const lat = position.coords.latitude;
-            const lng = position.coords.longitude;
             this.initMap(position.coords.latitude, position.coords.longitude);
-            this.searchPlaces(lat, lng);
-
-            // "내 위치 주변 식당" 텍스트를 나타냅니다.
-            this.$store.commit("setSearchMessage", "내 위치 주변 식당");
-            this.$store.commit("toggleSearchMessage", true);
           },
           (error) => {
             if (error.code === error.PERMISSION_DENIED) {
@@ -182,23 +188,14 @@ export default {
               this.showLocationAccessDeniedAlert();
             }
             console.error("위치 정보 오류: ", error.message);
-            this.initMap();
-
-            // "내 위치 주변 식당" 텍스트를 나타냅니다.
-            this.$store.commit("setSearchMessage", "내 위치 주변 식당");
-            this.$store.commit("toggleSearchMessage", true);
+            this.initMap(); // 기본 위치로 초기화
           }
         );
       } else {
         console.error("이 브라우저는 위치 정보를 지원하지 않습니다.");
-        this.initMap();
-
-        // "내 위치 주변 식당" 텍스트를 나타냅니다.
-        this.$store.commit("setSearchMessage", "내 위치 주변 식당");
-        this.$store.commit("toggleSearchMessage", true);
+        this.initMap(); // 기본 위치로 초기화
       }
     },
-
     showLocationAccessDeniedAlert() {
       // alert(
       //   "위치 정보 접근이 거부되었습니다. 지도 기능을 완전히 활용하려면 위치 정보 접근을 허용해주세요."
@@ -297,9 +294,7 @@ export default {
       }
     },
 
-    changePage(pageNumber) {
-      this.currentPage = pageNumber;
-    },
+   
     prevPage() {
       if (this.startPage === 1) return;
       this.startPage -= 10;
@@ -317,6 +312,7 @@ export default {
 
   
 <style >
+
 #map {
   /* 지도의 크기 설정 */
   width: 100%;
@@ -384,13 +380,11 @@ export default {
   color: rgb(255, 89, 0);
 }
 
-.store-hash {
-  color: rgb(255, 181, 70);
+.store-hash{
+  color:rgb(255, 181, 70)
 }
 
-.store-cate,
-.store-loca,
-.store-hash {
+.store-cate, .store-loca, .store-hash {
   font-size: 14px;
 }
 </style>
