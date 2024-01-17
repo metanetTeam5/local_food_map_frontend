@@ -34,8 +34,8 @@
         <img src="../assets/images/koreanfood.jpg" alt="한식" />
       </button>
       <button class="round-button2" @click="searchPlaces('중식')">
-        중식 <img src="../assets/images/chinesefood.png" alt="중식" /></button
-      >ㅊ
+        중식 <img src="../assets/images/chinesefood.png" alt="중식" />
+      </button>
       <button class="round-button2" @click="searchPlaces('일식')">
         일식
         <img src="../assets/images/japanesefood.png" alt="일식" />
