@@ -3,7 +3,7 @@
     <div class="row flex-nowrap">
       <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0">
         <div
-          class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 min-vh-100"
+          class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 min-vh-100 custom-text-color"
         >
           <ul
             class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start"
@@ -11,7 +11,7 @@
           >
             <li class="nav-item">
               <router-link class="nav-link align-middle px-0" to="/mypage">
-                <div class="ms-1 d-none d-sm-inline menu-span">
+                <div class="ms-1 d-none d-sm-inline menu-span selected-menu">
                   개인정보수정
                 </div></router-link
               >
@@ -21,7 +21,7 @@
                 class="nav-link align-middle px-0"
                 to="/mypage/reservations"
               >
-                <div class="ms-1 d-none d-sm-inline menu-span selected-menu">
+                <div class="ms-1 d-none d-sm-inline menu-span">
                   예약 내역
                 </div></router-link
               >
@@ -50,46 +50,160 @@
         </div>
       </div>
       <div class="col py-3">
-        <h2>예약 내역</h2>
+        <h2>프로필 수정하기</h2>
         <div v-if="isLoading">로딩중</div>
         <div v-else>
-          <div>
-            <table>
-              <tr v-for="(resv, index) in reservationList" :key="index">
-                <td>
-                  <img
-                    v-if="resv.restImg"
-                    class="profile"
-                    :src="resv.restImg"
-                    alt="식당 이미지"
-                  />
-                  <img
-                    v-else
-                    class="profile"
-                    src="../../assets/images/아맛무 로고.png"
-                    alt="기본 식당 이미지"
-                  />
-                  식당 이름 : {{ resv.restName }} <br />
-                  예약 날짜/시간 : {{ resv.resvDate }} {{ resv.resvHour }}
-                  <br />
-                  인원 수 : {{ resv.resvHeadCount }} <br />
-                  예약 한 날짜 : {{ resv.resvCreateDate }} <br />
-                  예약금 : {{ resv.resvPayAmount }} <br />
-                  요청사항 : {{ resv.resvRequirement }} <br />
-                  예약 상태 : {{ resv.resvStatus }}
-                  <button
-                    v-if="resv.reviewCreated"
-                    @click="getReview(resv.revwId)"
-                  >
-                    리뷰 보러가기
-                  </button>
-                  <button v-else @click="registerReview(resv)">
-                    리뷰 작성하기
-                  </button>
-                </td>
-              </tr>
-            </table>
-          </div>
+          <form method="post" action="">
+            <div class="container">
+              <div class="insert">
+                <table>
+                  <tr>
+                    <td class="col1">프로필 사진</td>
+                    <td class="col2">
+                      <img
+                        v-if="profileImg"
+                        class="profile"
+                        :src="profileImg"
+                        alt="프로필 이미지"
+                      />
+                      <img
+                        v-else
+                        class="profile"
+                        src="../../assets/images/default-profile-picture.png"
+                        alt="프로필 이미지"
+                      />
+                      <br />
+                      <input
+                        type="file"
+                        id="profilePic"
+                        name="profilePic"
+                        @change="handleFileChange"
+                      />
+                      <input
+                        class="but2"
+                        type="button"
+                        value="프로필 사진 변경"
+                        @click="updateProfileImg"
+                      />
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="col1">이메일</td>
+                    <td class="col2">
+                      {{ email }}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="col1">현재 비밀번호</td>
+                    <td class="col2">
+                      <input
+                        type="password"
+                        v-model="password"
+                        name="pwdCheck"
+                        maxlength="16"
+                      />
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="col1">새 비밀번호</td>
+                    <td class="col2">
+                      <input
+                        type="password"
+                        v-model="newPassword"
+                        name="pwdCheck"
+                        maxlength="16"
+                        @input="checkPassword"
+                      />
+                      <p>
+                        ※비밀번호는
+                        <span class="num"
+                          >문자, 숫자, 특수문자(~!@#$%^&*)의 조합 8 ~
+                          16자리</span
+                        >로 입력이 가능합니다.
+                      </p>
+                      <p>
+                        <span class="num" v-if="!checkPasswordPattern"
+                          >* 비밀번호 형식에 맞게 작성해주세요.</span
+                        >
+                      </p>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="col1">새 비밀번호 확인</td>
+                    <td class="col2">
+                      <input
+                        type="password"
+                        v-model="newPasswordCheck"
+                        name="pwdCheck"
+                        maxlength="16"
+                        @input="checkPassword"
+                      />
+                      <span class="num" v-if="!validPassword"
+                        >* 비밀번호가 일치하지 않습니다.</span
+                      >
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="col1">이름</td>
+                    <td class="col2">{{ name }}</td>
+                  </tr>
+                  <tr>
+                    <td class="col1">닉네임</td>
+                    <td class="col2">
+                      <input
+                        type="text"
+                        v-model="nickname"
+                        maxlength="20"
+                        @change="writeNickname"
+                      />
+                      <span v-if="nicknameDuplicate">
+                        <small class="color-red"
+                          >이미 사용 중인 닉네임입니다.</small
+                        >
+                      </span>
+                      <input
+                        class="but1"
+                        type="button"
+                        value="중복확인"
+                        @click="checkNicknameDuplicate"
+                      />
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <td class="col1">생년월일</td>
+                    <td class="col2">{{ birthDate }}</td>
+                  </tr>
+                  <tr>
+                    <td class="col1">성별</td>
+                    <td class="col2">{{ gender }}</td>
+                  </tr>
+                  <tr>
+                    <td class="col1">휴대전화</td>
+                    <td class="col2">{{ phoneNumber }}</td>
+                  </tr>
+                  <tr>
+                    <td class="col1">가입일</td>
+                    <td class="col2">{{ createdDate }}</td>
+                  </tr>
+                </table>
+              </div>
+              <div class="create">
+                <input
+                  class="but4"
+                  type="button"
+                  value="회원정보 수정"
+                  @click="updateMemberInfo"
+                />
+                <input
+                  class="but4"
+                  type="button"
+                  value="회원 탈퇴"
+                  @click="deleteMember"
+                />
+              </div>
+            </div>
+          </form>
         </div>
       </div>
     </div>
@@ -97,37 +211,48 @@
 </template>
 
 <script>
-// import router from '@/router/router';
 import axios from "axios";
 
 export default {
-  props: ["resvId", "restId"],
-  name: "MemberReservations",
+  name: "MemberMyPage",
   data() {
     return {
-      review: {
-        restId: this.restId,
-      },
       isLoading: true,
-      reservationList: [],
+      userId: "",
+      email: "",
+      password: "",
+      newPassword: "",
+      newPasswordCheck: "",
+      name: "",
+      nickname: "",
+      birthDate: "",
+      phoneNumber: "",
+      profileImg: null,
+      newProfileImg: null,
+      gender: "",
+      createdDate: "",
+      nicknameDuplicate: false,
+      validPassword: true,
+      changeNickname: false,
+      checkPasswordPattern: true,
     };
   },
   methods: {
-    async getReservations() {
+    async getInfo() {
       let token = sessionStorage.getItem("token");
       if (token !== null) {
         let response;
         try {
           response = await axios.get(
-            process.env.VUE_APP_API_ENDPOINT + "/member/reservation/list",
+            process.env.VUE_APP_API_ENDPOINT + "/member/info",
             {
               headers: {
                 "X-AUTH-TOKEN": token.toString(),
               },
             }
           );
+          this.setMemberInfo(response);
           console.log(response.data);
-          this.reservationList = response.data;
 
           this.isLoading = false;
         } catch (error) {
@@ -139,16 +264,159 @@ export default {
         this.$router.go(0);
       }
     },
-    async getReview() {},
-    async registerReview(resv) {
-      console.log(resv);
-      this.$router.push("/review-create/" + resv.resvId + "/" + resv.restId);
+    checkPassword() {
+      this.checkPasswordPatternFunction();
+      if (this.newPassword !== this.newPasswordCheck) {
+        this.validPassword = false;
+      } else {
+        this.validPassword = true;
+      }
+    },
+    checkPasswordPatternFunction() {
+      let passwordPattern =
+        /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,}$/;
+
+      if (!passwordPattern.test(this.newPassword)) {
+        this.checkPasswordPattern = false;
+      } else {
+        this.checkPasswordPattern = true;
+      }
+    },
+    handleFileChange(event) {
+      const selectedFile = event.target.files[0];
+      this.newProfileImg = selectedFile;
+    },
+    async updateProfileImg() {
+      let token = sessionStorage.getItem("token");
+      if (this.newProfileImg !== null) {
+        let formData = new FormData();
+        formData.append("email", this.email);
+        formData.append("file", this.newProfileImg);
+
+        await axios.put(
+          process.env.VUE_APP_API_ENDPOINT + "/member/profileimg/update",
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+              "X-AUTH-TOKEN": token.toString(),
+            },
+          }
+        );
+
+        alert("프로필 사진 변경 완료");
+        this.$router.go(0);
+      } else {
+        alert("선택된 파일이 없습니다.");
+      }
+    },
+    writeNickname() {
+      this.changeNickname = true;
+    },
+    async checkNicknameDuplicate() {
+      try {
+        await axios.get(
+          process.env.VUE_APP_API_ENDPOINT +
+            "/member/checknickname?nickname=" +
+            this.nickname
+        );
+
+        this.nicknameDuplicate = false;
+        this.changeNickname = false;
+        alert("사용 가능한 닉네임입니다.");
+      } catch (error) {
+        this.nicknameDuplicate = true;
+        this.changeNickname = true;
+      }
+    },
+    async updateMemberInfo() {
+      if (this.password === "") {
+        alert("현재 비밀번호를 입력해주세요.");
+      } else if (!this.validPassword || !this.checkPasswordPattern) {
+        alert("새 비밀번호 확인해주세요");
+      } else if (this.nicknameDuplicate || this.changeNickname) {
+        alert("닉네임 중복 확인 해주세요.");
+      } else {
+        let token = sessionStorage.getItem("token");
+        let response;
+        try {
+          response = await axios.put(
+            process.env.VUE_APP_API_ENDPOINT + "/member/info/update",
+            {
+              password: this.password,
+              newPassword: this.newPassword,
+              nickname: this.nickname,
+            },
+            {
+              headers: {
+                "X-AUTH-TOKEN": token.toString(),
+              },
+            }
+          );
+          console.log(response.data);
+          alert("회원 정보가 수정되었습니다.");
+          this.$router.go(0);
+        } catch (error) {
+          console.error(error);
+        }
+      }
+    },
+    async deleteMember() {
+      if (
+        confirm("회원 탈퇴를 하시겠습니까? 탈퇴하면 회원 정보는 삭제됩니다.")
+      ) {
+        if (this.password === "") {
+          alert("현재 비밀번호를 입력해주세요.");
+        } else {
+          let token = sessionStorage.getItem("token");
+          let response;
+          try {
+            response = await axios.delete(
+              process.env.VUE_APP_API_ENDPOINT + "/member/delete",
+              {
+                data: {
+                  password: this.password,
+                },
+                headers: {
+                  "X-AUTH-TOKEN": token.toString(),
+                },
+              }
+            );
+            console.log(response.data);
+            sessionStorage.clear();
+            alert("회원 탈퇴 완료");
+            this.$router.push({ name: "HomePage" });
+            this.$router.go(0);
+          } catch (error) {
+            console.error(error);
+            alert("회원 탈퇴 실패");
+          }
+        }
+      }
+    },
+    setMemberInfo(response) {
+      this.email = response.data.email;
+      this.name = response.data.name;
+      if (response.data.gender === "M") {
+        this.gender = "남성";
+      } else {
+        this.gender = "여성";
+      }
+      this.nickname = response.data.nickname;
+      this.birthDate = response.data.birthDate;
+      this.phoneNumber = response.data.phoneNumber;
+      this.profileImg = response.data.profileImg;
+      this.createdDate = response.data.createDate;
+    },
+
+    async beforeRouteUpdate(to, from, next) {
+      await this.getInfo();
+
+      next();
     },
   },
   mounted() {
-    this.review.restId = this.restId;
-    this.selectedReservationId = this.resvId;
-    this.getReservations();
+    this.getInfo();
   },
 };
 </script>
@@ -391,7 +659,7 @@ p {
   margin-top: 10px;
   margin-bottom: 10px;
 }
-.heart-button {
-  float: right;
+.custom-text-color {
+  color: black;
 }
 </style>

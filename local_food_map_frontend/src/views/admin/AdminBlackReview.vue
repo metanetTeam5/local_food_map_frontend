@@ -2,14 +2,18 @@
 	<div>
 		<AdminSidebar />
 		<div class="content">
+			<div>
+				<h1>악성리뷰 관리</h1>
+				<br />
+				<br />
+			</div>
 			<div class="content-area">
-				<b-form-input v-model="searchQuery" type="search" placeholder="검색.." class="mb-3">
-				</b-form-input>
-				<br />
-				<br />
-				<br />
-				<br />
-				<br />
+				<div class="search-area mb-4">
+					<b-form-input v-model="searchQuery" type="search" placeholder="검색..." class="search-input">
+					</b-form-input>
+				</div>
+				<!-- <b-form-input v-model="searchQuery" type="search" placeholder="검색.." class="mb-3">
+				</b-form-input> -->
 				<b-table striped hover :items="reviews" :fields="fields" :per-page="perPage" :current-page="currentPage"
 					:filter="searchQuery">
 					<!-- :filter="searchQuery" @row-clicked="navigateToDetail" -->
@@ -49,7 +53,7 @@ export default {
 				{ key: 'bmanId', label: '사업자 번호' },
 				{ key: 'revwContent', label: '리뷰 내용' },	//{ key: 'notiTitle', label: '제목' },
 				{ key: 'revwStarRate', label: '리뷰 별점' },
-				{ key: 'actions', label: '삭제'}
+				{ key: 'actions', label: '삭제' }
 
 				// {
 				// 	key: 'reviewCreateDate',
@@ -74,7 +78,7 @@ export default {
 				const response = await axios.get('http://localhost:8088/admin/review/delete/list');
 				this.rows = response.data.length; // 총 데이터 수 업데이트
 				this.reviews = response.data;		// this.notices = response.data;
-				console.log(this.reviews);
+				// console.log(this.reviews);
 			} catch (error) {
 				console.error('Error fetching notices:', error);
 			}
@@ -106,7 +110,110 @@ export default {
 	}
 };
 </script>
-  
+
+
+<style scoped>
+.content {
+	margin-left: 250px;
+	background-color: #f8f9fa;
+	min-height: 100vh;
+	padding: 2rem;
+}
+
+.content-area {
+	padding: 2rem;
+	/* 상단 여백과 같이 패딩 값 조정 */
+	background-color: #ffffff;
+	border-radius: .25rem;
+	box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+	margin: 1rem 0;
+	/* 상단 및 하단 마진 추가 */
+}
+
+.search-area {
+	max-width: 400px;
+	margin-bottom: 1.5rem;
+	/* 검색 영역 아래 마진 추가 */
+}
+
+.search-input {
+	padding: .75rem;
+	border-radius: .25rem;
+	border: 1px solid #ced4da;
+}
+
+.notices-table {
+	margin-top: 1rem;
+	margin-bottom: 1rem;
+	/* 테이블 상단 및 하단 마진 추가 */
+}
+
+.pagination-wrapper {
+	align-items: center;
+	padding: 1rem 0;
+	/* 페이지네이션 위 아래 패딩 추가 */
+}
+
+.pagination {
+	margin-bottom: 0;
+}
+
+@media (max-width: 767px) {
+	.content {
+		margin-left: 0;
+		padding: 1rem;
+	}
+
+	.content-area,
+	.search-area {
+		padding: 1rem;
+	}
+
+	.notices-table {
+		margin-top: 0.5rem;
+		margin-bottom: 0.5rem;
+	}
+
+	.pagination-wrapper {
+		padding: 0.5rem 0;
+	}
+}
+
+.notice-create-container {
+	/* 스타일링 */
+}
+
+.form-group {
+	margin-bottom: 1rem;
+}
+
+.form-group label {
+	display: block;
+}
+
+.form-group input,
+.form-group textarea {
+	width: 100%;
+	padding: 0.5rem;
+	margin-top: 0.5rem;
+}
+
+button {
+	padding: 0.5rem 1rem;
+	background-color: #007bff;
+	color: white;
+	border: none;
+	border-radius: 4px;
+	cursor: pointer;
+}
+
+button:hover {
+	background-color: #0056b3;
+}
+</style>
+
+
+<!--   
 <style scoped>
 .content {
 	margin-left: 250px;
@@ -133,4 +240,4 @@ export default {
 .mb-4 {
 	margin-bottom: 1.5rem;
 }
-</style>
+</style> -->
