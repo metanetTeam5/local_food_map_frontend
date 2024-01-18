@@ -22,6 +22,7 @@
                 aria-label="Search"
                 v-model="searchQuery"
               />
+
               <button
                 class="btn btn-outline-success my-2 my-sm-0 search-button"
                 type="submit"
@@ -73,26 +74,27 @@ export default {
     }
   },
   methods: {
-
     async searchPlaces() {
-  if (this.searchQuery.trim() === "") {
-    console.warn("검색어를 입력해주세요.");
-    return;
-  }
+      if (this.searchQuery.trim() === "") {
+        console.warn("검색어를 입력해주세요.");
+        return;
+      }
 
-  try {
-    await this.$store.dispatch("fetchSearchResults", this.searchQuery.trim());
-    console.log("검색 성공, MapPage로 이동");
+      try {
+        await this.$store.dispatch(
+          "fetchSearchResults",
+          this.searchQuery.trim()
+        );
+        console.log("검색 성공, MapPage로 이동");
 
-    if (this.$router.currentRoute.name !== "MapPage") {
-      // this.$router.push({ name: "MapPage", query: { query: this.searchQuery.trim() } });
-      this.$router.push({ name: "MapPage" });
-    }
-  } catch (error) {
-    console.error("검색 중 오류 발생: ", error);
-  }
-},
-
+        if (this.$router.currentRoute.name !== "MapPage") {
+          // this.$router.push({ name: "MapPage", query: { query: this.searchQuery.trim() } });
+          this.$router.push({ name: "MapPage" });
+        }
+      } catch (error) {
+        console.error("검색 중 오류 발생: ", error);
+      }
+    },
 
     async logout() {
       let token = sessionStorage.getItem("token");
@@ -156,12 +158,6 @@ export default {
 .search-container {
   margin-left: 180px;
   width: 800px;
-  font-family: "BMHANNAPro";
-}
-
-.search-input {
-  width: 100%;
-  outline: none;
   font-family: "BMHANNAPro";
 }
 

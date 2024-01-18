@@ -98,15 +98,15 @@
 
 <script>
 // import router from '@/router/router';
-import axios from 'axios';
+import axios from "axios";
 
 export default {
-  props: ['resvId', 'restId'],
-  name: 'MemberReservations',
+  props: ["resvId", "restId"],
+  name: "MemberReservations",
   data() {
     return {
       review: {
-        restId: this.restId
+        restId: this.restId,
       },
       isLoading: true,
       reservationList: [],
@@ -114,15 +114,15 @@ export default {
   },
   methods: {
     async getReservations() {
-      let token = sessionStorage.getItem('token');
+      let token = sessionStorage.getItem("token");
       if (token !== null) {
         let response;
         try {
           response = await axios.get(
-            process.env.VUE_APP_API_ENDPOINT + '/member/reservation/list',
+            process.env.VUE_APP_API_ENDPOINT + "/member/reservation/list",
             {
               headers: {
-                'X-AUTH-TOKEN': token.toString(),
+                "X-AUTH-TOKEN": token.toString(),
               },
             }
           );
@@ -134,20 +134,15 @@ export default {
           console.error(error);
         }
       } else {
-        alert('로그인 후 이용 가능합니다.');
-        this.$router.push({ name: 'HomePage' });
+        alert("로그인 후 이용 가능합니다.");
+        this.$router.push({ name: "HomePage" });
         this.$router.go(0);
       }
     },
     async getReview() {},
     async registerReview(resv) {
-        console.log(resv);
-    //     this.$router.push({
-    //     name: 'ReviewCreate',
-    //     params: { resvId: resv.resvId, restId: resv.restId }
-    //   })
-    
-    this.$router.push('/review-create/' + resv.resvId + '/' + resv.restId)
+      console.log(resv);
+      this.$router.push("/review-create/" + resv.resvId + "/" + resv.restId);
     },
   },
   mounted() {
@@ -160,7 +155,7 @@ export default {
 
 <style>
 * {
-  font-family: 'BMHANNAPro';
+  font-family: "BMHANNAPro";
 }
 .mypage-container {
   margin-top: 70px;
@@ -336,7 +331,7 @@ p {
 }
 
 .placehold-text:before {
-  content: '@naver.com';
+  content: "@naver.com";
   position: absolute; /*before은 inline 요소이기 때문에 span으로 감싸줌 */
   right: 20px;
   top: 13px;
@@ -367,7 +362,7 @@ p {
 }
 
 .member-footer div a:after {
-  content: '|';
+  content: "|";
   font-size: 10px;
   color: #bbb;
   margin-right: 5px;
