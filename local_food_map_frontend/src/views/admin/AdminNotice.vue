@@ -135,6 +135,9 @@ export default {
 </script>
 
 <style scoped>
+
+
+
 .content {
   margin-left: 250px;
   background-color: #f8f9fa;
