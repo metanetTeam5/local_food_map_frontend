@@ -3,10 +3,10 @@
 		<AdminSidebar />
 		<div class="content">
 			<div>
-        <h1>제휴 요청 관리</h1>
-        <br />
-        <br />
-      </div>
+				<h1>제휴 요청 관리</h1>
+				<br />
+				<br />
+			</div>
 			<div class="content-area">
 				<!-- <b-form-input v-model="searchQuery" type="search" placeholder="검색.." class="mb-3">
 				</b-form-input> -->
@@ -29,59 +29,60 @@
 					<b-modal v-model="isModalVisible" title="상세 정보" size="lg" hide-footer>
 						<div v-if="selectedBusinessman" class="modal-content">
 							<table class="table table-bordered">
-      <tbody>
-        <tr>
-          <th>사업자 번호</th>
-          <td>{{ selectedBusinessman.businessmanId }}</td>
-          <th>회원 번호</th>
-          <td>{{ selectedBusinessman.memberId }}</td>
-        </tr>
-        <tr>
-          <th>가게 번호</th>
-          <td>{{ selectedBusinessman.restaurantId }}</td>
-          <th>회사 이름</th>
-          <td>{{ selectedBusinessman.companyName }}</td>
-        </tr>
-        <tr>
-          <th>면허 번호</th>
-          <td>{{ selectedBusinessman.licenseNumber }}</td>
-          <th>생성 일자</th>
-          <td>{{ selectedBusinessman.createDate }}</td>
-        </tr>
-        <tr>
-          <th>승인 일자</th>
-          <td>{{ selectedBusinessman.grantDate }}</td>
-          <th>계좌</th>
-          <td>{{ selectedBusinessman.account }}</td>
-        </tr>
-        <tr>
-          <th>제휴 상태</th>
-          <td>{{ selectedBusinessman.status }}</td>
-        </tr>
-        <!-- 이미지 표시 -->
-        <tr v-if="selectedBusinessman.registration">
-          <th>사업자  등록증</th>
-          <td colspan="3">
-            <img :src="selectedBusinessman.registration" class="document-image" alt="사업자 등록증">
-          </td>
-        </tr>
-        <tr v-if="selectedBusinessman.report">
-          <th>보고서</th>
-          <td colspan="3">
-            <img :src="selectedBusinessman.report" class="document-image" alt="보고서">
-          </td>
-        </tr>
-        <tr v-if="selectedBusinessman.bankbook">
-          <th>통장 사본</th>
-          <td colspan="3">
-            <img :src="selectedBusinessman.bankbook" class="document-image" alt="통장 사본">
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-  <div class="modal-footer">
-    <b-button variant="primary" @click="handleOk">OK</b-button>
+								<tbody>
+									<tr>
+										<th>사업자 <br /> 번호</th>
+										<td>{{ selectedBusinessman.businessmanId }}</td>
+										<th>회원 번호</th>
+										<td>{{ selectedBusinessman.memberId }}</td>
+									</tr>
+									<tr>
+										<th>가게 번호</th>
+										<td>{{ selectedBusinessman.restaurantId }}</td>
+										<th>회사 이름</th>
+										<td>{{ selectedBusinessman.companyName }}</td>
+									</tr>
+									<tr>
+										<th>면허 번호</th>
+										<td>{{ selectedBusinessman.licenseNumber }}</td>
+										<th>생성 일자</th>
+										<td>{{ selectedBusinessman.createDate }}</td>
+									</tr>
+									<tr>
+										<th>승인 일자</th>
+										<td>{{ selectedBusinessman.grantDate }}</td>
+										<th>계좌</th>
+										<td>{{ selectedBusinessman.account }}</td>
+									</tr>
+									<tr>
+										<th>제휴 상태</th>
+										<td>{{ selectedBusinessman.status }}</td>
+									</tr>
+									<!-- 이미지 표시 -->
+									<tr v-if="selectedBusinessman.registration">
+										<th>사업자 등록증</th>
+										<td colspan="3">
+											<img :src="selectedBusinessman.registration" class="document-image"
+												alt="사업자 등록증">
+										</td>
+									</tr>
+									<tr v-if="selectedBusinessman.report">
+										<th>보고서</th>
+										<td colspan="3">
+											<img :src="selectedBusinessman.report" class="document-image" alt="보고서">
+										</td>
+									</tr>
+									<tr v-if="selectedBusinessman.bankbook">
+										<th>통장 사본</th>
+										<td colspan="3">
+											<img :src="selectedBusinessman.bankbook" class="document-image" alt="통장 사본">
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						<div class="modal-footer">
+							<b-button variant="primary" @click="handleOk">OK</b-button>
 						</div>
 					</b-modal>
 
@@ -191,55 +192,70 @@ export default {
 
 
 <style scoped>
-
 .modal-content {
-  /* 모달 콘텐츠에 대한 스타일링 */
-  font-size: 1rem; /* 글씨 크기 */
-  line-height: 1.5; /* 줄 간격 */
-  color: #333; /* 글씨 색상 */
+	/* 모달 콘텐츠에 대한 스타일링 */
+	font-size: 1rem;
+	/* 글씨 크기 */
+	line-height: 1.5;
+	/* 줄 간격 */
+	color: #333;
+	/* 글씨 색상 */
 }
 
 .modal-content p {
-  margin-bottom: 0.5rem; /* 단락 사이의 마진 */
+	margin-bottom: 0.5rem;
+	/* 단락 사이의 마진 */
 }
 
 .modal-header {
-  background-color: #f8f9fa; /* 모달 헤더 배경색 */
-  border-bottom: 1px solid #e9ecef; /* 헤더 하단 테두리 */
+	background-color: #f8f9fa;
+	/* 모달 헤더 배경색 */
+	border-bottom: 1px solid #e9ecef;
+	/* 헤더 하단 테두리 */
 }
 
 .modal-footer {
-  background-color: #f8f9fa; /* 모달 푸터 배경색 */
-  border-top: 1px solid #e9ecef; /* 푸터 상단 테두리 */
+	background-color: #f8f9fa;
+	/* 모달 푸터 배경색 */
+	border-top: 1px solid #e9ecef;
+	/* 푸터 상단 테두리 */
 }
 
 .modal-footer .btn {
-  margin-right: 0.5rem; /* 버튼 사이의 마진 */
+	margin-right: 0.5rem;
+	/* 버튼 사이의 마진 */
 }
 
 /* 이미지를 보여줄 컨테이너 스타일 */
 .document-image {
-  max-width: 100%; /* 이미지 최대 너비 */
-  height: auto; /* 이미지 높이 자동 조정 */
-  margin-bottom: 1rem; /* 이미지 아래 마진 */
+	max-width: 100%;
+	/* 이미지 최대 너비 */
+	height: auto;
+	/* 이미지 높이 자동 조정 */
+	margin-bottom: 1rem;
+	/* 이미지 아래 마진 */
 }
 
 /* 모달 내용의 전체적인 패딩 조정 */
 .b-modal-body {
-  padding: 1rem;
+	padding: 1rem;
 }
 
 /* 모달의 너비를 좀 더 커지게 조정하려면 .modal-dialog 클래스에 스타일을 추가합니다 */
 .modal-dialog {
-  max-width: 800px; /* 원하는 너비로 설정 */
+	max-width: 800px;
+	/* 원하는 너비로 설정 */
 }
 
 .modal-footer {
-  display: flex;
-  justify-content: flex-end; /* Aligns the button to the right */
-  padding: 1rem; /* Adds padding inside the footer */
-  border-top: none;
+	display: flex;
+	justify-content: flex-end;
+	/* Aligns the button to the right */
+	padding: 1rem;
+	/* Adds padding inside the footer */
+	border-top: none;
 }
+
 .content {
 	margin-left: 250px;
 	background-color: #f8f9fa;
