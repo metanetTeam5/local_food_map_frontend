@@ -50,56 +50,83 @@
         </div>
       </div>
       <div class="col py-3">
-        <h2>예약 내역</h2>
-        <div v-if="isLoading">로딩중</div>
+        <!-- <div v-if="isLoading">로딩중</div> -->
+        <div v-if="isLoading"></div>
         <div v-else>
           <div>
-            <table>
+            <table class="table2">
+              <h2 class="mb-4">나의 예약 내역</h2>
               <tr v-for="(resv, index) in reservationList" :key="index">
                 <td>
-                  <img
-                    v-if="resv.restImg"
-                    class="profile"
-                    :src="resv.restImg"
-                    alt="식당 이미지"
-                  />
-                  <img
-                    v-else
-                    class="profile"
-                    src="../../assets/images/아맛무 로고.png"
-                    alt="기본 식당 이미지"
-                  />
-                  식당 이름 : {{ resv.restName }} <br />
-                  예약 날짜 : {{ resv.resvDate }}
-                  <br />
-                  예약 시간 : {{ resv.resvHour }} <br />
-                  인원 수 : {{ resv.resvHeadCount }} <br />
-                  예약 한 날짜 : {{ resv.resvCreateDate }} <br />
-                  예약금 : {{ resv.resvPayAmount }} <br />
-                  요청사항 : {{ resv.resvRequirement }} <br />
-                  예약 상태 :
-                  <span v-if="resv.resvStatus === 'C'"
-                    >방문 완료
-                    <button
-                      v-if="resv.reviewCreated"
-                      @click="modalOpen(resv.revwId, resv.restName)"
-                    >
-                      리뷰 보기
-                    </button>
-                    <button v-else @click="registerReview(resv)">
-                      리뷰 작성하기
-                    </button>
-                  </span>
-                  <span v-else-if="resv.resvStatus === 'O'"
-                    >예약 승인
-                    <button @click="modalReservationOpen(resv.resvId)">
-                      예약 수정하기
-                    </button>
-                    <button @click="cancelReservation(resv.resvId)">
-                      예약 취소하기
-                    </button>
-                  </span>
-                  <span v-else-if="resv.resvStatus === 'X'">예약 취소</span>
+                  <div class="d-flex align-items-start review-context">
+                    <div class="mr-3">
+                      <img
+                        v-if="resv.restImg"
+                        class="rounded profileImg"
+                        :src="resv.restImg"
+                        alt="식당 이미지"
+                      />
+                      <img
+                        v-else
+                        class="rounded profileImg"
+                        src="../../assets/images/아맛무 로고.png"
+                        alt="기본 식당 이미지"
+                      />
+                    </div>
+                    <div id="reservation">
+                      식당 이름 : {{ resv.restName }} <br />
+                      예약 날짜 : {{ resv.resvDate }} <br />
+                      예약 시간 : {{ resv.resvHour }} <br />
+                      인원 수 : {{ resv.resvHeadCount }}명 <br />
+                      예약 한 날짜 : {{ resv.resvCreateDate }} <br />
+                      예약금 :
+                      {{ resv.resvPayAmount.toLocaleString() }} 원<br />
+                      요청사항 : {{ resv.resvRequirement }} <br />
+                      <span v-if="resv.resvStatus === 'C'" style="color: blue"
+                        >예약 상태 : 방문 완료
+                        <button
+                          v-if="resv.reviewCreated"
+                          @click="modalOpen(resv.revwId, resv.restName)"
+                        >
+                          리뷰 보기
+                        </button>
+                        <button v-else @click="registerReview(resv)">
+                          리뷰 작성하기
+                        </button>
+                      </span>
+                      <span
+                        v-else-if="resv.resvStatus === 'O'"
+                        style="color: green"
+                        >예약 상태 : 예약 완료
+                        <br />
+                        <div
+                          class="btn-group"
+                          role="group"
+                          aria-label="Reservation Buttons"
+                        >
+                          <button
+                            type="button"
+                            class="btn btn-primary"
+                            @click="modalReservationOpen(resv.resvId)"
+                          >
+                            예약 수정
+                          </button>
+                          <button
+                            type="button"
+                            class="btn btn-danger"
+                            @click="cancelReservation(resv.resvId)"
+                          >
+                            예약 취소
+                          </button>
+                        </div>
+                      </span>
+                      <span
+                        v-else-if="resv.resvStatus === 'X'"
+                        style="color: red"
+                        >예약 상태 : 예약 취소</span
+                      >
+                    </div>
+                  </div>
                 </td>
               </tr>
             </table>
@@ -143,8 +170,8 @@
             <h5 class="mb-4">예약 정보 입력</h5>
             <div class="form-group">
               <label for="headcount"
-                >인원 수: {{ reservation.headcount }}</label
-              >
+                >인원 수: {{ reservation.headcount }}명
+              </label>
             </div>
 
             <div class="form-group">
@@ -445,7 +472,6 @@ export default {
   },
 };
 </script>
-
 <style>
 * {
   font-family: "BMHANNAPro";
@@ -471,11 +497,6 @@ export default {
   color: #ffae00;
   margin-bottom: 30px;
   font-weight: normal;
-}
-div.container {
-}
-
-div.insert {
 }
 
 div.create {
@@ -684,9 +705,6 @@ p {
   margin-top: 10px;
   margin-bottom: 10px;
 }
-.heart-button {
-  float: right;
-}
 /* dimmed */
 .modal-wrap {
   position: fixed;
@@ -707,5 +725,18 @@ p {
   border-radius: 10px;
   padding: 20px;
   box-sizing: border-box;
+}
+.profileImg {
+  width: 220px;
+  height: 220px !important;
+}
+
+.review-context {
+  font-size: 15px;
+}
+#reservation {
+  margin-left: 10%;
+  margin-top: 2%;
+  font-size: 15px;
 }
 </style>

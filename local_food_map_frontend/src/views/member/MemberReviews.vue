@@ -32,28 +32,40 @@
             </ul>
           </div>
         </div>
-        <div class="col py-3">
-          <div v-if="isLoading" class="alert alert-info" role="alert">로딩중</div>
-          <div v-else>
-            <div>
-              <table class="table2">
-                <h2 class="mb-4">내가 쓴 리뷰</h2>
-                <tbody>
-                  <tr v-for="(rev, index) in paginatedReviews" :key="index">
-                    <td>
-                      <div class="d-flex align-items-start review-context">
-                        <div class="mr-3">
-                          <img v-if="rev.revwImg" class="rounded profileImg" :src="rev.revwImg" alt="식당 이미지" />
-                          <img v-else class="rounded profileImg" src="../../assets/images/아맛무 로고.png" alt="기본 리뷰 이미지" />
-                        </div>
-                        <div id="review">
-                          <p><strong>식당 이름:</strong> {{ rev.restName }}</p>
-                          <p><strong>별점:</strong> {{ rev.revwStarRate }}</p>
-                          <p><strong>리뷰 내용:</strong> {{ rev.revwContent }}</p>
-                          <p>
-                            <strong>작성 날짜:</strong> {{ rev.revwCreateDate }}
-                          </p>
-                        </div>
+      </div>
+      <div class="col py-3">
+        <div v-if="isLoading"></div>
+        <!-- <div v-if="isLoading" class="alert alert-info" role="alert">로딩중</div> -->
+
+        <div v-else>
+          <div>
+            <table class="table2">
+              <h2 class="mb-4">나의 리뷰 관리</h2>
+              <tbody>
+                <tr v-for="(rev, index) in paginatedReviews" :key="index">
+                  <td>
+                    <div class="d-flex align-items-start review-context">
+                      <div class="mr-3">
+                        <img
+                          v-if="rev.revwImg"
+                          class="rounded profileImg"
+                          :src="rev.revwImg"
+                          alt="식당 이미지"
+                        />
+                        <img
+                          v-else
+                          class="rounded profileImg"
+                          src="../../assets/images/아맛무 로고.png"
+                          alt="기본 리뷰 이미지"
+                        />
+                      </div>
+                      <div id="review">
+                        <p><strong>식당 이름:</strong> {{ rev.restName }}</p>
+                        <p><strong>별점:</strong> {{ rev.revwStarRate }}</p>
+                        <p><strong>리뷰 내용:</strong> {{ rev.revwContent }}</p>
+                        <p>
+                          <strong>작성 날짜:</strong> {{ rev.revwCreateDate }}
+                        </p>
                       </div>
                       <button @click="showModal(rev)" class="btn btn-danger mt-3">
                         수정
@@ -448,8 +460,7 @@ p {
 }
 
 .placehold-text {
-  display: block;
-  /*span 으로 감싸서 크기영역을 블록요소로 만들어ㅜ저야한다*/
+  display: block; /*span 으로 감싸서 크기영역을 블록요소로 만들어저야한다*/
   position: relative;
   /* border: 1px solid #000; */
 }
@@ -788,14 +799,15 @@ p {
   background-color: #e9ecef;
   border-color: #dee2e6;
 }
-
-.review-context {
-  font-size: 20px;
-}
+/* .mr-3 {
+  width: 30%;
+  height: 50% !important;
+} */
 
 #review {
   margin-left: 10%;
   margin-top: 2%;
+  font-size: 30px;
 }
 
 .profileImg {

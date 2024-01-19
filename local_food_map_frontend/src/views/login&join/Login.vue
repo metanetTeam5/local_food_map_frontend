@@ -47,17 +47,20 @@
         ><br /><router-link to="/join" class="reset-psw">회원가입</router-link>
       </div>
 
-      <b-form-group id="input-group-3" class="saveid">
-        <div class="checkbox-input">
+      <b-form-group
+        id="input-group-3"
+        class="saveid"
+        style="float: left; margin-right: 15px"
+      >
+        <label>
           <input
             type="checkbox"
             v-model="status"
             value="remember"
-            style="height: 14px"
             unchecked-value="not_remember"
           />
-        </div>
-        이메일 저장
+          이메일 저장
+        </label>
       </b-form-group>
 
       <div class="seperator"><b>or</b></div>
@@ -162,18 +165,21 @@ export default {
   transition: background-color 0.3s, color 0.3s;
   width: 100px;
   margin: 0 5px;
+  border-radius: 6px;
 }
 
 .user-type-btn:not(.active):hover {
   background-color: #fc8d05;
   color: rgb(0, 0, 0);
   letter-spacing: 1px;
+  border-radius: 6px;
 }
 
 .user-type-btn.active {
   background-color: #fc8d05;
   color: rgb(255, 255, 255);
   transform: scale(1.08);
+  border-radius: 6px;
 }
 
 .login-form {

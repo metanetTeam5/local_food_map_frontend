@@ -50,26 +50,39 @@
         </div>
       </div>
       <div class="col py-3">
-        <h2>나의 찜 관리</h2>
-        <div v-if="isLoading">로딩중</div>
+        <div v-if="isLoading"></div>
         <div v-else>
           <div>
-            <table>
+            <table class="table2">
+              <h2 class="mb-4">나의 찜 관리</h2>
+              <tbody></tbody>
               <tr v-for="(fav, index) in favoriteList" :key="index">
                 <td>
-
-                
-                  <img class="rest-img" :src="fav.restImg" alt="기본 식당 이미지">
-
-
-                  {{ fav.restName }}
-                  <br />
-                  {{ fav.restKeyword }}
+                  <img
+                    v-if="fav.restImg"
+                    class="profile3"
+                    :src="fav.restImg"
+                    alt="식당 이미지"
+                    style="float: left"
+                  />
+                  <img
+                    v-else
+                    class="profile3"
+                    src="../../assets/images/아맛무 로고.png"
+                    alt="기본 식당 이미지"
+                    style="float: left"
+                  />
+                  <div id="intro" style="float: left">
+                    {{ fav.restName }}
+                    <br />
+                    {{ fav.restKeyword }}
+                  </div>
                   <button
                     @click="deleteFavorite(fav.restId)"
-                    class="heart-button"
+                    class="btn btn-danger"
+                    style="float: right"
                   >
-                    찜 버튼
+                    찜 제거
                   </button>
                 </td>
               </tr>
@@ -82,10 +95,10 @@
 </template>
 
 <script>
-import axios from 'axios';
+import axios from "axios";
 
 export default {
-  name: 'MemberFavorites',
+  name: "MemberFavorites",
   data() {
     return {
       isLoading: true,
@@ -94,15 +107,15 @@ export default {
   },
   methods: {
     async getFavorites() {
-      let token = sessionStorage.getItem('token');
+      let token = sessionStorage.getItem("token");
       if (token !== null) {
         let response;
         try {
           response = await axios.get(
-            process.env.VUE_APP_API_ENDPOINT + '/restaurant/favorites',
+            process.env.VUE_APP_API_ENDPOINT + "/restaurant/favorites",
             {
               headers: {
-                'X-AUTH-TOKEN': token.toString(),
+                "X-AUTH-TOKEN": token.toString(),
               },
             }
           );
@@ -116,25 +129,25 @@ export default {
           console.error(error);
         }
       } else {
-        alert('로그인 후 이용 가능합니다.');
-        this.$router.push({ name: 'HomePage' });
+        alert("로그인 후 이용 가능합니다.");
+        this.$router.push({ name: "HomePage" });
         this.$router.go(0);
       }
     },
     async deleteFavorite(restId) {
-      let token = sessionStorage.getItem('token');
-      let userId = sessionStorage.getItem('userId');
+      let token = sessionStorage.getItem("token");
+      let userId = sessionStorage.getItem("userId");
       let response;
       try {
         response = await axios.delete(
-          process.env.VUE_APP_API_ENDPOINT + '/restaurant/favorite',
+          process.env.VUE_APP_API_ENDPOINT + "/restaurant/favorite",
           {
             data: {
               membId: userId,
               restId: restId,
             },
             headers: {
-              'X-AUTH-TOKEN': token.toString(),
+              "X-AUTH-TOKEN": token.toString(),
             },
           }
         );
@@ -143,7 +156,7 @@ export default {
         this.$router.go(0);
       } catch (error) {
         console.error(error);
-        alert('찜 삭제 실패');
+        alert("찜 삭제 실패");
       }
     },
   },
@@ -155,9 +168,7 @@ export default {
 
 <style>
 * {
-
   font-family: "NanumFont";
-
 }
 .mypage-container {
   margin-top: 70px;
@@ -333,7 +344,7 @@ p {
 }
 
 .placehold-text:before {
-  content: '@naver.com';
+  content: "@naver.com";
   position: absolute; /*before은 inline 요소이기 때문에 span으로 감싸줌 */
   right: 20px;
   top: 13px;
@@ -364,7 +375,7 @@ p {
 }
 
 .member-footer div a:after {
-  content: '|';
+  content: "|";
   font-size: 10px;
   color: #bbb;
   margin-right: 5px;
@@ -387,7 +398,7 @@ p {
 .color-red {
   color: red;
 }
-.rest-img {
+.profile3 {
   max-width: 100px;
   max-height: 100px;
   margin-top: 10px;
@@ -396,5 +407,8 @@ p {
 }
 .heart-button {
   float: right;
+}
+#intro {
+  margin-top: 20px;
 }
 </style>
