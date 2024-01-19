@@ -168,7 +168,7 @@ export default {
 
 <style>
 * {
-  font-family: "BMHANNAPro";
+  font-family: "NanumFont";
 }
 .mypage-container {
   margin-top: 70px;
@@ -403,6 +403,7 @@ p {
   max-height: 100px;
   margin-top: 10px;
   margin-bottom: 10px;
+  border-radius: 20px;
 }
 .heart-button {
   float: right;

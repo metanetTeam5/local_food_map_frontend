@@ -60,8 +60,10 @@
                 <th>예약자</th>
                 <th>인원</th>
                 <th>예약일자</th>
+                <th>예약시간</th>
                 <th>연락처</th>
                 <th>요청사항</th>
+                <th>방문확인</th>
               </tr>
               <tr v-for="(resv, index) in reservationList" :key="index">
                 <td>
@@ -74,10 +76,34 @@
                   {{ resv.resvDate }}
                 </td>
                 <td>
+                  {{ resv.resvHour }}
+                </td>
+                <td>
                   {{ resv.phoneNumber }}
                 </td>
                 <td>
                   {{ resv.requirement }}
+                </td>
+                <td>
+                  <span v-if="resv.resvStatus === 'X'"> 예약 취소 </span>
+                  <span v-else>
+                    <input
+                      id="O"
+                      type="radio"
+                      v-model="resv.resvStatus"
+                      value="O"
+                      @change="updateResvStatus(resv.resvId)"
+                    />
+                    <label for="O">방문 취소</label>
+                    <input
+                      id="C"
+                      type="radio"
+                      v-model="resv.resvStatus"
+                      value="C"
+                      @change="updateResvStatus(resv.resvId)"
+                    />
+                    <label for="C">방문 완료</label>
+                  </span>
                 </td>
               </tr>
             </table>
@@ -145,7 +171,30 @@ export default {
         this.$router.go(0);
       } catch (error) {
         console.error(error);
-        alert('찜 삭제 실패');
+        alert('리뷰 삭제 실패');
+      }
+    },
+    async updateResvStatus(resvId) {
+      let token = sessionStorage.getItem('token');
+      let response;
+      try {
+        response = await axios.post(
+          process.env.VUE_APP_API_ENDPOINT +
+            '/member/reservation/bm/visit/' +
+            resvId +
+            '?status=' +
+            event.target.value,
+          null,
+          {
+            headers: {
+              'X-AUTH-TOKEN': token.toString(),
+            },
+          }
+        );
+        console.log(response.data);
+      } catch (error) {
+        console.error(error);
+        alert('방문 상태 변경 실패');
       }
     },
   },

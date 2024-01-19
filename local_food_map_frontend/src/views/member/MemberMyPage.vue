@@ -586,12 +586,7 @@ p {
 .color-red {
   color: red;
 }
-/* .profile {
-  max-width: 100px;
-  max-height: 100px;
-  margin-top: 10px;
-  margin-bottom: 10px;
-} */
+
 .custom-text-color {
   color: black;
 }

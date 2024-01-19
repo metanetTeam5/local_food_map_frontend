@@ -77,10 +77,10 @@
             </button>
           </div>
 
-          <b-modal id="location-access-denied-modal" title="위치 정보 접근">
+          <!-- <b-modal id="location-access-denied-modal" title="위치 정보 접근">
             위치 정보 접근이 거부되었습니다. 지도 기능을 완전히 활용하려면 위치
             정보 접근을 허용해주세요.
-          </b-modal>
+          </b-modal> -->
         </div>
       </div>
 
@@ -342,6 +342,7 @@ export default {
 }
 
 .sidebar-item {
+  margin-right: -70px;
   display: flex;
 }
 
@@ -381,11 +382,20 @@ export default {
 }
 
 .store-hash{
-  color:rgb(255, 181, 70)
+  color:rgb(255, 115, 0)
+}
+.store-hash p{
+  font-weight: bold;
 }
 
 .store-cate, .store-loca, .store-hash {
   font-size: 14px;
 }
+
+.scrollarea {
+  overflow-y: auto; /* 세로 방향 스크롤을 활성화 */
+  max-height: 100vh; /* 슬라이드 영역의 최대 높이 설정 */
+}
+
 </style>
   

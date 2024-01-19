@@ -186,6 +186,17 @@
               </td>
             </tr>
             <tr>
+              <td class="col1">외국인 등록증<span class="num">*</span></td>
+              <td class="col2">
+                <input
+                  type="file"
+                  id="profilePic"
+                  name="profilePic"
+                  @change="handleResidenceChange"
+                />
+              </td>
+            </tr>
+            <tr>
               <td class="col1">계좌번호<span class="num">*</span></td>
               <td class="col2">
                 <input
@@ -278,6 +289,7 @@ export default {
       registration: null,
       report: null,
       bankbook: null,
+      residence: null,
       authCode: '',
       emailValid: true,
       emailDuplicate: false,
@@ -316,6 +328,10 @@ export default {
     handleBankBookChange(event) {
       const selectedFile = event.target.files[0];
       this.bankbook = selectedFile;
+    },
+    handleResidenceChange(event) {
+      const selectedFile = event.target.files[0];
+      this.residence = selectedFile;
     },
     async checkEmailDuplicate() {
       this.emailDuplicate = false;
@@ -423,6 +439,7 @@ export default {
         this.registration !== null &&
         this.report !== null &&
         this.bankbook !== null &&
+        this.residence !== null &&
         this.account
       ) {
         if (!this.authCodeChecked) {
@@ -434,6 +451,7 @@ export default {
           imagesFormData.append('registration', this.registration);
           imagesFormData.append('report', this.report);
           imagesFormData.append('bankbook', this.bankbook);
+          imagesFormData.append('residence', this.residence);
 
           let imagesResponse = await axios.post(
             process.env.VUE_APP_API_ENDPOINT + '/bm/images',
@@ -446,6 +464,7 @@ export default {
           let registrationUrl = imagesResponse.data.registration;
           let reportUrl = imagesResponse.data.report;
           let bankbookUrl = imagesResponse.data.bankbook;
+          let residenceUrl = imagesResponse.data.residence;
 
           await axios.post(process.env.VUE_APP_API_ENDPOINT + '/bm/register', {
             email: this.email,
@@ -460,6 +479,7 @@ export default {
             registration: registrationUrl,
             report: reportUrl,
             bankbook: bankbookUrl,
+            residence: residenceUrl,
             account: this.account,
           });
 
@@ -507,6 +527,7 @@ export default {
       this.registration = null;
       this.report = null;
       this.bankbook = null;
+      this.residence = null;
       this.profileImg = null;
       this.emailValid = true;
       this.emailDuplicate = false;

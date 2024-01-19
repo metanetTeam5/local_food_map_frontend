@@ -4,7 +4,7 @@
       <div class="container-fluid">
         <a class="navbar-brand" href="/home">
           <img
-            src="../../assets/images/아맛무 로고.png"
+            src="../../assets/images/아맛무 로고2.png"
             alt="Logo"
             style="height: 55px"
           />
