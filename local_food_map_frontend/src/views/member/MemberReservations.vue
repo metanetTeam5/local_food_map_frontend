@@ -70,26 +70,148 @@
                     alt="기본 식당 이미지"
                   />
                   식당 이름 : {{ resv.restName }} <br />
-                  예약 날짜/시간 : {{ resv.resvDate }} {{ resv.resvHour }}
+                  예약 날짜 : {{ resv.resvDate }}
                   <br />
+                  예약 시간 : {{ resv.resvHour }} <br />
                   인원 수 : {{ resv.resvHeadCount }} <br />
                   예약 한 날짜 : {{ resv.resvCreateDate }} <br />
                   예약금 : {{ resv.resvPayAmount }} <br />
                   요청사항 : {{ resv.resvRequirement }} <br />
-                  예약 상태 : {{ resv.resvStatus }}
-                  <button
-                    v-if="resv.reviewCreated"
-                    @click="getReview(resv.revwId)"
-                  >
-                    리뷰 보러가기
-                  </button>
-                  <button v-else @click="registerReview(resv)">
-                    리뷰 작성하기
-                  </button>
+                  예약 상태 :
+                  <span v-if="resv.resvStatus === 'C'"
+                    >방문 완료
+                    <button
+                      v-if="resv.reviewCreated"
+                      @click="modalOpen(resv.revwId, resv.restName)"
+                    >
+                      리뷰 보기
+                    </button>
+                    <button v-else @click="registerReview(resv)">
+                      리뷰 작성하기
+                    </button>
+                  </span>
+                  <span v-else-if="resv.resvStatus === 'O'"
+                    >예약 승인
+                    <button @click="modalReservationOpen(resv.resvId)">
+                      예약 수정하기
+                    </button>
+                    <button @click="cancelReservation(resv.resvId)">
+                      예약 취소하기
+                    </button>
+                  </span>
+                  <span v-else-if="resv.resvStatus === 'X'">예약 취소</span>
                 </td>
               </tr>
             </table>
           </div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div v-if="modalCheck" class="modal-wrap">
+        <div class="modal-container">
+          <!-- 모달창 content -->
+          <img
+            v-if="selectedReview.revwImg"
+            class="profile"
+            :src="selectedReview.revwImg"
+            alt="식당 이미지"
+          />
+          <img
+            v-else
+            class="profile"
+            src="../../assets/images/아맛무 로고.png"
+            alt="기본 식당 이미지"
+          />
+          식당 이름 : {{ selectedReview.restName }} <br />
+          별점 : {{ selectedReview.revwStarRate }} <br />
+          리뷰 내용 : {{ selectedReview.revwContent }} <br />
+          작성 날짜 : {{ selectedReview.revwCreateDate }}
+
+          <div class="modal-btn">
+            <button @click="modalClose">닫기</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div v-if="modalReservationCheck" class="modal-wrap">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <!-- 모달창 content -->
+          <form @submit.prevent="submitReservation" class="p-4">
+            <h5 class="mb-4">예약 정보 입력</h5>
+            <div class="form-group">
+              <label for="headcount"
+                >인원 수: {{ reservation.headcount }}</label
+              >
+            </div>
+
+            <div class="form-group">
+              <label for="resvDate">날짜:</label>
+              <input
+                type="date"
+                class="form-control"
+                id="resvDate"
+                v-model="reservation.resvDate"
+                :min="minDate"
+                required
+                @change="resetReservationHour"
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="resvHour">시간:</label>
+              <div class="time-buttons">
+                <button
+                  v-for="hour in availableHours"
+                  :key="hour"
+                  @click="setReservationHour(hour)"
+                  :disabled="isPastTime(hour) || !reservation.resvDate"
+                  :class="{
+                    'btn-primary': reservation.resvHour === hour,
+                    selected: selectedHour === hour,
+                  }"
+                >
+                  {{ hour }}
+                </button>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="additionalRequirements">추가 요구사항:</label>
+              <textarea
+                class="form-control"
+                id="additionalRequirements"
+                v-model="reservation.additionalRequirements"
+                rows="3"
+              ></textarea>
+            </div>
+
+            <div class="form-group">
+              <label>1인당 보증금: 10,000원</label>
+              <p>{{ deposit }}</p>
+            </div>
+
+            <div class="modal-btn text-right">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                @click="modalReservationClose"
+              >
+                닫기
+              </button>
+
+              <button
+                type="submit"
+                class="btn btn-primary"
+                :disabled="!reservation.resvHour"
+                @click="updateReservation(reservation.resvId)"
+              >
+                <div id="pay">수정하기</div>
+              </button>
+            </div>
+          </form>
         </div>
       </div>
     </div>
@@ -98,35 +220,48 @@
 
 <script>
 // import router from '@/router/router';
-import axios from 'axios';
+import axios from "axios";
 
 export default {
-  props: ['resvId', 'restId'],
-  name: 'MemberReservations',
+  props: ["resvId", "restId"],
+  name: "MemberReservations",
   data() {
     return {
       review: {
-        restId: this.restId
+        restId: this.restId,
       },
       isLoading: true,
       reservationList: [],
+      selectedReview: null,
+      modalCheck: false,
+      modalReservationCheck: false,
+      reservation: {
+        headcount: 0,
+        resvDate: null,
+        resvHour: null,
+        additionalRequirements: "",
+        resvId: null,
+      },
+      selectedHour: null,
     };
   },
   methods: {
     async getReservations() {
-      let token = sessionStorage.getItem('token');
+      let token = sessionStorage.getItem("token");
       if (token !== null) {
         let response;
         try {
           response = await axios.get(
-            process.env.VUE_APP_API_ENDPOINT + '/member/reservation/list',
+            process.env.VUE_APP_API_ENDPOINT + "/member/reservation/list",
             {
               headers: {
-                'X-AUTH-TOKEN': token.toString(),
+                "X-AUTH-TOKEN": token.toString(),
               },
             }
           );
+
           console.log(response.data);
+
           this.reservationList = response.data;
 
           this.isLoading = false;
@@ -134,20 +269,133 @@ export default {
           console.error(error);
         }
       } else {
-        alert('로그인 후 이용 가능합니다.');
-        this.$router.push({ name: 'HomePage' });
+        alert("로그인 후 이용 가능합니다.");
+        this.$router.push({ name: "HomePage" });
         this.$router.go(0);
       }
     },
-    async getReview() {},
     async registerReview(resv) {
-        console.log(resv);
-    //     this.$router.push({
-    //     name: 'ReviewCreate',
-    //     params: { resvId: resv.resvId, restId: resv.restId }
-    //   })
-    
-    this.$router.push('/review-create/' + resv.resvId + '/' + resv.restId)
+      console.log(resv);
+      //     this.$router.push({
+      //     name: 'ReviewCreate',
+      //     params: { resvId: resv.resvId, restId: resv.restId }
+      //   })
+
+      this.$router.push("/review-create/" + resv.resvId + "/" + resv.restId);
+    },
+    async modalOpen(revwId, restName) {
+      let response = await axios.get(
+        process.env.VUE_APP_API_ENDPOINT + "/review/search/" + revwId
+      );
+
+      console.log(response.data);
+
+      this.selectedReview = response.data;
+      this.selectedReview.restName = restName;
+
+      this.modalCheck = !this.modalCheck;
+    },
+    modalClose() {
+      this.modalCheck = !this.modalCheck;
+      this.selectedReview = null;
+    },
+    async updateReservation(resvId) {
+      let token = sessionStorage.getItem("token");
+      if (token !== null) {
+        let response;
+        try {
+          response = await axios.put(
+            process.env.VUE_APP_API_ENDPOINT +
+              "/member/reservation/update/" +
+              resvId,
+            {
+              resvDate: this.reservation.resvDate,
+              resvHour: this.reservation.resvHour,
+              resvRequirement: this.reservation.additionalRequirements,
+            },
+            {
+              headers: {
+                "X-AUTH-TOKEN": token.toString(),
+              },
+            }
+          );
+
+          console.log(response.data);
+
+          this.$router.go(0);
+        } catch (error) {
+          console.error(error);
+        }
+      } else {
+        alert("로그인 후 이용 가능합니다.");
+        this.$router.push({ name: "HomePage" });
+        this.$router.go(0);
+      }
+    },
+    async cancelReservation(resvId) {
+      let token = sessionStorage.getItem("token");
+      if (token !== null) {
+        let response;
+        try {
+          response = await axios.post(
+            process.env.VUE_APP_API_ENDPOINT +
+              "/member/reservation/cancel/" +
+              resvId,
+            null,
+            {
+              headers: {
+                "X-AUTH-TOKEN": token.toString(),
+              },
+            }
+          );
+
+          console.log(response.data);
+
+          this.$router.go(0);
+        } catch (error) {
+          console.error(error);
+        }
+      } else {
+        alert("로그인 후 이용 가능합니다.");
+        this.$router.push({ name: "HomePage" });
+        this.$router.go(0);
+      }
+    },
+    async modalReservationOpen(resvId) {
+      let response = await axios.get(
+        process.env.VUE_APP_API_ENDPOINT + "/member/reservation/info/" + resvId
+      );
+      this.reservation.headcount = response.data.resvHeadCount;
+      this.reservation.additionalRequirements = response.data.resvRequirement;
+      this.reservation.resvId = resvId;
+
+      this.modalReservationCheck = !this.modalReservationCheck;
+    },
+    submitReservation() {
+      console.log("Reservation Submitted:", this.reservation);
+    },
+    setReservationHour(hour) {
+      this.reservation.resvHour = hour;
+      this.selectedHour = hour;
+    },
+    resetReservationHour() {
+      this.reservation.resvHour = null;
+      this.selectedHour = null;
+    },
+    isPastTime(hour) {
+      if (this.isToday()) {
+        const selectedTime = new Date(`${this.currentDate} ${hour}`);
+        const currentTime = new Date();
+        return selectedTime <= currentTime;
+      }
+      return false;
+    },
+    isToday() {
+      return this.reservation.resvDate === this.currentDate;
+    },
+    modalReservationClose() {
+      this.headcount = 0;
+      this.modalReservationCheck = !this.modalReservationCheck;
     },
   },
   mounted() {
@@ -155,12 +403,52 @@ export default {
     this.selectedReservationId = this.resvId;
     this.getReservations();
   },
+  computed: {
+    currentDate() {
+      const today = new Date();
+      const year = today.getFullYear();
+      const month = String(today.getMonth() + 1).padStart(2, "0");
+      const day = String(today.getDate()).padStart(2, "0");
+      return `${year}-${month}-${day}`;
+    },
+    currentTime() {
+      const now = new Date();
+      const hours = String(now.getHours()).padStart(2, "0");
+      const minutes = String(now.getMinutes()).padStart(2, "0");
+      return `${hours}:${minutes}`;
+    },
+    minHeadcount() {
+      return 1;
+    },
+    deposit() {
+      const formattedDeposit = (
+        this.reservation.headcount * 10000
+      ).toLocaleString();
+      return `결제예정금액: ${this.reservation.headcount}(명) X 10,000 = ${formattedDeposit}원`;
+    },
+    availableHours() {
+      const startHour = this.isToday() ? new Date().getHours() + 1 : 9;
+      const endHour = 19;
+      const intervalMinutes = 30;
+
+      const hours = [];
+      for (let hour = startHour; hour <= endHour; hour++) {
+        for (let minute = 0; minute < 60; minute += intervalMinutes) {
+          const formattedHour = String(hour).padStart(2, "0");
+          const formattedMinute = String(minute).padStart(2, "0");
+          hours.push(`${formattedHour}:${formattedMinute}`);
+        }
+      }
+
+      return hours;
+    },
+  },
 };
 </script>
 
 <style>
 * {
-  font-family: 'BMHANNAPro';
+  font-family: "BMHANNAPro";
 }
 .mypage-container {
   margin-top: 70px;
@@ -336,7 +624,7 @@ p {
 }
 
 .placehold-text:before {
-  content: '@naver.com';
+  content: "@naver.com";
   position: absolute; /*before은 inline 요소이기 때문에 span으로 감싸줌 */
   right: 20px;
   top: 13px;
@@ -367,7 +655,7 @@ p {
 }
 
 .member-footer div a:after {
-  content: '|';
+  content: "|";
   font-size: 10px;
   color: #bbb;
   margin-right: 5px;
@@ -398,5 +686,26 @@ p {
 }
 .heart-button {
   float: right;
+}
+/* dimmed */
+.modal-wrap {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+}
+/* modal or popup */
+.modal-container {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 550px;
+  background: #fff;
+  border-radius: 10px;
+  padding: 20px;
+  box-sizing: border-box;
 }
 </style>

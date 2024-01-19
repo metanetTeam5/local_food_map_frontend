@@ -190,7 +190,7 @@ export default {
   background: #fce7bc;
 }
 
-a {
+a.nav-link {
   color: black;
   text-decoration: none;
   background-color: transparent;
@@ -240,6 +240,7 @@ a {
   color: #fff;
   cursor: pointer;
   font-family: "BMHANNAPro";
+  text-decoration: none;
 }
 
 .round-button:hover {

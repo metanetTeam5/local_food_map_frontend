@@ -14,6 +14,40 @@
       </form>
     </div>
   </template>
+
+
+
+
+<template>
+  <b-container>
+    <b-row class="justify-content-md-center">
+      <b-col lg="8">
+        <b-card title="공지사항 작성하기" class="mt-3">
+          <b-form @submit.prevent="submitForm">
+            <b-form-group label="제목" label-for="notiTitle">
+              <b-form-input
+                id="notiTitle"
+                type="text"
+                v-model="notice.notiTitle"
+                required
+              />
+            </b-form-group>
+
+            <b-form-group label="내용" label-for="notiContent">
+              <b-form-textarea
+                id="notiContent"
+                v-model="notice.notiContent"
+                required
+              />
+            </b-form-group>
+
+            <b-button type="submit" variant="primary">작성완료</b-button>
+          </b-form>
+        </b-card>
+      </b-col>
+    </b-row>
+  </b-container>
+</template>
   
   <script>
   import axios from 'axios';
