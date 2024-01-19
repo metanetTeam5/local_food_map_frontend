@@ -1,117 +1,124 @@
 <template>
-  <div class="container-fluid mypage-container">
-    <div class="row">
-      <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0">
-        <div
-          class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 min-vh-100"
-        >
-          <ul
-            class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start"
-            id="menu"
+  <div>
+    <div class="container-fluid mypage-container">
+      <div class="row">
+        <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0">
+          <div
+            class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 min-vh-100"
           >
-            <li class="nav-item">
-              <router-link class="nav-link align-middle px-0" to="/mypage">
-                <div class="ms-1 d-none d-sm-inline menu-span">
-                  개인정보수정
-                </div>
-              </router-link>
-            </li>
-            <li class="nav-item">
-              <router-link
-                class="nav-link align-middle px-0"
-                to="/mypage/reservations"
-              >
-                <div class="ms-1 d-none d-sm-inline menu-span">예약 내역</div>
-              </router-link>
-            </li>
-            <li class="nav-item">
-              <router-link
-                class="nav-link align-middle px-0"
-                to="/mypage/reviews"
-              >
-                <div class="ms-1 d-none d-sm-inline menu-span selected-menu">
-                  리뷰 관리
-                </div>
-              </router-link>
-            </li>
-            <li class="nav-item">
-              <router-link
-                class="nav-link align-middle px-0"
-                to="/mypage/favorites"
-              >
-                <div class="ms-1 d-none d-sm-inline menu-span">나의 찜</div>
-              </router-link>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </div>
-    <div class="col py-3">
-      <div v-if="isLoading"></div>
-      <!-- <div v-if="isLoading" class="alert alert-info" role="alert">로딩중</div> -->
-
-      <div v-else>
-        <div>
-          <table class="table2">
-            <h2 class="mb-4">나의 리뷰 관리</h2>
-            <tbody>
-              <tr v-for="(rev, index) in paginatedReviews" :key="index">
-                <td>
-                  <div class="d-flex align-items-start review-context">
-                    <div class="mr-3">
-                      <img
-                        v-if="rev.revwImg"
-                        class="rounded profileImg"
-                        :src="rev.revwImg"
-                        alt="식당 이미지"
-                      />
-                      <img
-                        v-else
-                        class="rounded profileImg"
-                        src="../../assets/images/아맛무 로고.png"
-                        alt="기본 리뷰 이미지"
-                      />
-                    </div>
-                    <div id="review">
-                      <p><strong>식당 이름:</strong> {{ rev.restName }}</p>
-                      <p><strong>별점:</strong> {{ rev.revwStarRate }}</p>
-                      <p><strong>리뷰 내용:</strong> {{ rev.revwContent }}</p>
-                      <p>
-                        <strong>작성 날짜:</strong> {{ rev.revwCreateDate }}
-                      </p>
-                    </div>
-                    <button @click="showModal(rev)" class="btn btn-danger mt-3">
-                      수정
-                    </button>
-                    <button
-                      @click="deleteReview(rev.revwId)"
-                      class="btn btn-danger mt-3"
-                    >
-                      삭제
-                    </button>
+            <ul
+              class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start"
+              id="menu"
+            >
+              <li class="nav-item">
+                <router-link class="nav-link align-middle px-0" to="/mypage">
+                  <div class="ms-1 d-none d-sm-inline menu-span">
+                    개인정보수정
                   </div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-          <div class="pagination justify-content-center">
-            <button
-              @click="fetchPrevPage"
-              :disabled="currentPage === 1"
-              class="btn btn-primary"
-            >
-              이전
-            </button>
-            <span class="mx-3"
-              >페이지 {{ currentPage }} / {{ totalPages }}</span
-            >
-            <button
-              @click="fetchNextPage"
-              :disabled="currentPage === totalPages"
-              class="btn btn-primary"
-            >
-              다음
-            </button>
+                </router-link>
+              </li>
+              <li class="nav-item">
+                <router-link
+                  class="nav-link align-middle px-0"
+                  to="/mypage/reservations"
+                >
+                  <div class="ms-1 d-none d-sm-inline menu-span">예약 내역</div>
+                </router-link>
+              </li>
+              <li class="nav-item">
+                <router-link
+                  class="nav-link align-middle px-0"
+                  to="/mypage/reviews"
+                >
+                  <div class="ms-1 d-none d-sm-inline menu-span selected-menu">
+                    리뷰 관리
+                  </div>
+                </router-link>
+              </li>
+              <li class="nav-item">
+                <router-link
+                  class="nav-link align-middle px-0"
+                  to="/mypage/favorites"
+                >
+                  <div class="ms-1 d-none d-sm-inline menu-span">나의 찜</div>
+                </router-link>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="col py-3">
+          <div v-if="isLoading" class="alert alert-info" role="alert">
+            로딩중
+          </div>
+          <div v-else>
+            <div>
+              <table class="table2">
+                <h2 class="mb-4">내가 쓴 리뷰</h2>
+                <tbody>
+                  <tr v-for="(rev, index) in paginatedReviews" :key="index">
+                    <td>
+                      <div class="d-flex align-items-start review-context">
+                        <div class="mr-3">
+                          <img
+                            v-if="rev.revwImg"
+                            class="rounded profileImg"
+                            :src="rev.revwImg"
+                            alt="식당 이미지"
+                          />
+                          <img
+                            v-else
+                            class="rounded profileImg"
+                            src="../../assets/images/아맛무 로고.png"
+                            alt="기본 리뷰 이미지"
+                          />
+                        </div>
+                        <div id="review">
+                          <p><strong>식당 이름:</strong> {{ rev.restName }}</p>
+                          <p><strong>별점:</strong> {{ rev.revwStarRate }}</p>
+                          <p>
+                            <strong>리뷰 내용:</strong> {{ rev.revwContent }}
+                          </p>
+                          <p>
+                            <strong>작성 날짜:</strong> {{ rev.revwCreateDate }}
+                          </p>
+                        </div>
+                      </div>
+                      <button
+                        @click="showModal(rev)"
+                        class="btn btn-primary mt-3"
+                      >
+                        수정
+                      </button>
+                      <button
+                        @click="deleteReview(rev.revwId)"
+                        class="btn btn-danger mt-3"
+                      >
+                        삭제
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <div class="pagination justify-content-center">
+                <button
+                  @click="fetchPrevPage"
+                  :disabled="currentPage === 1"
+                  class="btn btn-primary"
+                >
+                  이전
+                </button>
+                <span class="mx-3"
+                  >페이지 {{ currentPage }} / {{ totalPages }}</span
+                >
+                <button
+                  @click="fetchNextPage"
+                  :disabled="currentPage === totalPages"
+                  class="btn btn-primary"
+                >
+                  다음
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
