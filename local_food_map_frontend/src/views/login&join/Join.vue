@@ -177,6 +177,9 @@
           </table>
         </div>
         <div class="create">
+          <router-link to="/bman/join">
+            <input class="but4" type="button" value="사업자로 회원가입" />
+          </router-link>
           <input
             class="but4"
             type="button"
@@ -191,22 +194,22 @@
 </template>
 
 <script>
-import axios from "axios";
+import axios from 'axios';
 
 export default {
-  name: "UserJoin",
+  name: 'UserJoin',
   data() {
     return {
-      email: "",
-      password: "",
-      passwordCheck: "",
-      name: "",
-      gender: "남성",
-      nickname: "",
-      birthDate: "",
-      phoneNumber: "",
+      email: '',
+      password: '',
+      passwordCheck: '',
+      name: '',
+      gender: '남성',
+      nickname: '',
+      birthDate: '',
+      phoneNumber: '',
       profileImg: null,
-      authCode: "",
+      authCode: '',
       emailValid: true,
       emailDuplicate: false,
       nicknameDuplicate: false,
@@ -239,11 +242,11 @@ export default {
         try {
           await axios.get(
             process.env.VUE_APP_API_ENDPOINT +
-              "/member/checkemail?email=" +
+              '/member/checkemail?email=' +
               this.email
           );
           this.emailDuplicate = false;
-          alert("사용 가능한 이메일입니다.");
+          alert('사용 가능한 이메일입니다.');
         } catch (error) {
           this.emailDuplicate = true;
         }
@@ -253,12 +256,12 @@ export default {
       try {
         await axios.get(
           process.env.VUE_APP_API_ENDPOINT +
-            "/member/checknickname?nickname=" +
+            '/member/checknickname?nickname=' +
             this.nickname
         );
 
         this.nicknameDuplicate = false;
-        alert("사용 가능한 닉네임입니다.");
+        alert('사용 가능한 닉네임입니다.');
       } catch (error) {
         this.nicknameDuplicate = true;
       }
@@ -267,39 +270,39 @@ export default {
       try {
         await axios.get(
           process.env.VUE_APP_API_ENDPOINT +
-            "/member/checkphonenumber?phoneNumber=" +
+            '/member/checkphonenumber?phoneNumber=' +
             this.phoneNumber
         );
 
         this.phoneNumberDuplicate = false;
-        alert("사용 가능한 전화번호입니다.");
+        alert('사용 가능한 전화번호입니다.');
       } catch (error) {
         this.phoneNumberDuplicate = true;
       }
     },
     async sendAuthCode() {
       if (this.phoneNumberDuplicate === null) {
-        alert("휴대전화 번호 중복 확인을 해주세요.");
+        alert('휴대전화 번호 중복 확인을 해주세요.');
       } else if (this.phoneNumber !== null) {
         if (!this.phoneNumberDuplicate) {
           try {
             await axios.get(
               process.env.VUE_APP_API_ENDPOINT +
-                "/member/sendauthcode/" +
+                '/member/sendauthcode/' +
                 this.phoneNumber
             );
             alert(
-              "입력한 휴대전화 번호로 인증번호 전송했습니다.(인증 시간 : 2분)"
+              '입력한 휴대전화 번호로 인증번호 전송했습니다.(인증 시간 : 2분)'
             );
           } catch (error) {
             console.error(error);
-            alert("서버 에러 발생");
+            alert('서버 에러 발생');
           }
         } else {
-          alert("중복된 휴대전화 번호에 전송할 수 없습니다.");
+          alert('중복된 휴대전화 번호에 전송할 수 없습니다.');
         }
       } else {
-        alert("휴대전화 번호를 입력해주세요.");
+        alert('휴대전화 번호를 입력해주세요.');
       }
     },
     async checkAuthCode() {
@@ -307,20 +310,20 @@ export default {
         try {
           await axios.get(
             process.env.VUE_APP_API_ENDPOINT +
-              "/member/checkauthcode?phoneNumber=" +
+              '/member/checkauthcode?phoneNumber=' +
               this.phoneNumber +
-              "&code=" +
+              '&code=' +
               this.authCode
           );
           this.authCodeChecked = true;
-          alert("휴대전화 인증 완료");
+          alert('휴대전화 인증 완료');
         } catch (error) {
           console.error(error);
           this.authCodeChecked = false;
           alert(error.response.data);
         }
       } else {
-        alert("인증번호를 입력해주세요.");
+        alert('인증번호를 입력해주세요.');
       }
     },
     async register() {
@@ -336,12 +339,12 @@ export default {
         this.authCode
       ) {
         if (!this.authCodeChecked) {
-          alert("휴대전화 인증을 완료해주세요.");
+          alert('휴대전화 인증을 완료해주세요.');
         }
 
         try {
           const response = await axios.post(
-            process.env.VUE_APP_API_ENDPOINT + "/member/register",
+            process.env.VUE_APP_API_ENDPOINT + '/member/register',
             {
               email: this.email,
               password: this.password,
@@ -355,40 +358,40 @@ export default {
 
           if (this.profileImg !== null) {
             let formData = new FormData();
-            formData.append("email", this.email);
-            formData.append("file", this.profileImg);
+            formData.append('email', this.email);
+            formData.append('file', this.profileImg);
 
             await axios.post(
-              process.env.VUE_APP_API_ENDPOINT + "/member/profileimg",
+              process.env.VUE_APP_API_ENDPOINT + '/member/profileimg',
               formData,
               {
-                headers: { "Content-Type": "multipart/form-data" },
+                headers: { 'Content-Type': 'multipart/form-data' },
               }
             );
           }
 
           console.log(response);
 
-          alert("회원가입이 완료되었습니다");
+          alert('회원가입이 완료되었습니다');
         } catch (error) {
           console.error(error);
-          alert("회원가입 중 오류가 발생했습니다.");
+          alert('회원가입 중 오류가 발생했습니다.');
         }
 
         this.resetFormData();
       } else {
-        alert("필수 입력 항목 작성해주세요.");
+        alert('필수 입력 항목 작성해주세요.');
       }
     },
     resetFormData() {
-      this.email = "";
-      this.password = "";
-      this.passwordCheck = "";
-      this.name = "";
-      this.gender = "남성";
-      this.nickname = "";
-      this.birthDate = "";
-      this.phoneNumber = "";
+      this.email = '';
+      this.password = '';
+      this.passwordCheck = '';
+      this.name = '';
+      this.gender = '남성';
+      this.nickname = '';
+      this.birthDate = '';
+      this.phoneNumber = '';
       this.profileImg = null;
       this.emailValid = true;
       this.emailDuplicate = false;
@@ -566,7 +569,7 @@ p {
 }
 
 .placehold-text:before {
-  content: "@naver.com";
+  content: '@naver.com';
   position: absolute; /*before은 inline 요소이기 때문에 span으로 감싸줌 */
   right: 20px;
   top: 13px;
@@ -597,7 +600,7 @@ p {
 }
 
 .member-footer div a:after {
-  content: "|";
+  content: '|';
   font-size: 10px;
   color: #bbb;
   margin-right: 5px;
