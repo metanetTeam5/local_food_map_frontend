@@ -46,11 +46,13 @@
         </div>
       </div>
       <div class="col py-3">
-        <div v-if="isLoading" class="alert alert-info" role="alert">로딩중</div>
+        <div v-if="isLoading"></div>
+        <!-- <div v-if="isLoading" class="alert alert-info" role="alert">로딩중</div> -->
+
         <div v-else>
           <div>
             <table class="table2">
-              <h2 class="mb-4">내가 쓴 리뷰</h2>
+              <h2 class="mb-4">나의 리뷰 관리</h2>
               <tbody>
                 <tr v-for="(rev, index) in paginatedReviews" :key="index">
                   <td>
@@ -387,7 +389,7 @@ p {
 }
 
 .placehold-text {
-  display: block; /*span 으로 감싸서 크기영역을 블록요소로 만들어ㅜ저야한다*/
+  display: block; /*span 으로 감싸서 크기영역을 블록요소로 만들어저야한다*/
   position: relative;
   /* border: 1px solid #000; */
 }
@@ -673,12 +675,15 @@ p {
   background-color: #e9ecef;
   border-color: #dee2e6;
 }
-.review-context {
-  font-size: 20px;
-}
+/* .mr-3 {
+  width: 30%;
+  height: 50% !important;
+} */
+
 #review {
   margin-left: 10%;
   margin-top: 2%;
+  font-size: 30px;
 }
 .profileImg {
   width: 200px;

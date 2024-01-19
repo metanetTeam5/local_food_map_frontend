@@ -3,7 +3,7 @@
     <div class="row flex-nowrap">
       <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0">
         <div
-          class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 min-vh-100 custom-text-color"
+          class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 min-vh-100"
         >
           <ul
             class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start"
@@ -13,194 +13,192 @@
               <router-link class="nav-link align-middle px-0" to="/mypage">
                 <div class="ms-1 d-none d-sm-inline menu-span selected-menu">
                   개인정보수정
-                </div></router-link
-              >
+                </div>
+              </router-link>
             </li>
             <li class="nav-item">
               <router-link
                 class="nav-link align-middle px-0"
                 to="/mypage/reservations"
               >
-                <div class="ms-1 d-none d-sm-inline menu-span">
-                  예약 내역
-                </div></router-link
-              >
+                <div class="ms-1 d-none d-sm-inline menu-span">예약 내역</div>
+              </router-link>
             </li>
             <li class="nav-item">
               <router-link
                 class="nav-link align-middle px-0"
                 to="/mypage/reviews"
               >
-                <div class="ms-1 d-none d-sm-inline menu-span">
-                  리뷰 관리
-                </div></router-link
-              >
+                <div class="ms-1 d-none d-sm-inline menu-span">리뷰 관리</div>
+              </router-link>
             </li>
             <li class="nav-item">
               <router-link
                 class="nav-link align-middle px-0"
                 to="/mypage/favorites"
               >
-                <div class="ms-1 d-none d-sm-inline menu-span">
-                  나의 찜
-                </div></router-link
-              >
+                <div class="ms-1 d-none d-sm-inline menu-span">나의 찜</div>
+              </router-link>
             </li>
           </ul>
         </div>
       </div>
       <div class="col py-3">
-        <h2>프로필 수정하기</h2>
-        <div v-if="isLoading">로딩중</div>
+        <div v-if="isLoading"></div>
         <div v-else>
           <form method="post" action="">
             <div class="container">
               <div class="insert">
-                <table>
-                  <tr>
-                    <td class="col1">프로필 사진</td>
-                    <td class="col2">
-                      <img
-                        v-if="profileImg"
-                        class="profile"
-                        :src="profileImg"
-                        alt="프로필 이미지"
-                      />
-                      <img
-                        v-else
-                        class="profile"
-                        src="../../assets/images/default-profile-picture.png"
-                        alt="프로필 이미지"
-                      />
-                      <br />
-                      <input
-                        type="file"
-                        id="profilePic"
-                        name="profilePic"
-                        @change="handleFileChange"
-                      />
-                      <input
-                        class="but2"
-                        type="button"
-                        value="프로필 사진 변경"
-                        @click="updateProfileImg"
-                      />
-                    </td>
-                  </tr>
-                  <tr>
-                    <td class="col1">이메일</td>
-                    <td class="col2">
-                      {{ email }}
-                    </td>
-                  </tr>
-                  <tr>
-                    <td class="col1">현재 비밀번호</td>
-                    <td class="col2">
-                      <input
-                        type="password"
-                        v-model="password"
-                        name="pwdCheck"
-                        maxlength="16"
-                      />
-                    </td>
-                  </tr>
-                  <tr>
-                    <td class="col1">새 비밀번호</td>
-                    <td class="col2">
-                      <input
-                        type="password"
-                        v-model="newPassword"
-                        name="pwdCheck"
-                        maxlength="16"
-                        @input="checkPassword"
-                      />
-                      <p>
-                        ※비밀번호는
-                        <span class="num"
-                          >문자, 숫자, 특수문자(~!@#$%^&*)의 조합 8 ~
-                          16자리</span
-                        >로 입력이 가능합니다.
-                      </p>
-                      <p>
-                        <span class="num" v-if="!checkPasswordPattern"
-                          >* 비밀번호 형식에 맞게 작성해주세요.</span
+                <table class="table table-bordered">
+                  <thead class="thead-light">
+                    <tr>
+                      <th colspan="2" class="text-center">나의 정보 수정</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td class="col1">프로필 사진</td>
+                      <td class="col2">
+                        <div class="profile5">
+                          <img
+                            v-if="profileImg"
+                            class="profile img-fluid rounded-circle"
+                            :src="profileImg"
+                            alt="프로필 이미지"
+                          />
+                          <img
+                            v-else
+                            class="profile img-fluid rounded-circle"
+                            src="../../assets/images/default-profile-picture.png"
+                            alt="프로필 이미지"
+                          />
+                        </div>
+                        <div class="mt-2">
+                          <input
+                            type="file"
+                            id="profilePic"
+                            name="profilePic"
+                            class="form-control"
+                            @change="handleFileChange"
+                          />
+                          <button
+                            class="btn btn-secondary mt-2"
+                            type="button"
+                            @click="updateProfileImg"
+                          >
+                            프로필 저장
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="col1">이메일</td>
+                      <td class="col2">
+                        {{ email }}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="col1">현재 비밀번호</td>
+                      <td class="col2">
+                        <input
+                          type="password"
+                          v-model="password"
+                          name="pwdCheck"
+                          maxlength="16"
+                        />
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="col1">새 비밀번호</td>
+                      <td class="col2">
+                        <input
+                          type="password"
+                          v-model="newPassword"
+                          name="pwdCheck"
+                          maxlength="16"
+                          @input="checkPassword"
+                        />
+                        <p>
+                          ※비밀번호는
+                          <span class="num"
+                            >문자, 숫자, 특수문자(~!@#$%^&*)의 조합 8 ~
+                            16자리</span
+                          >로 입력이 가능합니다.
+                        </p>
+                        <p>
+                          <span class="num" v-if="!checkPasswordPattern"
+                            >* 비밀번호 형식에 맞게 작성해주세요.</span
+                          >
+                        </p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="col1">새 비밀번호 확인</td>
+                      <td class="col2">
+                        <input
+                          type="password"
+                          v-model="newPasswordCheck"
+                          name="pwdCheck"
+                          maxlength="16"
+                          @input="checkPassword"
+                        />
+                        <span class="num" v-if="!validPassword"
+                          >* 비밀번호가 일치하지 않습니다.</span
                         >
-                      </p>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td class="col1">새 비밀번호 확인</td>
-                    <td class="col2">
-                      <input
-                        type="password"
-                        v-model="newPasswordCheck"
-                        name="pwdCheck"
-                        maxlength="16"
-                        @input="checkPassword"
-                      />
-                      <span class="num" v-if="!validPassword"
-                        >* 비밀번호가 일치하지 않습니다.</span
-                      >
-                    </td>
-                  </tr>
-                  <tr>
-                    <td class="col1">이름</td>
-                    <td class="col2">{{ name }}</td>
-                  </tr>
-                  <tr>
-                    <td class="col1">닉네임</td>
-                    <td class="col2">
-                      <input
-                        type="text"
-                        v-model="nickname"
-                        maxlength="20"
-                        @change="writeNickname"
-                      />
-                      <span v-if="nicknameDuplicate">
-                        <small class="color-red"
-                          >이미 사용 중인 닉네임입니다.</small
-                        >
-                      </span>
-                      <input
-                        class="but1"
-                        type="button"
-                        value="중복확인"
-                        @click="checkNicknameDuplicate"
-                      />
-                    </td>
-                  </tr>
-
-                  <tr>
-                    <td class="col1">생년월일</td>
-                    <td class="col2">{{ birthDate }}</td>
-                  </tr>
-                  <tr>
-                    <td class="col1">성별</td>
-                    <td class="col2">{{ gender }}</td>
-                  </tr>
-                  <tr>
-                    <td class="col1">휴대전화</td>
-                    <td class="col2">{{ phoneNumber }}</td>
-                  </tr>
-                  <tr>
-                    <td class="col1">가입일</td>
-                    <td class="col2">{{ createdDate }}</td>
-                  </tr>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="col1">이름</td>
+                      <td class="col2">{{ name }}</td>
+                    </tr>
+                    <tr>
+                      <td class="col1">닉네임</td>
+                      <td class="col2">
+                        <input
+                          type="text"
+                          v-model="nickname"
+                          maxlength="20"
+                          @change="writeNickname"
+                        />
+                        <span v-if="nicknameDuplicate">
+                          <small class="color-red"
+                            >이미 사용 중인 닉네임입니다.</small
+                          >
+                        </span>
+                        <input
+                          class="but1 rounded"
+                          type="button"
+                          value="중복확인"
+                          @click="checkNicknameDuplicate"
+                        />
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="col1">생년월일</td>
+                      <td class="col2">{{ birthDate }}</td>
+                    </tr>
+                    <tr>
+                      <td class="col1">성별</td>
+                      <td class="col2">{{ gender }}</td>
+                    </tr>
+                    <tr>
+                      <td class="col1">휴대전화</td>
+                      <td class="col2">{{ phoneNumber }}</td>
+                    </tr>
+                    <tr>
+                      <td class="col1">가입일</td>
+                      <td class="col2">{{ createdDate }}</td>
+                    </tr>
+                  </tbody>
                 </table>
               </div>
               <div class="create">
-                <input
-                  class="but4"
-                  type="button"
-                  value="회원정보 수정"
-                  @click="updateMemberInfo"
-                />
-                <input
-                  class="but4"
-                  type="button"
-                  value="회원 탈퇴"
-                  @click="deleteMember"
-                />
+                <button class="btn btn-warning" @click="updateMemberInfo">
+                  회원정보 수정
+                </button>
+                <button class="btn btn-danger" @click="deleteMember">
+                  회원 탈퇴
+                </button>
               </div>
             </div>
           </form>
@@ -433,7 +431,7 @@ export default {
 }
 
 .selected-menu {
-  color: #ffae00;
+  color: #6c757d;
 }
 
 .join-form {
@@ -443,14 +441,9 @@ export default {
 .join-form h1 {
   font-size: 36px;
   text-align: center;
-  color: #ffae00;
+  color: #6c757d;
   margin-bottom: 30px;
   font-weight: normal;
-}
-div.container {
-}
-
-div.insert {
 }
 
 div.create {
@@ -475,79 +468,19 @@ caption {
   text-align: left;
 }
 
-.col1 {
-  background-color: white;
-  border: solid 2px #fce205;
-  padding: 10px;
-  text-align: center;
-  font-weight: bold;
-  font-size: 0.8em;
-}
-
-.col2 {
-  text-align: left;
-  border: solid 2px #fce205;
-  padding: 5px;
-}
-
 .but1 {
   height: 25px;
   width: 80px;
-  background-color: #ffae00;
+  background-color: #6c757d !important;
   color: white;
-  border: 2px solid #ffae00;
+  border: 2px solid #6c757d !important;
   margin-left: 5px;
-}
-
-.but2 {
-  height: 25px;
-  width: 150px;
-  background-color: #ffae00;
-  color: white;
-  border: 2px solid #ffae00;
-  margin-left: 5px;
-}
-
-.but3 {
-  height: 35px;
-  width: 150px;
-  background-color: #ffae00;
-  color: white;
-  border: 2px solid #ffae00;
-  margin-left: 10px;
-}
-
-.but4 {
-  height: 35px;
-  width: 150px;
-  background-color: #ffae00;
-  color: white;
-  border: 2px solid #ffae00;
-  margin-right: 10px;
 }
 
 .but1:hover {
-  background-color: #fed273;
+  background-color: #6c757d;
   color: white;
-  border: 2px solid #fed273;
-}
-
-.but2:hover {
-  background-color: #fed273;
-  color: white;
-  border: 2px solid #fed273;
-}
-
-.but3:hover {
-  background-color: #fed273;
-  color: white;
-  border: 2px solid #fed273;
-}
-
-.but4:hover {
-  background-color: #fed273;
-  color: white;
-  border: 2px solid #fed273;
+  border: 2px solid #6c757d;
 }
 
 #checkAuthCodeBtn {
@@ -653,12 +586,12 @@ p {
 .color-red {
   color: red;
 }
-.profile {
+/* .profile {
   max-width: 100px;
   max-height: 100px;
   margin-top: 10px;
   margin-bottom: 10px;
-}
+} */
 .custom-text-color {
   color: black;
 }
