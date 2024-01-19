@@ -37,7 +37,11 @@
               <i class="fa fa-share"></i>
               <span>공유</span>
             </button>
-            <button class="button button-like">
+            <!-- <button class="button button-like">
+              <i class="fa fa-heart"></i>
+              <span>Like</span>
+            </button> -->
+            <button class="button button-like" @click="addToFavorites">
               <i class="fa fa-heart"></i>
               <span>Like</span>
             </button>
@@ -198,6 +202,7 @@
 <script>
 import Modal from "./modal/Modal.vue";
 import { apiService } from "../../js/apiService.js";
+import axios from 'axios';
 
 export default {
   name: "storeDetailPage",
@@ -308,9 +313,9 @@ export default {
       document.body.appendChild(textarea);
       textarea.value = this.restaurant.restLocationName;
       textarea.select();
-      document.execCommand('copy');
+      document.execCommand("copy");
       document.body.removeChild(textarea);
-      alert('주소가 복사 되었습니다!');
+      alert("주소가 복사 되었습니다!");
     },
     getTodayDate() {
       var today = new Date();
@@ -321,6 +326,27 @@ export default {
       var formattedDate = month + "/" + day + "일";
 
       this.todayDate = formattedDate; // 데이터 속성에 오늘의 날짜 저장
+    },
+
+    async addToFavorites() {
+      try {
+        // response 변수 제거
+        await axios.post(process.env.VUE_APP_API_ENDPOINT + "/restaurant/favorite", {
+          membId: sessionStorage.getItem("userId"),
+          restId: this.restaurant.restId,
+        }, {
+          headers: {
+            "X-AUTH-TOKEN": sessionStorage.getItem("token").toString(),
+          },
+        });
+
+        // 성공적으로 추가되었을 때의 처리
+        alert("즐겨찾기에 추가되었습니다.");
+        // 추가 처리 필요
+      } catch (error) {
+        console.error(error);
+        alert("즐겨찾기 추가 실패");
+      }
     },
 
     openModal() {
@@ -418,6 +444,7 @@ export default {
   margin-bottom: 0;
 }
 .store-container {
+  background: #fff2df;
   margin-top: 80px;
   display: flex;
   flex-direction: column;
@@ -440,7 +467,7 @@ export default {
   word-wrap: break-word;
   background-color: #c80000;
   background-clip: border-box;
-  border: 1px solid rgba(0, 0, 0, 0.125);
+  border: 1px solid rgb(255, 255, 255);
   border-radius: 0.25rem;
 }
 

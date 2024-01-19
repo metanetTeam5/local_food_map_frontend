@@ -56,13 +56,10 @@ export default {
 }
 
 @font-face {
-  font-family: "BMHANNAPro";
-  src: url("assets/fonts/BMHANNAPro.ttf") format("truetype");
-  font-weight: 400;
+  font-family: 'NanumFont';
+  src: url('./assets/fonts/Nanum.ttf') format('truetype');
+  
 }
 
-@font-face {
-  font-family: "BMJUA";
-  src: url("./assets/fonts/BMJUA_ttf.ttf") format("truetype");
-}
+
 </style>
