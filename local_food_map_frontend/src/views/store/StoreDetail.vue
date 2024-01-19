@@ -14,14 +14,19 @@
           <p>평균별점</p>
           <p class="text-left"></p>
 
-          <p>{{ restaurant.restMaxResv }}점</p>
+          <p>{{ averageReviewScore }}점</p>
+
           <div class="store-star">
-            <span class="fa fa-star star-active ml-3"></span>
-            <span class="fa fa-star star-active"></span>
-            <span class="fa fa-star star-active"></span>
-            <span class="fa fa-star star-active"></span>
-            <span class="fa fa-star star-inactive"></span>
-          </div>
+  <!-- 활성 별 (노란색) -->
+  <span v-for="star in Math.floor(averageReviewScore)" :key="`full-${star}`" class="fa fa-star star-active"></span>
+
+  <!-- 반 별 -->
+  <span v-if="averageReviewScore - Math.floor(averageReviewScore) >= 0.5" class="fa fa-star-half-alt star-active" :key="`half`"></span>
+
+  <!-- 비활성 별 (회색) -->
+  <span v-for="star in 5 - Math.ceil(averageReviewScore)" :key="`empty-${star}`" class="fa fa-star star-inactive"></span>
+</div>
+
         </div>
       </div>
       <ul class="list-group list-group-flush">
@@ -116,62 +121,92 @@
             <h5 class="card-title store-title">
               {{ review.length }}건의 방문자 평가
             </h5>
+            <hr class="review-title-divider" />
           </div>
 
           <!-- 개별 리뷰 항목 반복 -->
-          <div
-            v-for="reviewItem in review"
-            :key="reviewItem.revwId"
-            class="review-section"
-          >
-            <!-- 리뷰 프로필 및 정보 -->
-            <div class="profile">
-              <div class="profile-info">
-                <img class="profile-pic" :src="reviewItem.membProfileImg" />
-                <div class="profile-details">
-                  <h3 class="mt-2 mb-0">{{ reviewItem.membNickname }}</h3>
-                  <div class="review-info">
-                    <span class="text-muted">{{
-                      reviewItem.revwStarRate
-                    }}</span>
-                    <span class="fa fa-star star-active ml-3"></span>
+          <div class="riview-sectionContainer">
+            <div
+              v-for="reviewItem in review"
+              :key="reviewItem.revwId"
+              class="review-section"
+              :class="{ 'review-divider': index < review.length - 1 }"
+            >
+              <!-- 리뷰 프로필 및 정보 -->
+              <div class="profile">
+                <div class="profile-info">
+                  <img class="profile-pic" :src="reviewItem.membProfileImg" />
+                  <div class="profile-details">
+                    <h3 class="mt-2 mb-0">{{ reviewItem.membNickname }}</h3>
+                    <div class="review-info">
+                      <div class="review-score">
+                        <span class="text-muted">{{
+                          reviewItem.revwStarRate
+                        }}</span>
+                      </div>
+                      <!-- <span class="fa fa-star star-active ml-3"></span>
                     <span class="fa fa-star star-active"></span>
                     <span class="fa fa-star star-active"></span>
                     <span class="fa fa-star star-active"></span>
-                    <span class="fa fa-star star-inactive"></span>
-                    <p class="profile-write">{{ reviewItem.revwCreateDate }}</p>
+                    <span class="fa fa-star star-inactive"></span> -->
+                      <!-- <div
+                      v-if="
+                        typeof restaurant.restMaxResv === 'number' &&
+                        restaurant.restMaxResv >= 0
+                      "
+                      class="store-star"
+                    > -->
+                      <!-- 활성 별 (노란색) -->
+                      <div
+                        v-if="
+                          typeof reviewItem.revwStarRate === 'number' &&
+                          reviewItem.revwStarRate >= 0
+                        "
+                        class="store-star"
+                      >
+                        <span
+                          v-for="star in reviewItem.revwStarRate"
+                          :key="`active-${star}`"
+                          class="fa fa-star star-active ml-3"
+                        ></span>
+
+                        <!-- 비활성 별 (회색) -->
+                        <span
+                          v-for="star in 5 - reviewItem.revwStarRate"
+                          :key="`inactive-${star}`"
+                          class="fa fa-star star-inactive"
+                        ></span>
+                      </div>
+                      <div class="review-date">
+                        <p class="profile-write">
+                          {{ reviewItem.revwCreateDate }}
+                        </p>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-
-            <!-- 리뷰 이미지 -->
-            <div class="review--images">
-              <!-- <img
-              class="pic"
-              v-for="(item, index) in review"
-              :key="index"
-              :src="item.revwImg"
-              :class="{
-                pic: index < 3,
-                'special-pic': index === 3 && review.length > 4,
-              }"
-              @click="index === 3 && review.length > 4 ? openModal() : null"
-            /> -->
-              <img
-                v-for="(img, index) in reviewItem.revwImgs"
-                :key="index"
-                :src="img"
-                :class="{
-                  pic: index < 4,
-                  'special-pic': index === 3 && reviewItem.revwImgs.length > 4,
-                }"
-                @click="
-                  index === 3 && reviewItem.revwImgs.length > 4
-                    ? openModal()
-                    : null
-                "
-              />
+              <div class="rivew-content">
+                <p>{{ reviewItem.revwContent }}</p>
+              </div>
+              <!-- 리뷰 이미지 -->
+              <div class="review--images">
+                <img
+                  v-for="(img, index) in reviewItem.revwImgs"
+                  :key="index"
+                  :src="img"
+                  :class="{
+                    pic: index < 4,
+                    'special-pic':
+                      index === 3 && reviewItem.revwImgs.length > 4,
+                  }"
+                  @click="
+                    index === 3 && reviewItem.revwImgs.length > 4
+                      ? openModal()
+                      : null
+                  "
+                />
+              </div>
             </div>
           </div>
         </div>
@@ -202,7 +237,7 @@
 <script>
 import Modal from "./modal/Modal.vue";
 import { apiService } from "../../js/apiService.js";
-import axios from 'axios';
+import axios from "axios";
 
 export default {
   name: "storeDetailPage",
@@ -221,7 +256,7 @@ export default {
         restLocationName: "가게 위치 정보",
       },
       review: {},
-      member: {},
+      // member: {},
       menu: {},
       todayDate: "",
       showRivewModal: false,
@@ -229,21 +264,30 @@ export default {
     };
   },
   computed: {
-    averageStarRate() {
+
+
+  averageReviewScore() {
+    try {
       if (!this.review || this.review.length === 0) {
         return 0;
       }
-      const total = this.review.reduce(
-        (acc, item) => acc + item.revwStarRate,
-        0
-      );
-      return total / this.review.length;
-    },
+      const totalScore = this.review.reduce((sum, item) => {
+        if (typeof item.revwStarRate !== 'number') {
+          throw new Error('Invalid revwStarRate value');
+        }
+        return sum + item.revwStarRate;
+      }, 0);
+      return (totalScore / this.review.length).toFixed(1);
+    } catch (error) {
+      console.error(error);
+      return 0;
+    }
   },
 
+  },
   created() {
     const restId = this.$route.params.restId;
-    const memberId = this.$route.params.memberId;
+    // const memberId = this.$route.params.memberId;
     //식당 정보 가져오기
     apiService
       .getRestaurantById(restId)
@@ -266,15 +310,15 @@ export default {
         console.error("리뷰 정보를 불러오는데 실패했습니다:", error);
       });
     //멤버 정보 가져오기
-    apiService
-      .getMemberById(memberId)
-      .then((response) => {
-        this.member = response.data;
-        return this.$store.state.user.id;
-      })
-      .catch((error) => {
-        console.error("멤버 정보를 불러오는데 실패했습니다:", error);
-      });
+    // apiService
+    //   .getMemberById(memberId)
+    //   .then((response) => {
+    //     this.member = response.data;
+    //     return this.$store.state.user.id;
+    //   })
+    //   .catch((error) => {
+    //     console.error("멤버 정보를 불러오는데 실패했습니다:", error);
+    //   });
     //메뉴 정보 가져오기
     apiService
       .getMenuById(restId)
@@ -291,12 +335,60 @@ export default {
       "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
     );
     this.loadExternalCSS(
-      "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+      "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.0/css/font-awesome.min.css"
     );
     this.initializeMap();
     this.createMap();
     this.getTodayDate();
   },
+
+  async checkFavoriteStatus() {
+    try {
+      const response = await axios.get(
+        process.env.VUE_APP_API_ENDPOINT + "/restaurant/favorite",
+        {
+          // 필요한 데이터
+        }
+      );
+      if (response.status === 200) {
+        this.isLiked = response.data.isLiked; // 즐겨찾기 상태로 버튼 업데이트
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  },
+  async deleteFavorite(restId) {
+    let token = sessionStorage.getItem("token");
+    let userId = sessionStorage.getItem("userId");
+
+    try {
+      const response = await axios.delete(
+        `${process.env.VUE_APP_API_ENDPOINT}/restaurant/favorite`,
+        {
+          data: {
+            membId: userId,
+            restId: restId,
+          },
+          headers: {
+            "X-AUTH-TOKEN": token.toString(),
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        // 즐겨찾기 목록에서 해당 가게 제거
+        this.favoriteList = this.favoriteList.filter(
+          (item) => item.restId !== restId
+        );
+        // 성공 메시지 또는 기타 UI 업데이트
+        console.log("즐겨찾기가 성공적으로 삭제되었습니다.");
+      }
+    } catch (error) {
+      console.error(error);
+      alert("즐겨찾기 삭제에 실패했습니다.");
+    }
+  },
+
   methods: {
     processImageData(reviewData) {
       return reviewData.map((item) => {
@@ -331,14 +423,18 @@ export default {
     async addToFavorites() {
       try {
         // response 변수 제거
-        await axios.post(process.env.VUE_APP_API_ENDPOINT + "/restaurant/favorite", {
-          membId: sessionStorage.getItem("userId"),
-          restId: this.restaurant.restId,
-        }, {
-          headers: {
-            "X-AUTH-TOKEN": sessionStorage.getItem("token").toString(),
+        await axios.post(
+          process.env.VUE_APP_API_ENDPOINT + "/restaurant/favorite",
+          {
+            membId: sessionStorage.getItem("userId"),
+            restId: this.restaurant.restId,
           },
-        });
+          {
+            headers: {
+              "X-AUTH-TOKEN": sessionStorage.getItem("token").toString(),
+            },
+          }
+        );
 
         // 성공적으로 추가되었을 때의 처리
         alert("즐겨찾기에 추가되었습니다.");
@@ -798,7 +894,10 @@ td {
 .review--images {
   width: 100%;
   margin-top: 40px;
+  margin-bottom: 20px;
+  margin-left: 20px;
 }
+
 /*하트버튼*/
 
 .button-like {
@@ -873,6 +972,42 @@ td {
 .liked:hover .fa,
 .liked:hover span {
   color: #fefefe;
+}
+
+.rivew-content {
+  margin-left: 20px;
+  width: 100%;
+  height: auto;
+  margin-top: 20px;
+}
+.rivew-content p {
+  font-size: 20px;
+}
+
+.review-score {
+  margin-bottom: 15px;
+}
+.review-date {
+  margin-bottom: 14px;
+}
+.review-section {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  /* border-style: solid; */
+  border: 1px solid #cbcbcb;
+}
+
+/* 방문자 평가 타이틀 아래 구분선 */
+.review-title-divider {
+  border-bottom: 1px solid #eee; /* 연한 회색 구분선 */
+  margin-bottom: 20px;
+}
+
+/* 리뷰 항목 사이 구분선 */
+.review-divider {
+  border-bottom: 1px solid #eee; /* 연한 회색 구분선 */
+  margin-bottom: 20px;
+  padding-bottom: 20px;
 }
 
 @media (max-width: 768px) {
