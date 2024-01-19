@@ -57,18 +57,9 @@
             <table>
               <tr v-for="(fav, index) in favoriteList" :key="index">
                 <td>
-                  <img
-                    v-if="fav.profileImg"
-                    class="profile"
-                    :src="fav.profileImg"
-                    alt="식당 이미지"
-                  />
-                  <img
-                    v-else
-                    class="profile"
-                    src="../../assets/images/아맛무 로고.png"
-                    alt="기본 식당 이미지"
-                  />
+                
+                  <img class="rest-img" :src="fav.restImg" alt="기본 식당 이미지">
+
                   {{ fav.restName }}
                   <br />
                   {{ fav.restKeyword }}
@@ -160,7 +151,7 @@ export default {
 
 <style>
 * {
-  font-family: "BMHANNAPro";
+  font-family: "NanumFont";
 }
 .mypage-container {
   margin-top: 70px;
@@ -390,11 +381,12 @@ p {
 .color-red {
   color: red;
 }
-.profile {
+.rest-img {
   max-width: 100px;
   max-height: 100px;
   margin-top: 10px;
   margin-bottom: 10px;
+  border-radius: 20px;
 }
 .heart-button {
   float: right;

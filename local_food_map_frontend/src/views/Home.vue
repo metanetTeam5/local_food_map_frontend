@@ -17,6 +17,16 @@
             현지인 식당 맛집
           </p>
         </div>
+        <!-- <div class="main-header">
+        <div class="main-header-image">
+          <img src="../assets/images/로고마크.png" alt="이미지 설명" />
+        </div>
+        <div class="main-headertext">
+          <p>
+            당신을 위한 <br />
+            현지인 식당 맛집
+          </p>
+        </div> -->
         <div class="button-container">
           <router-link to="/map" class="round-button"
             >지도에서 검색</router-link
@@ -157,7 +167,7 @@ export default {
 * {
 
   box-sizing: border-box; 
-  overflow-x: hidden
+  overflow-x: hidden;
 
   box-sizing: border-box;
   overflow-x: hidden;
@@ -205,7 +215,16 @@ a {
   align-items: center;
   font-family: "BMHANNAPro";
 }
+.main-header-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
+.main-header-image img {
+  height: 100%; /* 이미지 높이 조절 */
+  max-height: 200px; /* 최대 높이 설정 */
+}
 .button-container {
   display: flex;
   justify-content: space-around;

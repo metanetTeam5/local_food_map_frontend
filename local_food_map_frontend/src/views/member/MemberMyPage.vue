@@ -654,9 +654,11 @@ p {
   color: red;
 }
 .profile {
+  margin-left: 20px;
   max-width: 100px;
   max-height: 100px;
   margin-top: 10px;
   margin-bottom: 10px;
+  border-radius: 100%;
 }
 </style>
