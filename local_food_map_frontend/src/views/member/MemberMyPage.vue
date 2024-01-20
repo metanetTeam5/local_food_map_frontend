@@ -318,7 +318,7 @@ export default {
         await axios.get(
           process.env.VUE_APP_API_ENDPOINT +
             '/member/checknickname?nickname=' +
-            this.nickname
+            this.newNickname
         );
 
         this.nicknameDuplicate = false;
@@ -345,7 +345,7 @@ export default {
             {
               password: this.password,
               newPassword: this.newPassword,
-              nickname: this.nickname,
+              nickname: this.newNickname,
             },
             {
               headers: {

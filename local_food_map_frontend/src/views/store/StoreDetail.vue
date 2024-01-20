@@ -17,16 +17,27 @@
           <p>{{ averageReviewScore }}점</p>
 
           <div class="store-star">
-  <!-- 활성 별 (노란색) -->
-  <span v-for="star in Math.floor(averageReviewScore)" :key="`full-${star}`" class="fa fa-star star-active"></span>
+            <!-- 활성 별 (노란색) -->
+            <span
+              v-for="star in Math.floor(averageReviewScore)"
+              :key="`full-${star}`"
+              class="fa fa-star star-active"
+            ></span>
 
-  <!-- 반 별 -->
-  <span v-if="averageReviewScore - Math.floor(averageReviewScore) >= 0.5" class="fa fa-star-half-alt star-active" :key="`half`"></span>
+            <!-- 반 별 -->
+            <span
+              v-if="averageReviewScore - Math.floor(averageReviewScore) >= 0.5"
+              class="fa fa-star-half-alt star-active"
+              :key="`half`"
+            ></span>
 
-  <!-- 비활성 별 (회색) -->
-  <span v-for="star in 5 - Math.ceil(averageReviewScore)" :key="`empty-${star}`" class="fa fa-star star-inactive"></span>
-</div>
-
+            <!-- 비활성 별 (회색) -->
+            <span
+              v-for="star in 5 - Math.ceil(averageReviewScore)"
+              :key="`empty-${star}`"
+              class="fa fa-star star-inactive"
+            ></span>
+          </div>
         </div>
       </div>
       <ul class="list-group list-group-flush">
@@ -34,7 +45,7 @@
           <div class="button-container">
             <!-- 버튼들 -->
             <!--하트버튼-->
-            <button class="button button-like">
+            <button class="button button-like" @click="modalOpen">
               <i class="fa fa-calendar-plus"></i>
               <span>예약</span>
             </button>
@@ -231,59 +242,196 @@
         <div class="col-xl-7 col-lg-8 col-md-10 col-12 text-center mb-5"></div>
       </div>
     </div>
+    <div v-if="modalCheck" class="modal-wrap">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <!-- 모달창 content -->
+          <form @submit.prevent="submitReservation" class="p-4">
+            <h5 class="mb-4">예약 정보 입력</h5>
+            <div class="form-group">
+              <label for="headcount">인원 수:</label>
+              <input
+                type="number"
+                class="form-control"
+                id="headcount"
+                v-model="reservation.headcount"
+                :min="minHeadcount"
+                required
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="resvDate">날짜:</label>
+              <input
+                type="date"
+                class="form-control"
+                id="resvDate"
+                v-model="reservation.resvDate"
+                :min="minDate"
+                required
+                @change="resetReservationHour"
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="resvHour">시간:</label>
+              <div class="time-buttons">
+                <button
+                  v-for="hour in availableHours"
+                  :key="hour"
+                  @click="setReservationHour(hour)"
+                  :disabled="isPastTime(hour) || !reservation.resvDate"
+                  :class="{
+                    'btn-primary': reservation.resvHour === hour,
+                    selected: selectedHour === hour,
+                  }"
+                >
+                  {{ hour }}
+                </button>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="additionalRequirements">추가 요구사항:</label>
+              <textarea
+                class="form-control"
+                id="additionalRequirements"
+                v-model="reservation.additionalRequirements"
+                rows="3"
+              ></textarea>
+            </div>
+
+            <div class="form-group">
+              <label>1인당 보증금: 10,000원</label>
+              <p>{{ deposit }}</p>
+            </div>
+
+            <div class="modal-btn text-right">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                @click="modalOpen"
+              >
+                닫기
+              </button>
+              <router-link
+                :to="{
+                  path: '/payment',
+                  query: {
+                    resvHour: reservation.resvHour,
+                    additionalRequirements: reservation.additionalRequirements,
+                  },
+                }"
+              >
+                <button
+                  type="submit"
+                  class="btn btn-primary"
+                  :disabled="!reservation.resvHour"
+                >
+                  <div id="pay">결제</div>
+                </button>
+              </router-link>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
-import Modal from "./modal/Modal.vue";
-import { apiService } from "../../js/apiService.js";
-import axios from "axios";
+import Modal from './modal/Modal.vue';
+import { apiService } from '../../js/apiService.js';
+import axios from 'axios';
 
 export default {
-  name: "storeDetailPage",
+  name: 'storeDetailPage',
   components: {
     Modal,
   },
   data() {
     return {
-      storeName: "",
+      storeName: '',
       totalScore: {},
       showModal: false,
       showFavoriteModal: false,
       showReserveModal: false,
       showShareModal: false,
       restaurant: {
-        restLocationName: "가게 위치 정보",
+        restLocationName: '가게 위치 정보',
       },
       review: {},
       // member: {},
       menu: {},
-      todayDate: "",
+      todayDate: '',
       showRivewModal: false,
       isLiked: false,
+      modalCheck: false,
+      reservation: {
+        headcount: 1,
+        resvDate: null,
+        resvHour: null,
+        additionalRequirements: '',
+      },
+      selectedHour: null,
     };
   },
   computed: {
-
-
-  averageReviewScore() {
-    try {
-      if (!this.review || this.review.length === 0) {
+    averageReviewScore() {
+      try {
+        if (!this.review || this.review.length === 0) {
+          return 0;
+        }
+        const totalScore = this.review.reduce((sum, item) => {
+          if (typeof item.revwStarRate !== 'number') {
+            throw new Error('Invalid revwStarRate value');
+          }
+          return sum + item.revwStarRate;
+        }, 0);
+        return (totalScore / this.review.length).toFixed(1);
+      } catch (error) {
+        console.error(error);
         return 0;
       }
-      const totalScore = this.review.reduce((sum, item) => {
-        if (typeof item.revwStarRate !== 'number') {
-          throw new Error('Invalid revwStarRate value');
-        }
-        return sum + item.revwStarRate;
-      }, 0);
-      return (totalScore / this.review.length).toFixed(1);
-    } catch (error) {
-      console.error(error);
-      return 0;
-    }
-  },
+    },
+    currentDate() {
+      const today = new Date();
+      const year = today.getFullYear();
+      const month = String(today.getMonth() + 1).padStart(2, '0');
+      const day = String(today.getDate()).padStart(2, '0');
+      return `${year}-${month}-${day}`;
+    },
+    currentTime() {
+      const now = new Date();
+      const hours = String(now.getHours()).padStart(2, '0');
+      const minutes = String(now.getMinutes()).padStart(2, '0');
+      return `${hours}:${minutes}`;
+    },
+    minHeadcount() {
+      return 1;
+    },
+    deposit() {
+      const formattedDeposit = (
+        this.reservation.headcount * 10000
+      ).toLocaleString();
+      return `결제예정금액: ${this.reservation.headcount}(명) X 10,000 = ${formattedDeposit}원`;
+    },
+    availableHours() {
+      const startHour = this.isToday() ? new Date().getHours() + 1 : 9;
+      const endHour = 19;
+      const intervalMinutes = 30;
 
+      const hours = [];
+      for (let hour = startHour; hour <= endHour; hour++) {
+        for (let minute = 0; minute < 60; minute += intervalMinutes) {
+          const formattedHour = String(hour).padStart(2, '0');
+          const formattedMinute = String(minute).padStart(2, '0');
+          hours.push(`${formattedHour}:${formattedMinute}`);
+        }
+      }
+
+      return hours;
+    },
   },
   created() {
     const restId = this.$route.params.restId;
@@ -307,7 +455,7 @@ export default {
         this.review = this.processImageData(response.data);
       })
       .catch((error) => {
-        console.error("리뷰 정보를 불러오는데 실패했습니다:", error);
+        console.error('리뷰 정보를 불러오는데 실패했습니다:', error);
       });
     //멤버 정보 가져오기
     // apiService
@@ -327,15 +475,15 @@ export default {
         this.menu = response.data;
       })
       .catch((error) => {
-        console.error("메뉴 정보를 불러오는데 실패했습니다:", error);
+        console.error('메뉴 정보를 불러오는데 실패했습니다:', error);
       });
   },
   async mounted() {
     this.loadExternalCSS(
-      "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+      'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css'
     );
     this.loadExternalCSS(
-      "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.0/css/font-awesome.min.css"
+      'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.0/css/font-awesome.min.css'
     );
     this.initializeMap();
     this.createMap();
@@ -345,7 +493,7 @@ export default {
   async checkFavoriteStatus() {
     try {
       const response = await axios.get(
-        process.env.VUE_APP_API_ENDPOINT + "/restaurant/favorite",
+        process.env.VUE_APP_API_ENDPOINT + '/restaurant/favorite',
         {
           // 필요한 데이터
         }
@@ -358,8 +506,8 @@ export default {
     }
   },
   async deleteFavorite(restId) {
-    let token = sessionStorage.getItem("token");
-    let userId = sessionStorage.getItem("userId");
+    let token = sessionStorage.getItem('token');
+    let userId = sessionStorage.getItem('userId');
 
     try {
       const response = await axios.delete(
@@ -370,7 +518,7 @@ export default {
             restId: restId,
           },
           headers: {
-            "X-AUTH-TOKEN": token.toString(),
+            'X-AUTH-TOKEN': token.toString(),
           },
         }
       );
@@ -381,11 +529,11 @@ export default {
           (item) => item.restId !== restId
         );
         // 성공 메시지 또는 기타 UI 업데이트
-        console.log("즐겨찾기가 성공적으로 삭제되었습니다.");
+        console.log('즐겨찾기가 성공적으로 삭제되었습니다.');
       }
     } catch (error) {
       console.error(error);
-      alert("즐겨찾기 삭제에 실패했습니다.");
+      alert('즐겨찾기 삭제에 실패했습니다.');
     }
   },
 
@@ -393,7 +541,7 @@ export default {
     processImageData(reviewData) {
       return reviewData.map((item) => {
         // 이미지 URL이 쉼표로 구분되어 있다고 가정
-        item.revwImgs = item.revwImg.split(","); // 문자열을 배열로 변환
+        item.revwImgs = item.revwImg.split(','); // 문자열을 배열로 변환
         return item;
       });
     },
@@ -401,13 +549,13 @@ export default {
       this.isLiked = !this.isLiked;
     },
     copyToClipboard() {
-      const textarea = document.createElement("textarea");
+      const textarea = document.createElement('textarea');
       document.body.appendChild(textarea);
       textarea.value = this.restaurant.restLocationName;
       textarea.select();
-      document.execCommand("copy");
+      document.execCommand('copy');
       document.body.removeChild(textarea);
-      alert("주소가 복사 되었습니다!");
+      alert('주소가 복사 되었습니다!');
     },
     getTodayDate() {
       var today = new Date();
@@ -415,7 +563,7 @@ export default {
       var day = today.getDate();
 
       // 날짜를 원하는 형식으로 조합
-      var formattedDate = month + "/" + day + "일";
+      var formattedDate = month + '/' + day + '일';
 
       this.todayDate = formattedDate; // 데이터 속성에 오늘의 날짜 저장
     },
@@ -424,24 +572,24 @@ export default {
       try {
         // response 변수 제거
         await axios.post(
-          process.env.VUE_APP_API_ENDPOINT + "/restaurant/favorite",
+          process.env.VUE_APP_API_ENDPOINT + '/restaurant/favorite',
           {
-            membId: sessionStorage.getItem("userId"),
+            membId: sessionStorage.getItem('userId'),
             restId: this.restaurant.restId,
           },
           {
             headers: {
-              "X-AUTH-TOKEN": sessionStorage.getItem("token").toString(),
+              'X-AUTH-TOKEN': sessionStorage.getItem('token').toString(),
             },
           }
         );
 
         // 성공적으로 추가되었을 때의 처리
-        alert("즐겨찾기에 추가되었습니다.");
+        alert('즐겨찾기에 추가되었습니다.');
         // 추가 처리 필요
       } catch (error) {
         console.error(error);
-        alert("즐겨찾기 추가 실패");
+        alert('즐겨찾기 추가 실패');
       }
     },
 
@@ -457,17 +605,17 @@ export default {
     },
 
     loadExternalCSS(url) {
-      const link = document.createElement("link");
+      const link = document.createElement('link');
       link.href = url;
-      link.rel = "stylesheet";
-      link.type = "text/css";
+      link.rel = 'stylesheet';
+      link.type = 'text/css';
       document.head.appendChild(link);
     },
     initializeMap() {
-      const script = document.createElement("script");
+      const script = document.createElement('script');
       script.onload = () => this.createMap();
       script.src =
-        "https://dapi.kakao.com/v2/maps/sdk.js?appkey=4ee6fa1017dfbe37aa5850be2d9c3350&autoload=false";
+        'https://dapi.kakao.com/v2/maps/sdk.js?appkey=4ee6fa1017dfbe37aa5850be2d9c3350&autoload=false';
       document.head.appendChild(script);
     },
     createMap() {
@@ -476,7 +624,7 @@ export default {
           navigator.geolocation.getCurrentPosition(
             () => {
               // 'map' 변수를 여기에서 정의합니다.
-              const mapContainer = document.getElementById("map");
+              const mapContainer = document.getElementById('map');
               const options = {
                 center: new kakao.maps.LatLng(
                   this.restLocationY,
@@ -491,7 +639,7 @@ export default {
               const restLocationY = 37.575863; // 가게의 위도 정보
 
               // 마커 이미지 경로 설정
-              var MarkimageSrc = require("../../assets/images/로고마크표시.png");
+              var MarkimageSrc = require('../../assets/images/로고마크표시.png');
 
               // 마커 이미지 사이즈 및 옵션 설정
               var MarkimageSize = new kakao.maps.Size(50, 53);
@@ -518,7 +666,7 @@ export default {
               map.setCenter(markerPosition);
             },
             (error) => {
-              console.error("Geolocation failed: " + error.message);
+              console.error('Geolocation failed: ' + error.message);
             }
           );
         } else {
@@ -526,13 +674,38 @@ export default {
         }
       });
     },
+    modalOpen() {
+      this.modalCheck = !this.modalCheck;
+    },
+    submitReservation() {
+      console.log('Reservation Submitted:', this.reservation);
+    },
+    setReservationHour(hour) {
+      this.reservation.resvHour = hour;
+      this.selectedHour = hour;
+    },
+    resetReservationHour() {
+      this.reservation.resvHour = null;
+      this.selectedHour = null;
+    },
+    isPastTime(hour) {
+      if (this.isToday()) {
+        const selectedTime = new Date(`${this.currentDate} ${hour}`);
+        const currentTime = new Date();
+        return selectedTime <= currentTime;
+      }
+      return false;
+    },
+    isToday() {
+      return this.reservation.resvDate === this.currentDate;
+    },
   },
 };
 </script>
 
 <style>
 * {
-  font-family: "BMHANNAPro";
+  font-family: 'BMHANNAPro';
 }
 
 .list-group-item p {
@@ -621,7 +794,7 @@ export default {
 }
 
 .store-category p:not(:last-child)::after {
-  content: "|";
+  content: '|';
   margin-left: 10px;
   color: #333;
 }
@@ -667,7 +840,7 @@ export default {
 }
 
 .card-store-menu p::after {
-  content: " ------------------------------------------------------------";
+  content: ' ------------------------------------------------------------';
   margin-top: 1em;
 }
 
@@ -874,7 +1047,7 @@ td {
 }
 
 .special-pic::after {
-  content: "+"; /* 추가 텍스트 */
+  content: '+'; /* 추가 텍스트 */
   position: absolute;
   top: 50%;
   left: 50%;
@@ -1027,5 +1200,43 @@ td {
     font-size: smaller; /* 모바일 화면에서 텍스트 크기 조정 */
   }
   /* 필요한 경우 다른 요소들에 대한 스타일 조정 */
+}
+
+#pay {
+  color: white;
+}
+.modal-wrap {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+div.modal-content {
+  background: white;
+  border-radius: 10px;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.time-buttons {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.time-buttons button {
+  width: 80px;
+  margin-bottom: 10px;
+}
+
+.selected {
+  background-color: #4caf50;
+  color: white;
 }
 </style>

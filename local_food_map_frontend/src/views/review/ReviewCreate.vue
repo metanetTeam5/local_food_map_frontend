@@ -57,7 +57,6 @@
   </b-container>
 </template>
 
-  
 <script>
 import axios from 'axios';
 
@@ -68,7 +67,7 @@ export default {
       review: {
         revwStarRate: 0,
         revwContent: '',
-        restId: this.$route.params.restId
+        restId: this.$route.params.restId,
       },
       selectedFile: null,
       // selectedReservationId: this.resvId,
@@ -88,29 +87,37 @@ export default {
     },
     async submitReview() {
       const formData = new FormData();
-      formData.append('review', new Blob([JSON.stringify(this.review)], { type: 'application/json' }));
+      formData.append(
+        'review',
+        new Blob([JSON.stringify(this.review)], { type: 'application/json' })
+      );
       formData.append('file', this.selectedFile);
       console.log(this.review);
 
       try {
-        let token = sessionStorage.getItem("token");
+        let token = sessionStorage.getItem('token');
         // const response = await axios.post(`http://localhost:8088/reviewimage/reservation/${this.selectedReservationId}`, formData);
-        const response = await axios.post(`http://localhost:8088/reviewimage/reservation/${this.selectedReservationId}`, formData,
+        const response = await axios.post(
+          `http://localhost:8088/reviewimage/reservation/${this.selectedReservationId}`,
+          formData,
           {
             headers: {
-              "X-AUTH-TOKEN": token.toString(),
+              'X-AUTH-TOKEN': token.toString(),
             },
-          });
+          }
+        );
         console.log(response.data);
         // 리뷰 제출 후 처리 로직
         this.isReviewFormVisible = false; // 폼 숨기기
+        this.$router.push({ name: 'MemberReservations' });
+        this.$router.go(0);
         // 추가적인 성공 메시지나 상태 업데이트를 할 수 있습니다.
       } catch (error) {
-        console.error("리뷰 제출에 실패했습니다.", error);
+        console.error('리뷰 제출에 실패했습니다.', error);
         // 에러 처리 로직을 추가할 수 있습니다.
       }
-    }
-  }
+    },
+  },
 };
 </script>
 
