@@ -420,6 +420,7 @@ export default {
 
 div.create {
   justify-content: space-between;
+/* div.create2 { */
   width: 800px;
   text-align: center;
   padding: 30px;
