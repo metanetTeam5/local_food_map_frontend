@@ -56,48 +56,80 @@
               <table class="table2">
                 <h2 class="mb-4">내가 쓴 리뷰</h2>
                 <tbody>
-                  <tr v-for="(rev, index) in paginatedReviews" :key="index">
-                    <td>
-                      <div class="d-flex align-items-start review-context">
-                        <div class="mr-3">
-                          <img
-                            v-if="rev.revwImg"
-                            class="rounded profileImg"
-                            :src="rev.revwImg"
-                            alt="식당 이미지"
-                          />
-                          <img
-                            v-else
-                            class="rounded profileImg"
-                            src="../../assets/images/아맛무 로고.png"
-                            alt="기본 리뷰 이미지"
-                          />
-                        </div>
-                        <div id="review">
-                          <p><strong>식당 이름:</strong> {{ rev.restName }}</p>
-                          <p><strong>별점:</strong> {{ rev.revwStarRate }}</p>
-                          <p>
+                  <div class="my-rest">
+                    <tr v-for="(rev, index) in paginatedReviews" :key="index">
+                      <td>
+                        <div class="d-flex align-items-start review-context">
+                          <div class="mr-3">
+                            <img
+                              v-if="rev.revwImg"
+                              class="rounded profileImg"
+                              :src="rev.revwImg"
+                              alt="식당 이미지"
+                            />
+                            <img
+                              v-else
+                              class="rounded profileImg"
+                              src="../../assets/images/아맛무 로고.png"
+                              alt="기본 리뷰 이미지"
+                            />
+                          </div>
+                          <div id="review">
+                            <p>
+                              <strong>식당 이름 :</strong> {{ rev.restName }}
+                            </p>
+                            <div class="store-star">
+                              <strong>별점 : </strong>
+
+                              <span
+                                v-for="star in 5"
+                                :key="star"
+                                class="fa fa-star"
+                                :class="{
+                                  'star-active':
+                                    star <= Math.floor(rev.revwStarRate),
+                                  'star-half-active':
+                                    star === Math.ceil(rev.revwStarRate) &&
+                                    rev.revwStarRate -
+                                      Math.floor(rev.revwStarRate) >=
+                                      0.5,
+                                  'star-inactive': star > rev.revwStarRate,
+                                }"
+                              ></span>
+                            </div>
+                            <p>
+                              <strong>작성 날짜 :</strong>
+                              {{ rev.revwCreateDate }}
+                            </p>
+                            <!-- <p>
                             <strong>리뷰 내용:</strong> {{ rev.revwContent }}
-                          </p>
-                          <p>
-                            <strong>작성 날짜:</strong> {{ rev.revwCreateDate }}
-                          </p>
+                          </p> -->
+                            <p>
+                              <strong>리뷰 내용</strong>
+                            </p>
+                            <div class="review-content">
+                              {{ rev.revwContent }}
+                            </div>
+                          </div>
                         </div>
-                      </div>
-                      <button
-                        @click="showModal(rev)"
-                        class="btn btn-primary mt-3"
-                      >
-                        수정
-                      </button>
-                      <button
-                        @click="deleteReview(rev.revwId)"
-                        class="btn btn-danger mt-3"
-                      >
-                        삭제
-                      </button>
-                    </td>
-                  </tr>
+                        <button
+                          @click="showModal(rev)"
+                          class="btn btn-primary mt-3"
+                          style="width: 80px;border-radius: 20px"
+                        >
+                          수정
+                        </button>
+
+                        <button
+                          @click="deleteReview(rev.revwId)"
+                          class="btn btn-danger mt-3"
+                          style="width: 80px; border-radius: 20px"
+                        >
+                          삭제
+                        </button>
+                      </td>
+                    </tr>
+                  </div>
                 </tbody>
               </table>
               <div class="pagination justify-content-center">
@@ -143,25 +175,27 @@
               required
             ></textarea>
           </div>
+
           <div class="form-group">
             <label for="reviewRating">별점</label>
-            <select
+            <div id="star-rating">
+              <i
+                v-for="star in 5"
+                :key="star"
+                :class="{
+                  'fa fa-star': true,
+                  'star-active': star <= selectedReview.revwStarRate,
+                }"
+                @click="setStarRating(star)"
+              ></i>
+            </div>
+            <input
+              type="hidden"
               id="reviewRating"
-              class="form-control"
               v-model="selectedReview.revwStarRate"
-              required
-            >
-              <option value="1">1 별</option>
-              <option value="1">1.5 별</option>
-              <option value="2">2 별</option>
-              <option value="2">2.5 별</option>
-              <option value="3">3 별</option>
-              <option value="3">3.5 별</option>
-              <option value="4">4 별</option>
-              <option value="4">4.5 별</option>
-              <option value="4">5 별</option>
-            </select>
+            />
           </div>
+
           <div class="form-group">
             <label for="fileUpload">파일 업로드</label>
             <input type="file" id="fileUpload" @change="handleFileUpload" />
@@ -192,6 +226,7 @@ export default {
       reviewList: [],
       currentPage: 1,
       pageSize: 5,
+      revwStarRate: 0,
     };
   },
   computed: {
@@ -208,6 +243,10 @@ export default {
   },
 
   methods: {
+    setStarRating(star) {
+      this.selectedReview.revwStarRate = star;
+    },
+
     handleFileUpload(event) {
       this.file = event.target.files[0];
     },
@@ -268,19 +307,8 @@ export default {
       let token = sessionStorage.getItem("token");
       let response;
 
-      // const updatedReviewData = {
-      //   revwContent: this.selectedReview.revwContent,
-      //   revwStarRate: this.selectedReview.revwStarRate
-      // }
-
       let formData = new FormData();
-      // formData.append('revwContent', this.selectedReview.revwContent);
-      // formData.append('revwStarRate', this.selectedReview.revwStarRate);
 
-      // 파일이 있으면 FormData에 추가
-      // if (this.file) {
-      //   formData.append('file', this.file);
-      // }
       let reviewDto = JSON.stringify({
         revwContent: this.selectedReview.revwContent,
         revwStarRate: this.selectedReview.revwStarRate,
@@ -305,11 +333,11 @@ export default {
           }
         );
         console.log(response.data);
-
+        alert("리뷰가 수정되었습니다!");
         this.$router.go(0);
       } catch (error) {
         console.error(error);
-        alert("리뷰 수정 실패");
+        // alert("리뷰 수정 실패");
       }
     },
     // Fetch reviews based on the current page
@@ -350,6 +378,51 @@ export default {
   font-family: "BMHANNAPro";
 }
 
+.mt-3{
+  margin-left: 30px;
+  margin-bottom: 10px;
+}
+.mr-3 {
+  margin-top: 20px;
+  margin-left: 30px;
+}
+.mx-3 {
+  margin-top: 8px;
+}
+/* 식당 이름 */
+#review p:first-of-type {
+  font-size: 20px; /* 원하는 폰트 크기로 변경 */
+}
+
+/* 별점 */
+.store-star {
+  font-size: 20px; /* 원하는 폰트 크기로 변경 */
+}
+
+/* 작성 날짜 */
+#review p:nth-of-type(2) {
+  font-size: 20px; /* 원하는 폰트 크기로 변경 */
+}
+
+/* 리뷰 내용 */
+#review p:nth-of-type(3) {
+  font-size: 20px; /* 원하는 폰트 크기로 변경 */
+}
+
+.my-rest {
+  background: #fff;
+}
+.review-content {
+  border: 2px solid white; /* 흰색 테두리 */
+  border-radius: 10px; /* 둥근 모서리 */
+  padding: 10px; /* 내부 여백 */
+  background-color: #fff2c8; /* 배경색 */
+  font-size: 14px;
+}
+
+.store-star .fa-star {
+  font-size: 18px; /* 별 아이콘 크기 조절 */
+}
 .mypage-container {
   margin-top: 70px;
 }

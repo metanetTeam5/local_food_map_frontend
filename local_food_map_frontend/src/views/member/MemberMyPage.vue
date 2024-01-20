@@ -2,11 +2,21 @@
   <div class="container-fluid mypage-container">
     <div class="row flex-nowrap">
       <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0">
-        <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 min-vh-100">
-          <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
+        <div
+          class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 min-vh-100"
+        >
+        <ul id="menu" class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" style="width: 100%;">
             <li class="nav-item">
-              <router-link class="nav-link align-middle px-0" to="/mypage">
+              <!-- <router-link class="nav-link align-middle px-0" to="/mypage">
                 <div class="ms-1 d-none d-sm-inline menu-span selected-menu">
+                  개인정보수정
+                </div>
+              </router-link> -->
+              <router-link class="nav-link align-middle px-0" to="/mypage">
+                <div
+                  class="ms-1 d-none d-sm-inline menu-span"
+                  :class="{ 'selected-menu': currentPath === '/mypage' }"
+                >
                   개인정보수정
                 </div>
               </router-link>
@@ -32,7 +42,7 @@
       <div class="col py-3">
         <div v-if="isLoading"></div>
         <div v-else>
-          <form method="post" action="">
+          <form>
             <div class="container">
               <div class="insert">
                 <table class="table table-bordered">
@@ -149,44 +159,51 @@
 </template>
 
 <script>
-import axios from 'axios';
+import axios from "axios";
 
 export default {
-  name: 'MemberMyPage',
+  name: "MemberMyPage",
   data() {
     return {
       isLoading: true,
-      userId: '',
-      email: '',
-      password: '',
-      newPassword: '',
-      newPasswordCheck: '',
-      name: '',
-      nickname: '',
-      newNickname: '',
-      birthDate: '',
-      phoneNumber: '',
+      userId: "",
+      email: "",
+      password: "",
+      newPassword: "",
+      newPasswordCheck: "",
+      name: "",
+      nickname: "",
+      newNickname: "",
+      birthDate: "",
+      phoneNumber: "",
       profileImg: null,
       newProfileImg: null,
-      gender: '',
-      createdDate: '',
+      gender: "",
+      createdDate: "",
       nicknameDuplicate: false,
       validPassword: true,
       changeNickname: false,
       checkPasswordPattern: true,
+      currentPath: this.$route.path,
     };
   },
+  watch: {
+    $route(to) {
+      this.currentPath = to.path;
+    },
+  },
+
   methods: {
     async getInfo() {
-      let token = sessionStorage.getItem('token');
+      let token = sessionStorage.getItem("token");
       if (token !== null) {
         let response;
         try {
           response = await axios.get(
-            process.env.VUE_APP_API_ENDPOINT + '/member/info',
+            process.env.VUE_APP_API_ENDPOINT + "/member/info",
             {
               headers: {
-                'X-AUTH-TOKEN': token.toString(),
+                "X-AUTH-TOKEN": token.toString(),
               },
             }
           );
@@ -198,8 +215,8 @@ export default {
           console.error(error);
         }
       } else {
-        alert('로그인 후 이용 가능합니다.');
-        this.$router.push({ name: 'HomePage' });
+        alert("로그인 후 이용 가능합니다.");
+        this.$router.push({ name: "HomePage" });
         this.$router.go(0);
       }
     },
@@ -226,27 +243,27 @@ export default {
       this.newProfileImg = selectedFile;
     },
     async updateProfileImg() {
-      let token = sessionStorage.getItem('token');
+      let token = sessionStorage.getItem("token");
       if (this.newProfileImg !== null) {
         let formData = new FormData();
-        formData.append('email', this.email);
-        formData.append('file', this.newProfileImg);
+        formData.append("email", this.email);
+        formData.append("file", this.newProfileImg);
 
         await axios.put(
-          process.env.VUE_APP_API_ENDPOINT + '/member/profileimg/update',
+          process.env.VUE_APP_API_ENDPOINT + "/member/profileimg/update",
           formData,
           {
             headers: {
-              'Content-Type': 'multipart/form-data',
-              'X-AUTH-TOKEN': token.toString(),
+              "Content-Type": "multipart/form-data",
+              "X-AUTH-TOKEN": token.toString(),
             },
           }
         );
 
-        alert('프로필 사진 변경 완료');
+        alert("프로필 사진 변경 완료");
         this.$router.go(0);
       } else {
-        alert('선택된 파일이 없습니다.');
+        alert("선택된 파일이 없습니다.");
       }
     },
     writeNickname() {
@@ -256,44 +273,44 @@ export default {
       try {
         await axios.get(
           process.env.VUE_APP_API_ENDPOINT +
-          '/member/checknickname?nickname=' +
-          this.nickname
+            "/member/checknickname?nickname=" +
+            this.newNickname
         );
 
         this.nicknameDuplicate = false;
         this.changeNickname = false;
-        alert('사용 가능한 닉네임입니다.');
+        alert("사용 가능한 닉네임입니다.");
       } catch (error) {
         this.nicknameDuplicate = true;
         this.changeNickname = true;
       }
     },
     async updateMemberInfo() {
-      if (this.password === '') {
-        alert('현재 비밀번호를 입력해주세요.');
+      if (this.password === "") {
+        alert("현재 비밀번호를 입력해주세요.");
       } else if (!this.validPassword || !this.checkPasswordPattern) {
-        alert('새 비밀번호 확인해주세요');
+        alert("새 비밀번호 확인해주세요");
       } else if (this.nicknameDuplicate || this.changeNickname) {
-        alert('닉네임 중복 확인 해주세요.');
+        alert("닉네임 중복 확인 해주세요.");
       } else {
-        let token = sessionStorage.getItem('token');
+        let token = sessionStorage.getItem("token");
         let response;
         try {
           response = await axios.put(
-            process.env.VUE_APP_API_ENDPOINT + '/member/info/update',
+            process.env.VUE_APP_API_ENDPOINT + "/member/info/update",
             {
               password: this.password,
               newPassword: this.newPassword,
-              nickname: this.nickname,
+              nickname: this.newNickname,
             },
             {
               headers: {
-                'X-AUTH-TOKEN': token.toString(),
+                "X-AUTH-TOKEN": token.toString(),
               },
             }
           );
           console.log(response.data);
-          alert('회원 정보가 수정되었습니다.');
+          alert("회원 정보가 수정되었습니다.");
           this.$router.go(0);
         } catch (error) {
           console.error(error);
@@ -305,44 +322,46 @@ export default {
     },
     async deleteMember() {
       if (
-        confirm('회원 탈퇴를 하시겠습니까? 탈퇴하면 회원 정보는 삭제됩니다.')
+        confirm("회원 탈퇴를 하시겠습니까? 탈퇴하면 회원 정보는 삭제됩니다.")
       ) {
-        if (this.password === '') {
-          alert('현재 비밀번호를 입력해주세요.');
+        if (this.password === "") {
+          alert("현재 비밀번호를 입력해주세요.");
         } else {
-          let token = sessionStorage.getItem('token');
+          let token = sessionStorage.getItem("token");
           let response;
           try {
             response = await axios.delete(
-              process.env.VUE_APP_API_ENDPOINT + '/member/delete',
+              process.env.VUE_APP_API_ENDPOINT + "/member/delete",
               {
                 data: {
                   password: this.password,
                 },
                 headers: {
-                  'X-AUTH-TOKEN': token.toString(),
+                  "X-AUTH-TOKEN": token.toString(),
                 },
               }
             );
             console.log(response.data);
             sessionStorage.clear();
-            alert('회원 탈퇴 완료');
-            this.$router.push({ name: 'HomePage' });
+            alert("회원 탈퇴 완료");
+            this.$router.push({ name: "HomePage" });
             this.$router.go(0);
           } catch (error) {
             console.error(error);
-            alert('회원 탈퇴 실패');
+            alert("회원 탈퇴 실패");
           }
         }
+      } else {
+        return false;
       }
     },
     setMemberInfo(response) {
       this.email = response.data.email;
       this.name = response.data.name;
-      if (response.data.gender === 'M') {
-        this.gender = '남성';
+      if (response.data.gender === "M") {
+        this.gender = "남성";
       } else {
-        this.gender = '여성';
+        this.gender = "여성";
       }
       this.nickname = response.data.nickname;
       this.newNickname = response.data.nickname;
@@ -366,7 +385,16 @@ export default {
 
 <style>
 * {
-  font-family: 'BMHANNAPro';
+  font-family: "BMHANNAPro";
+
+}
+.px-sm-2 {
+  background: #ffe1b3;
+}
+.py-3 {
+  background: #fff2df;
+
+
 }
 
 .mypage-container {
@@ -378,6 +406,7 @@ export default {
 }
 
 .selected-menu {
+
   color: #6c757d;
 }
 
@@ -394,11 +423,25 @@ export default {
   font-weight: normal;
 }
 
+
 div.create {
+  justify-content: space-between;
+
+//div.create2 {
+
   width: 800px;
   text-align: center;
   padding: 30px;
   margin: auto;
+}
+.btn-warning {
+  /* 회원정보수정 버튼 */
+  margin-right: 20px; /* 오른쪽에 20px의 간격 추가 */
+}
+
+.btn-danger {
+  /* 회원 탈퇴 버튼 */
+  margin-left: 20px;
 }
 
 table {
@@ -514,7 +557,7 @@ p {
 }
 
 .member-footer div a:after {
-  content: '|';
+  content: "|";
   font-size: 10px;
   color: #bbb;
   margin-right: 5px;

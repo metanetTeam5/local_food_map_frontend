@@ -27,7 +27,7 @@
           v-model="loginData.email"
           placeholder="이메일 입력"
         />
-        <span class="input-icon"><i class="fa fa-envelope"></i></span>
+        <span class="input-icon"><i class="fas fa-envelope"></i></span>
       </div>
       <div class="form-group">
         <input
@@ -69,33 +69,33 @@
           <i class="fa fa-naver"></i><span style="font-weight: bold">N</span>
         </button>
         <button type="button"><i class="fa fa-comment"></i></button>
-        <button type="button"><i class="fa fa-google"></i></button>
+        <button type="button"><i>G</i></button>
       </div>
     </form>
   </div>
 </template>
 
 <script>
-import axios from 'axios';
+import axios from "axios";
 
 export default {
-  name: 'UserLogin',
+  name: "UserLogin",
   data() {
     return {
       loginData: {
-        email: '',
-        password: '',
+        email: "",
+        password: "",
       },
-      loginType: 'user',
-      status: 'not_remember',
+      loginType: "user",
+      status: "not_remember",
     };
   },
   created() {
-    if (localStorage.getItem('rememberid') !== null) {
-      this.status = 'remember';
-      this.loginData.email = localStorage.getItem('rememberid');
+    if (localStorage.getItem("rememberid") !== null) {
+      this.status = "remember";
+      this.loginData.email = localStorage.getItem("rememberid");
     } else {
-      this.status = 'not_remember';
+      this.status = "not_remember";
     }
   },
   methods: {
@@ -105,38 +105,38 @@ export default {
     async submitForm() {
       try {
         const endpoint =
-          this.loginType === 'user'
+          this.loginType === "user"
             ? process.env.VUE_APP_API_ENDPOINT_USER
             : process.env.VUE_APP_API_ENDPOINT_BUSINESS;
 
         let response = await axios.post(endpoint, this.loginData);
-        sessionStorage.setItem('token', response.data.token);
-        sessionStorage.setItem('userId', response.data.userId);
-        sessionStorage.setItem('userEmail', response.data.userEmail);
+        sessionStorage.setItem("token", response.data.token);
+        sessionStorage.setItem("userId", response.data.userId);
+        sessionStorage.setItem("userEmail", response.data.userEmail);
 
         this.checkRememberId();
-        if (this.loginType === 'user') {
-          this.$router.push({ name: 'HomePage' });
+        if (this.loginType === "user") {
+          this.$router.push({ name: "HomePage" });
           this.$router.go(0);
         } else {
-          sessionStorage.setItem('bmId', response.data.bmId);
-          this.$router.push({ name: 'BmanReservations' });
+          sessionStorage.setItem("bmId", response.data.bmId);
+          this.$router.push({ name: "BmanReservations" });
           this.$router.go(0);
         }
       } catch (error) {
         if (error.response) {
-          console.error('Error:', error.response.data);
-          alert('로그인 실패: ' + error.response.data);
+          console.error("Error:", error.response.data);
+          alert("로그인 실패: " + error.response.data);
         } else {
-          console.error('Error:', error.message);
+          console.error("Error:", error.message);
         }
       }
     },
     checkRememberId() {
-      if (this.status == 'not_remember') {
-        localStorage.removeItem('rememberid');
+      if (this.status == "not_remember") {
+        localStorage.removeItem("rememberid");
       } else {
-        localStorage.setItem('rememberid', this.loginData.email);
+        localStorage.setItem("rememberid", this.loginData.email);
       }
     },
   },
@@ -145,7 +145,7 @@ export default {
 
 <style>
 .password-input {
-  font-family: 'BMJUA_ttf';
+  font-family: "BMJUA_ttf";
 }
 
 .user-type-buttons {
