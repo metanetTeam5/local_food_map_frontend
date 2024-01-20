@@ -176,11 +176,14 @@ input[type='search']::-webkit-search-cancel-button {
   border: none;
   background-color: transparent;
   outline: none;
+  border: none !important;
+  outline: none !important;
 }
 
 .search-button:hover,
 .search-input:hover {
-  border: none;
+  border: none !important;
+  outline: none !important;
   font-family: 'BMHANNAPro';
 }
 
