@@ -3,8 +3,13 @@
     <div class="container-fluid mypage-container">
       <div class="row">
         <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0">
-          <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 min-vh-100">
-            <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
+          <div
+            class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 min-vh-100"
+          >
+            <ul
+              class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start"
+              id="menu"
+            >
               <li class="nav-item">
                 <router-link class="nav-link align-middle px-0" to="/mypage">
                   <div class="ms-1 d-none d-sm-inline menu-span">
@@ -13,64 +18,81 @@
                 </router-link>
               </li>
               <li class="nav-item">
-                <router-link class="nav-link align-middle px-0" to="/mypage/reservations">
+                <router-link
+                  class="nav-link align-middle px-0"
+                  to="/mypage/reservations"
+                >
                   <div class="ms-1 d-none d-sm-inline menu-span">예약 내역</div>
                 </router-link>
               </li>
               <li class="nav-item">
-                <router-link class="nav-link align-middle px-0" to="/mypage/reviews">
+                <router-link
+                  class="nav-link align-middle px-0"
+                  to="/mypage/reviews"
+                >
                   <div class="ms-1 d-none d-sm-inline menu-span selected-menu">
                     리뷰 관리
                   </div>
                 </router-link>
               </li>
               <li class="nav-item">
-                <router-link class="nav-link align-middle px-0" to="/mypage/favorites">
+                <router-link
+                  class="nav-link align-middle px-0"
+                  to="/mypage/favorites"
+                >
                   <div class="ms-1 d-none d-sm-inline menu-span">나의 찜</div>
                 </router-link>
               </li>
             </ul>
           </div>
         </div>
-      </div>
-      <div class="col py-3">
-        <div v-if="isLoading"></div>
-        <!-- <div v-if="isLoading" class="alert alert-info" role="alert">로딩중</div> -->
-
-        <div v-else>
-          <div>
-            <table class="table2">
-              <h2 class="mb-4">나의 리뷰 관리</h2>
-              <tbody>
-                <tr v-for="(rev, index) in paginatedReviews" :key="index">
-                  <td>
-                    <div class="d-flex align-items-start review-context">
-                      <div class="mr-3">
-                        <img
-                          v-if="rev.revwImg"
-                          class="rounded profileImg"
-                          :src="rev.revwImg"
-                          alt="식당 이미지"
-                        />
-                        <img
-                          v-else
-                          class="rounded profileImg"
-                          src="../../assets/images/아맛무 로고.png"
-                          alt="기본 리뷰 이미지"
-                        />
+        <div class="col py-3">
+          <div v-if="isLoading" class="alert alert-info" role="alert">
+            로딩중
+          </div>
+          <div v-else>
+            <div>
+              <table class="table2">
+                <h2 class="mb-4">내가 쓴 리뷰</h2>
+                <tbody>
+                  <tr v-for="(rev, index) in paginatedReviews" :key="index">
+                    <td>
+                      <div class="d-flex align-items-start review-context">
+                        <div class="mr-3">
+                          <img
+                            v-if="rev.revwImg"
+                            class="rounded profileImg"
+                            :src="rev.revwImg"
+                            alt="식당 이미지"
+                          />
+                          <img
+                            v-else
+                            class="rounded profileImg"
+                            src="../../assets/images/아맛무 로고.png"
+                            alt="기본 리뷰 이미지"
+                          />
+                        </div>
+                        <div id="review">
+                          <p><strong>식당 이름:</strong> {{ rev.restName }}</p>
+                          <p><strong>별점:</strong> {{ rev.revwStarRate }}</p>
+                          <p>
+                            <strong>리뷰 내용:</strong> {{ rev.revwContent }}
+                          </p>
+                          <p>
+                            <strong>작성 날짜:</strong> {{ rev.revwCreateDate }}
+                          </p>
+                        </div>
                       </div>
-                      <div id="review">
-                        <p><strong>식당 이름:</strong> {{ rev.restName }}</p>
-                        <p><strong>별점:</strong> {{ rev.revwStarRate }}</p>
-                        <p><strong>리뷰 내용:</strong> {{ rev.revwContent }}</p>
-                        <p>
-                          <strong>작성 날짜:</strong> {{ rev.revwCreateDate }}
-                        </p>
-                      </div>
-                      <button @click="showModal(rev)" class="btn btn-danger mt-3">
+                      <button
+                        @click="showModal(rev)"
+                        class="btn btn-primary mt-3"
+                      >
                         수정
                       </button>
-                      <button @click="deleteReview(rev.revwId)" class="btn btn-danger mt-3">
+                      <button
+                        @click="deleteReview(rev.revwId)"
+                        class="btn btn-danger mt-3"
+                      >
                         삭제
                       </button>
                     </td>
@@ -78,11 +100,21 @@
                 </tbody>
               </table>
               <div class="pagination justify-content-center">
-                <button @click="fetchPrevPage" :disabled="currentPage === 1" class="btn btn-primary">
+                <button
+                  @click="fetchPrevPage"
+                  :disabled="currentPage === 1"
+                  class="btn btn-primary"
+                >
                   이전
                 </button>
-                <span class="mx-3">페이지 {{ currentPage }} / {{ totalPages }}</span>
-                <button @click="fetchNextPage" :disabled="currentPage === totalPages" class="btn btn-primary">
+                <span class="mx-3"
+                  >페이지 {{ currentPage }} / {{ totalPages }}</span
+                >
+                <button
+                  @click="fetchNextPage"
+                  :disabled="currentPage === totalPages"
+                  class="btn btn-primary"
+                >
                   다음
                 </button>
               </div>
@@ -92,16 +124,32 @@
       </div>
     </div>
 
-    <b-modal v-model="isModalVisible" title="리뷰 수정하기" hide-footer size="lg" @hide="resetModal">
+    <b-modal
+      v-model="isModalVisible"
+      title="리뷰 수정하기"
+      hide-footer
+      size="lg"
+      @hide="resetModal"
+    >
       <div v-if="selectedReview">
         <form @submit.prevent="editReview(selectedReview.revwId)">
           <div class="form-group">
             <label for="reviewContent">리뷰 내용</label>
-            <textarea id="reviewContent" class="form-control" v-model="selectedReview.revwContent" required></textarea>
+            <textarea
+              id="reviewContent"
+              class="form-control"
+              v-model="selectedReview.revwContent"
+              required
+            ></textarea>
           </div>
           <div class="form-group">
             <label for="reviewRating">별점</label>
-            <select id="reviewRating" class="form-control" v-model="selectedReview.revwStarRate" required>
+            <select
+              id="reviewRating"
+              class="form-control"
+              v-model="selectedReview.revwStarRate"
+              required
+            >
               <option value="1">1 별</option>
               <option value="1">1.5 별</option>
               <option value="2">2 별</option>
@@ -115,13 +163,17 @@
           </div>
           <div class="form-group">
             <label for="fileUpload">파일 업로드</label>
-            <input type="file" id="fileUpload" @change="handleFileUpload">
+            <input type="file" id="fileUpload" @change="handleFileUpload" />
           </div>
-          <button @click="editReview(selectedReview.revwId)" class="btn btn-primary">OK</button>
+          <button
+            @click="editReview(selectedReview.revwId)"
+            class="btn btn-primary"
+          >
+            OK
+          </button>
         </form>
       </div>
     </b-modal>
-
   </div>
 </template>
 
@@ -230,11 +282,14 @@ export default {
       // }
       let reviewDto = JSON.stringify({
         revwContent: this.selectedReview.revwContent,
-        revwStarRate: this.selectedReview.revwStarRate
+        revwStarRate: this.selectedReview.revwStarRate,
       });
-      formData.append('review', new Blob([reviewDto], { type: "application/json" }));
+      formData.append(
+        "review",
+        new Blob([reviewDto], { type: "application/json" })
+      );
       if (this.file) {
-        formData.append('file', this.file);
+        formData.append("file", this.file);
       }
 
       try {
@@ -244,7 +299,7 @@ export default {
           {
             headers: {
               "X-AUTH-TOKEN": token.toString(),
-              "Content-Type": "multipart/form-data"
+              "Content-Type": "multipart/form-data",
             },
           }
         );
@@ -255,7 +310,6 @@ export default {
         console.error(error);
         alert("리뷰 수정 실패");
       }
-
     },
     // Fetch reviews based on the current page
     fetchReviews() {
@@ -554,7 +608,7 @@ p {
   border-bottom: 2px solid #dee2e6;
 }
 
-.table2 tbody+tbody {
+.table2 tbody + tbody {
   border-top: 2px solid #dee2e6;
 }
 
@@ -584,7 +638,7 @@ p {
 .table-borderless th,
 .table-borderless td,
 .table-borderless thead th,
-.table-borderless tbody+tbody {
+.table-borderless tbody + tbody {
   border: 0;
 }
 
@@ -598,15 +652,15 @@ p {
 }
 
 .table-primary,
-.table-primary>th,
-.table-primary>td {
+.table-primary > th,
+.table-primary > td {
   background-color: #b8daff;
 }
 
 .table-primary th,
 .table-primary td,
 .table-primary thead th,
-.table-primary tbody+tbody {
+.table-primary tbody + tbody {
   border-color: #7abaff;
 }
 
@@ -614,21 +668,21 @@ p {
   background-color: #9fcdff;
 }
 
-.table-hover .table-primary:hover>td,
-.table-hover .table-primary:hover>th {
+.table-hover .table-primary:hover > td,
+.table-hover .table-primary:hover > th {
   background-color: #9fcdff;
 }
 
 .table-secondary,
-.table-secondary>th,
-.table-secondary>td {
+.table-secondary > th,
+.table-secondary > td {
   background-color: #d6d8db;
 }
 
 .table-secondary th,
 .table-secondary td,
 .table-secondary thead th,
-.table-secondary tbody+tbody {
+.table-secondary tbody + tbody {
   border-color: #b3b7bb;
 }
 
@@ -636,21 +690,21 @@ p {
   background-color: #c8cbcf;
 }
 
-.table-hover .table-secondary:hover>td,
-.table-hover .table-secondary:hover>th {
+.table-hover .table-secondary:hover > td,
+.table-hover .table-secondary:hover > th {
   background-color: #c8cbcf;
 }
 
 .table-success,
-.table-success>th,
-.table-success>td {
+.table-success > th,
+.table-success > td {
   background-color: #c3e6cb;
 }
 
 .table-success th,
 .table-success td,
 .table-success thead th,
-.table-success tbody+tbody {
+.table-success tbody + tbody {
   border-color: #8fd19e;
 }
 
@@ -658,21 +712,21 @@ p {
   background-color: #b1dfbb;
 }
 
-.table-hover .table-success:hover>td,
-.table-hover .table-success:hover>th {
+.table-hover .table-success:hover > td,
+.table-hover .table-success:hover > th {
   background-color: #b1dfbb;
 }
 
 .table-info,
-.table-info>th,
-.table-info>td {
+.table-info > th,
+.table-info > td {
   background-color: #bee5eb;
 }
 
 .table-info th,
 .table-info td,
 .table-info thead th,
-.table-info tbody+tbody {
+.table-info tbody + tbody {
   border-color: #86cfda;
 }
 
@@ -680,21 +734,21 @@ p {
   background-color: #abdde5;
 }
 
-.table-hover .table-info:hover>td,
-.table-hover .table-info:hover>th {
+.table-hover .table-info:hover > td,
+.table-hover .table-info:hover > th {
   background-color: #abdde5;
 }
 
 .table-warning,
-.table-warning>th,
-.table-warning>td {
+.table-warning > th,
+.table-warning > td {
   background-color: #ffeeba;
 }
 
 .table-warning th,
 .table-warning td,
 .table-warning thead th,
-.table-warning tbody+tbody {
+.table-warning tbody + tbody {
   border-color: #ffdf7e;
 }
 
@@ -702,21 +756,21 @@ p {
   background-color: #ffe8a1;
 }
 
-.table-hover .table-warning:hover>td,
-.table-hover .table-warning:hover>th {
+.table-hover .table-warning:hover > td,
+.table-hover .table-warning:hover > th {
   background-color: #ffe8a1;
 }
 
 .table-danger,
-.table-danger>th,
-.table-danger>td {
+.table-danger > th,
+.table-danger > td {
   background-color: #f5c6cb;
 }
 
 .table-danger th,
 .table-danger td,
 .table-danger thead th,
-.table-danger tbody+tbody {
+.table-danger tbody + tbody {
   border-color: #ed969e;
 }
 
@@ -724,21 +778,21 @@ p {
   background-color: #f1b0b7;
 }
 
-.table-hover .table-danger:hover>td,
-.table-hover .table-danger:hover>th {
+.table-hover .table-danger:hover > td,
+.table-hover .table-danger:hover > th {
   background-color: #f1b0b7;
 }
 
 .table-light,
-.table-light>th,
-.table-light>td {
+.table-light > th,
+.table-light > td {
   background-color: #fdfdfe;
 }
 
 .table-light th,
 .table-light td,
 .table-light thead th,
-.table-light tbody+tbody {
+.table-light tbody + tbody {
   border-color: #fbfcfc;
 }
 
@@ -746,21 +800,21 @@ p {
   background-color: #ececf6;
 }
 
-.table-hover .table-light:hover>td,
-.table-hover .table-light:hover>th {
+.table-hover .table-light:hover > td,
+.table-hover .table-light:hover > th {
   background-color: #ececf6;
 }
 
 .table-dark,
-.table-dark>th,
-.table-dark>td {
+.table-dark > th,
+.table-dark > td {
   background-color: #c6c8ca;
 }
 
 .table-dark th,
 .table-dark td,
 .table-dark thead th,
-.table-dark tbody+tbody {
+.table-dark tbody + tbody {
   border-color: #95999c;
 }
 
@@ -768,14 +822,14 @@ p {
   background-color: #b9bbbe;
 }
 
-.table-hover .table-dark:hover>td,
-.table-hover .table-dark:hover>th {
+.table-hover .table-dark:hover > td,
+.table-hover .table-dark:hover > th {
   background-color: #b9bbbe;
 }
 
 .table-active,
-.table-active>th,
-.table-active>td {
+.table-active > th,
+.table-active > td {
   background-color: rgba(0, 0, 0, 0.075);
 }
 
@@ -783,8 +837,8 @@ p {
   background-color: rgba(0, 0, 0, 0.075);
 }
 
-.table-hover .table-active:hover>td,
-.table-hover .table-active:hover>th {
+.table-hover .table-active:hover > td,
+.table-hover .table-active:hover > th {
   background-color: rgba(0, 0, 0, 0.075);
 }
 

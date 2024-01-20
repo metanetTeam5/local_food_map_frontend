@@ -36,7 +36,7 @@
             <router-link class="nav-link" to="/join">회원가입</router-link>
           </div>
           <div class="navbar-nav ml-auto" v-else>
-            <span class="nav-link" @click="logout">로그아웃</span>
+            <button class="nav-link" @click="logout">로그아웃</button>
             <router-link class="nav-link" to="/mypage">마이페이지</router-link>
           </div>
         </div>
