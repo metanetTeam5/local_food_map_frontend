@@ -33,7 +33,9 @@
           </form>
           <div class="navbar-nav ml-auto" v-if="!login">
             <router-link class="nav-link" to="/login">로그인</router-link>
-            <router-link class="nav-link" to="/join">회원가입</router-link>
+            <router-link class="nav-link" to="/selectjoin"
+              >회원가입</router-link
+            >
           </div>
           <div class="navbar-nav ml-auto" v-else>
             <span class="nav-link" @click="logout">로그아웃</span>

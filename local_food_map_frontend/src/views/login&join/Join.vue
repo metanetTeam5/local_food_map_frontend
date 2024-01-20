@@ -177,9 +177,6 @@
           </table>
         </div>
         <div class="create">
-          <router-link to="/bman/join">
-            <input class="but4" type="button" value="사업자로 회원가입" />
-          </router-link>
           <input
             class="but4"
             type="button"

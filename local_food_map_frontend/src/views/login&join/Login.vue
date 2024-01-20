@@ -214,13 +214,14 @@ export default {
   margin: 0 0 15px;
   position: relative;
 }
+
 .login-form input {
   color: #000000;
   width: 100%;
   padding: 5px;
   height: 56px;
   border-radius: 74px;
-  border: 1px solid #ccc;
+  border: 1px solid #ffae00;
   box-sizing: border-box;
   font-size: 15px;
   padding-left: 75px;
