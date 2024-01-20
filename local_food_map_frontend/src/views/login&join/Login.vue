@@ -38,6 +38,20 @@
         />
         <span class="input-icon"><i class="fa fa-lock"></i></span>
       </div>
+      <b-form-group id="input-group-3" class="saveid">
+        <label for="rememberEmail" class="checkbox-label">
+          <input
+            type="checkbox"
+            v-model="status"
+            value="remember"
+            style="height: 14px"
+            unchecked-value="not_remember"
+            id="rememberEmail"
+            name="rememberEmail"
+          />
+          이메일 저장
+        </label>
+      </b-form-group>
       <button class="login-btn">Login</button>
       <!-- <a class="reset-psw" href="#">아이디 찾기</a><a class="reset-psw" href="#">비밀번호 찾기</a> -->
       <div class="reset-links">
@@ -46,22 +60,6 @@
           >비밀번호 찾기</router-link
         ><br /><router-link to="/join" class="reset-psw">회원가입</router-link>
       </div>
-
-      <b-form-group
-        id="input-group-3"
-        class="saveid"
-        style="float: left; margin-right: 15px"
-      >
-        <label>
-          <input
-            type="checkbox"
-            v-model="status"
-            value="remember"
-            unchecked-value="not_remember"
-          />
-          이메일 저장
-        </label>
-      </b-form-group>
 
       <div class="seperator"><b>or</b></div>
 
@@ -78,26 +76,26 @@
 </template>
 
 <script>
-import axios from "axios";
+import axios from 'axios';
 
 export default {
-  name: "UserLogin",
+  name: 'UserLogin',
   data() {
     return {
       loginData: {
-        email: "",
-        password: "",
+        email: '',
+        password: '',
       },
-      loginType: "user",
-      status: "not_remember",
+      loginType: 'user',
+      status: 'not_remember',
     };
   },
   created() {
-    if (localStorage.getItem("rememberid") !== null) {
-      this.status = "remember";
-      this.loginData.email = localStorage.getItem("rememberid");
+    if (localStorage.getItem('rememberid') !== null) {
+      this.status = 'remember';
+      this.loginData.email = localStorage.getItem('rememberid');
     } else {
-      this.status = "not_remember";
+      this.status = 'not_remember';
     }
   },
   methods: {
@@ -107,38 +105,38 @@ export default {
     async submitForm() {
       try {
         const endpoint =
-          this.loginType === "user"
+          this.loginType === 'user'
             ? process.env.VUE_APP_API_ENDPOINT_USER
             : process.env.VUE_APP_API_ENDPOINT_BUSINESS;
 
         let response = await axios.post(endpoint, this.loginData);
-        sessionStorage.setItem("token", response.data.token);
-        sessionStorage.setItem("userId", response.data.userId);
-        sessionStorage.setItem("userEmail", response.data.userEmail);
+        sessionStorage.setItem('token', response.data.token);
+        sessionStorage.setItem('userId', response.data.userId);
+        sessionStorage.setItem('userEmail', response.data.userEmail);
 
         this.checkRememberId();
-        if (this.loginType === "user") {
-          this.$router.push({ name: "HomePage" });
+        if (this.loginType === 'user') {
+          this.$router.push({ name: 'HomePage' });
           this.$router.go(0);
         } else {
-          sessionStorage.setItem("bmId", response.data.bmId);
-          this.$router.push({ name: "BmanReservations" });
+          sessionStorage.setItem('bmId', response.data.bmId);
+          this.$router.push({ name: 'BmanReservations' });
           this.$router.go(0);
         }
       } catch (error) {
         if (error.response) {
-          console.error("Error:", error.response.data);
-          alert("로그인 실패: " + error.response.data);
+          console.error('Error:', error.response.data);
+          alert('로그인 실패: ' + error.response.data);
         } else {
-          console.error("Error:", error.message);
+          console.error('Error:', error.message);
         }
       }
     },
     checkRememberId() {
-      if (this.status == "not_remember") {
-        localStorage.removeItem("rememberid");
+      if (this.status == 'not_remember') {
+        localStorage.removeItem('rememberid');
       } else {
-        localStorage.setItem("rememberid", this.loginData.email);
+        localStorage.setItem('rememberid', this.loginData.email);
       }
     },
   },
@@ -147,7 +145,7 @@ export default {
 
 <style>
 .password-input {
-  font-family: "BMJUA_ttf";
+  font-family: 'BMJUA_ttf';
 }
 
 .user-type-buttons {
@@ -216,13 +214,14 @@ export default {
   margin: 0 0 15px;
   position: relative;
 }
+
 .login-form input {
   color: #000000;
   width: 100%;
   padding: 5px;
   height: 56px;
   border-radius: 74px;
-  border: 1px solid #ccc;
+  border: 1px solid #ffae00;
   box-sizing: border-box;
   font-size: 15px;
   padding-left: 75px;
@@ -368,5 +367,21 @@ export default {
     width: 90%;
     padding: 15px 15px 30px;
   }
+}
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  color: #000000;
+  font-size: 14px;
+  margin-left: -5px; /* 조절이 필요한 경우에 사용 */
+}
+
+.checkbox-label input {
+  margin-right: 0px; /* 조절이 필요한 경우에 사용 */
+  margin-left: 10px;
+}
+#rememberEmail {
+  width: 30px;
+  accent-color: #fce205;
 }
 </style>
