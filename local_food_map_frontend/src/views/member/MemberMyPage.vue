@@ -46,7 +46,7 @@
       <div class="col py-3">
         <div v-if="isLoading"></div>
         <div v-else>
-          <form method="post" action="">
+          <form>
             <div class="container">
               <div class="insert">
                 <table class="table table-bordered">
@@ -392,6 +392,8 @@ export default {
             alert('회원 탈퇴 실패');
           }
         }
+      } else {
+        return false;
       }
     },
     setMemberInfo(response) {
