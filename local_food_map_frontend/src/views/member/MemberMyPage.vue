@@ -51,7 +51,7 @@
       <div class="col py-3">
         <div v-if="isLoading"></div>
         <div v-else>
-          <form method="post" action="">
+          <form>
             <div class="container">
               <div class="insert">
                 <table class="table table-bordered">
@@ -197,6 +197,7 @@
                     </tr>
                   </tbody>
                 </table>
+
                 <div class="create">
                   <button class="btn btn-warning" @click="updateMemberInfo">
                     회원정보 수정
@@ -205,6 +206,7 @@
                     회원 탈퇴
                   </button>
                 </div>
+
               </div>
             </div>
           </form>
@@ -404,6 +406,8 @@ export default {
             alert("회원 탈퇴 실패");
           }
         }
+      } else {
+        return false;
       }
     },
     setMemberInfo(response) {
@@ -437,12 +441,15 @@ export default {
 <style>
 * {
   font-family: "BMHANNAPro";
+
 }
 .px-sm-2 {
   background: #ffe1b3;
 }
 .py-3 {
   background: #fff2df;
+
+
 }
 .mypage-container {
   margin-top: 70px;
@@ -468,8 +475,12 @@ export default {
   font-weight: normal;
 }
 
+
 div.create {
   justify-content: space-between;
+
+//div.create2 {
+
   width: 800px;
   text-align: center;
   padding: 30px;
