@@ -33,7 +33,9 @@
           </form>
           <div class="navbar-nav ml-auto" v-if="!login">
             <router-link class="nav-link" to="/login">로그인</router-link>
-            <router-link class="nav-link" to="/join">회원가입</router-link>
+            <router-link class="nav-link" to="/selectjoin"
+              >회원가입</router-link
+            >
           </div>
           <div class="navbar-nav ml-auto" v-else>
             <button class="nav-link" @click="logout">로그아웃</button>
@@ -46,28 +48,28 @@
 </template>
 
 <script>
-import axios from "axios";
+import axios from 'axios';
 
 export default {
-  name: "AppHeader",
+  name: 'AppHeader',
   data() {
     return {
       isCollapsed: true,
-      searchQuery: "",
+      searchQuery: '',
       login: false,
     };
   },
   created() {
-    let checkLogin = sessionStorage.getItem("token");
-    if (checkLogin !== "" && checkLogin !== null && checkLogin !== undefined) {
+    let checkLogin = sessionStorage.getItem('token');
+    if (checkLogin !== '' && checkLogin !== null && checkLogin !== undefined) {
       this.login = true;
     } else {
       this.login = false;
     }
   },
   mounted() {
-    let checkLogin = sessionStorage.getItem("token");
-    if (checkLogin !== "" && checkLogin !== null && checkLogin !== undefined) {
+    let checkLogin = sessionStorage.getItem('token');
+    if (checkLogin !== '' && checkLogin !== null && checkLogin !== undefined) {
       this.login = true;
     } else {
       this.login = false;
@@ -75,67 +77,67 @@ export default {
   },
   methods: {
     async searchPlaces() {
-      if (this.searchQuery.trim() === "") {
-        console.warn("검색어를 입력해주세요.");
+      if (this.searchQuery.trim() === '') {
+        console.warn('검색어를 입력해주세요.');
         return;
       }
 
       try {
         await this.$store.dispatch(
-          "fetchSearchResults",
+          'fetchSearchResults',
           this.searchQuery.trim()
         );
-        console.log("검색 성공, MapPage로 이동");
+        console.log('검색 성공, MapPage로 이동');
 
-        if (this.$router.currentRoute.name !== "MapPage") {
+        if (this.$router.currentRoute.name !== 'MapPage') {
           // this.$router.push({ name: "MapPage", query: { query: this.searchQuery.trim() } });
-          this.$router.push({ name: "MapPage" });
+          this.$router.push({ name: 'MapPage' });
         }
       } catch (error) {
-        console.error("검색 중 오류 발생: ", error);
+        console.error('검색 중 오류 발생: ', error);
       }
     },
 
     async logout() {
-      let token = sessionStorage.getItem("token");
+      let token = sessionStorage.getItem('token');
       if (token === null) {
-        alert("로그아웃 되었습니다.");
-        this.$router.push({ name: "HomePage" });
+        alert('로그아웃 되었습니다.');
+        this.$router.push({ name: 'HomePage' });
         this.$router.go();
       } else {
         try {
           await axios.post(
-            process.env.VUE_APP_API_ENDPOINT + "/member/logout",
+            process.env.VUE_APP_API_ENDPOINT + '/member/logout',
             null,
             {
               headers: {
-                "X-AUTH-TOKEN": token.toString(),
+                'X-AUTH-TOKEN': token.toString(),
               },
             }
           );
 
           sessionStorage.clear();
 
-          alert("로그아웃 되었습니다.");
+          alert('로그아웃 되었습니다.');
 
-          if (this.$route.path === "/") {
+          if (this.$route.path === '/') {
             this.$router.go(0);
           } else {
-            this.$router.push({ name: "HomePage" });
+            this.$router.push({ name: 'HomePage' });
             this.$router.go(0);
           }
         } catch (error) {
           sessionStorage.clear();
 
-          alert("로그아웃 되었습니다.");
+          alert('로그아웃 되었습니다.');
 
-          if (this.$route.path === "/") {
+          if (this.$route.path === '/') {
             this.$router.go(0);
           } else {
-            this.$router.push({ name: "HomePage" });
+            this.$router.push({ name: 'HomePage' });
             this.$router.go(0);
           }
-          console.error("Error:", error.message);
+          console.error('Error:', error.message);
         }
       }
     },
@@ -158,10 +160,10 @@ export default {
 .search-container {
   margin-left: 180px;
   width: 800px;
-  font-family: "BMHANNAPro";
+  font-family: 'BMHANNAPro';
 }
 
-input[type="search"]::-webkit-search-cancel-button {
+input[type='search']::-webkit-search-cancel-button {
   -webkit-appearance: none;
   display: none;
 }
@@ -179,13 +181,13 @@ input[type="search"]::-webkit-search-cancel-button {
 .search-button:hover,
 .search-input:hover {
   border: none;
-  font-family: "BMHANNAPro";
+  font-family: 'BMHANNAPro';
 }
 
 .search-button:focus,
 .search-input:focus {
   border: none;
-  font-family: "BMHANNAPro";
+  font-family: 'BMHANNAPro';
 }
 
 .btn {
@@ -196,13 +198,13 @@ input[type="search"]::-webkit-search-cancel-button {
 .search-button {
   width: 3.5rem;
   height: 3rem;
-  font-family: "BMHANNAPro";
+  font-family: 'BMHANNAPro';
 }
 
 .search-button img {
   width: 100%;
   height: auto;
-  font-family: "BMHANNAPro";
+  font-family: 'BMHANNAPro';
 }
 
 .bg-light {
@@ -212,7 +214,7 @@ input[type="search"]::-webkit-search-cancel-button {
 .navbar-nav .nav-link {
   margin-right: 20px;
   color: #000000;
-  font-family: "BMHANNAPro";
+  font-family: 'BMHANNAPro';
 }
 .navbar-nav .nav-link:focus {
   outline: none;
@@ -230,5 +232,8 @@ input[type="search"]::-webkit-search-cancel-button {
   .form-inline .form-control {
     width: 100% !important;
   }
+}
+.nav-link {
+  cursor: pointer;
 }
 </style>
