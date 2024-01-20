@@ -46,7 +46,7 @@
       <div class="col py-3">
         <div v-if="isLoading"></div>
         <div v-else>
-          <form method="post" action="">
+          <form>
             <div class="container">
               <div class="insert">
                 <table class="table table-bordered">
@@ -317,8 +317,8 @@ export default {
       try {
         await axios.get(
           process.env.VUE_APP_API_ENDPOINT +
-            "/member/checknickname?nickname=" +
-            this.nickname
+            '/member/checknickname?nickname=' +
+            this.newNickname
         );
 
         this.nicknameDuplicate = false;
@@ -345,7 +345,7 @@ export default {
             {
               password: this.password,
               newPassword: this.newPassword,
-              nickname: this.nickname,
+              nickname: this.newNickname,
             },
             {
               headers: {
@@ -392,6 +392,8 @@ export default {
             alert("회원 탈퇴 실패");
           }
         }
+      } else {
+        return false;
       }
     },
     setMemberInfo(response) {
