@@ -24,6 +24,9 @@
 						<template v-slot:cell(actions)="row">
 							<b-button variant="danger" @click="acceptPartnership(row.item.businessmanId)">제휴</b-button>
 						</template>
+						<template v-slot:cell(deny)="row">
+							<b-button variant="danger" @click="denyPartnership(row.item.businessmanId)">제휴</b-button>
+						</template>
 					</b-table>
 
 					<b-modal v-model="isModalVisible" title="상세 정보" size="lg" hide-footer>
@@ -118,7 +121,9 @@ export default {
 				{ key: 'memberId', label: '회원 번호' },
 				{ key: 'restaurantId', label: '가게 번호' },	//{ key: 'notiTitle', label: '제목' },
 				{ key: 'companyName', label: '회사 이름' },
-				{ key: 'actions', label: '제휴 승인' }
+				{ key: 'actions', label: '제휴 승인' },
+				{ key: 'deny', label: '반려' }
+				
 				// { key: 'licenseNumber', label: '면허 번호' },
 				// { key: 'registration', label: 'registration' },
 				// { key: 'report', label: 'report' },
@@ -170,7 +175,10 @@ export default {
 			} catch (error) {
 				console.error('Error accept partnership-request', error);
 			}
-		}
+		},
+		// async denyPartnership(businessmanId) {
+			
+		// }
 
 		// navigateToDetail(item) {
 		// 	this.$router.push({ name: 'AdminNoticeDetail', params: { id: item.notiId } });

@@ -21,7 +21,10 @@
 						{{ data.index + 1 }}
 					</template>
 					<template v-slot:cell(actions)="row">
-						<b-button variant="danger" @click="deleteReview(row.item.rdelId)">삭제</b-button>
+						<b-button variant="danger btn-sm" class="small-button" @click="deleteReview(row.item.rdelId)">삭제</b-button>
+					</template>
+					<template v-slot:cell(preserve)="row">
+						<b-button variant="danger btn-sm" class="small-button" @click="preserveReview(row.item.rdelId)">반려</b-button>
 					</template>
 				</b-table>
 				<div class="d-flex justify-content-between align-items-center my-3">
@@ -53,7 +56,8 @@ export default {
 				{ key: 'bmanId', label: '사업자 번호' },
 				{ key: 'revwContent', label: '리뷰 내용' },	//{ key: 'notiTitle', label: '제목' },
 				{ key: 'revwStarRate', label: '리뷰 별점' },
-				{ key: 'actions', label: '삭제' }
+				{ key: 'actions', label: '삭제' },
+				{ key: 'preserve', label: '반려' }
 
 				// {
 				// 	key: 'reviewCreateDate',
@@ -91,7 +95,10 @@ export default {
 			} catch (error) {
 				console.error('Error deleting review:', error);
 			}
-		}
+		},
+		// async preserveReview(reviewId) {
+			
+		// }
 
 		// navigateToDetail(item) {
 		// 	this.$router.push({ name: 'AdminNoticeDetail', params: { id: item.notiId } });
@@ -210,6 +217,11 @@ button {
 button:hover {
 	background-color: #0056b3;
 }
+.small-button {
+  padding: 0.25rem 0.5rem; /* 작은 패딩 값 조절 */
+  font-size: 12px; /* 작은 글꼴 크기 조절 */
+}
+
 </style>
 
 
