@@ -56,8 +56,8 @@ export default {
 }
 
 @font-face {
-  font-family: 'NanumFont';
-  src: url('./assets/fonts/Nanum.ttf') format('truetype');
+  font-family: 'BMHANNAPro';
+  src: url('./assets/fonts/BMHANNAPro.ttf') format('truetype');
   
 }
 

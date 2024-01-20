@@ -5,13 +5,18 @@
         <div
           class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 min-vh-100"
         >
-          <ul
-            class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start"
-            id="menu"
-          >
+        <ul id="menu" class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" style="width: 100%;">
             <li class="nav-item">
-              <router-link class="nav-link align-middle px-0" to="/mypage">
+              <!-- <router-link class="nav-link align-middle px-0" to="/mypage">
                 <div class="ms-1 d-none d-sm-inline menu-span selected-menu">
+                  개인정보수정
+                </div>
+              </router-link> -->
+              <router-link class="nav-link align-middle px-0" to="/mypage">
+                <div
+                  class="ms-1 d-none d-sm-inline menu-span"
+                  :class="{ 'selected-menu': currentPath === '/mypage' }"
+                >
                   개인정보수정
                 </div>
               </router-link>
@@ -192,14 +197,16 @@
                     </tr>
                   </tbody>
                 </table>
-              </div>
-              <div class="create2">
-                <button class="btn btn-warning" @click="updateMemberInfo">
-                  회원정보 수정
-                </button>
-                <button class="btn btn-danger" @click="deleteMember">
-                  회원 탈퇴
-                </button>
+
+                <div class="create">
+                  <button class="btn btn-warning" @click="updateMemberInfo">
+                    회원정보 수정
+                  </button>
+                  <button class="btn btn-danger" @click="deleteMember">
+                    회원 탈퇴
+                  </button>
+                </div>
+
               </div>
             </div>
           </form>
@@ -235,8 +242,15 @@ export default {
       validPassword: true,
       changeNickname: false,
       checkPasswordPattern: true,
+      currentPath: this.$route.path,
     };
   },
+  watch: {
+    $route(to) {
+      this.currentPath = to.path;
+    },
+  },
+
   methods: {
     async getInfo() {
       let token = sessionStorage.getItem("token");
@@ -317,7 +331,7 @@ export default {
       try {
         await axios.get(
           process.env.VUE_APP_API_ENDPOINT +
-            '/member/checknickname?nickname=' +
+            "/member/checknickname?nickname=" +
             this.newNickname
         );
 
@@ -427,6 +441,15 @@ export default {
 <style>
 * {
   font-family: "BMHANNAPro";
+
+}
+.px-sm-2 {
+  background: #ffe1b3;
+}
+.py-3 {
+  background: #fff2df;
+
+
 }
 .mypage-container {
   margin-top: 70px;
@@ -436,6 +459,7 @@ export default {
 }
 
 .selected-menu {
+
   color: #6c757d;
 }
 
@@ -451,11 +475,25 @@ export default {
   font-weight: normal;
 }
 
-div.create2 {
+
+div.create {
+  justify-content: space-between;
+
+//div.create2 {
+
   width: 800px;
   text-align: center;
   padding: 30px;
   margin: auto;
+}
+.btn-warning {
+  /* 회원정보수정 버튼 */
+  margin-right: 20px; /* 오른쪽에 20px의 간격 추가 */
+}
+
+.btn-danger {
+  /* 회원 탈퇴 버튼 */
+  margin-left: 20px;
 }
 
 table {

@@ -57,7 +57,15 @@
               <i class="fa fa-heart"></i>
               <span>Like</span>
             </button> -->
-            <button class="button button-like" @click="addToFavorites">
+            <!-- <button class="button button-like" @click="addToFavorites">
+              <i class="fa fa-heart"></i>
+              <span>Like</span>
+            </button> -->
+            <button
+              class="button button-like"
+              @click="addToFavorites"
+              v-bind:class="{ liked: isLiked }"
+            >
               <i class="fa fa-heart"></i>
               <span>Like</span>
             </button>
@@ -224,7 +232,7 @@
 
         <!-- 리뷰가 없는 경우 -->
         <div v-else>
-          <p>작성된 리뷰가 없습니다.</p>
+          <p style="font-size: 20px; margin-top:20px; text-align: center;">작성된 리뷰가 없습니다.</p>
         </div>
       </div>
     </div>
@@ -314,6 +322,7 @@
               >
                 닫기
               </button>
+              <span  style="margin-right: 20px;"></span >
               <router-link
                 :to="{
                   path: '/payment',
@@ -340,30 +349,30 @@
 </template>
 
 <script>
-import Modal from './modal/Modal.vue';
-import { apiService } from '../../js/apiService.js';
-import axios from 'axios';
+import Modal from "./modal/Modal.vue";
+import { apiService } from "../../js/apiService.js";
+import axios from "axios";
 
 export default {
-  name: 'storeDetailPage',
+  name: "storeDetailPage",
   components: {
     Modal,
   },
   data() {
     return {
-      storeName: '',
+      storeName: "",
       totalScore: {},
       showModal: false,
       showFavoriteModal: false,
       showReserveModal: false,
       showShareModal: false,
       restaurant: {
-        restLocationName: '가게 위치 정보',
+        restLocationName: "가게 위치 정보",
       },
       review: {},
       // member: {},
       menu: {},
-      todayDate: '',
+      todayDate: "",
       showRivewModal: false,
       isLiked: false,
       modalCheck: false,
@@ -371,7 +380,7 @@ export default {
         headcount: 1,
         resvDate: null,
         resvHour: null,
-        additionalRequirements: '',
+        additionalRequirements: "",
       },
       selectedHour: null,
     };
@@ -383,8 +392,8 @@ export default {
           return 0;
         }
         const totalScore = this.review.reduce((sum, item) => {
-          if (typeof item.revwStarRate !== 'number') {
-            throw new Error('Invalid revwStarRate value');
+          if (typeof item.revwStarRate !== "number") {
+            throw new Error("Invalid revwStarRate value");
           }
           return sum + item.revwStarRate;
         }, 0);
@@ -397,14 +406,14 @@ export default {
     currentDate() {
       const today = new Date();
       const year = today.getFullYear();
-      const month = String(today.getMonth() + 1).padStart(2, '0');
-      const day = String(today.getDate()).padStart(2, '0');
+      const month = String(today.getMonth() + 1).padStart(2, "0");
+      const day = String(today.getDate()).padStart(2, "0");
       return `${year}-${month}-${day}`;
     },
     currentTime() {
       const now = new Date();
-      const hours = String(now.getHours()).padStart(2, '0');
-      const minutes = String(now.getMinutes()).padStart(2, '0');
+      const hours = String(now.getHours()).padStart(2, "0");
+      const minutes = String(now.getMinutes()).padStart(2, "0");
       return `${hours}:${minutes}`;
     },
     minHeadcount() {
@@ -424,8 +433,8 @@ export default {
       const hours = [];
       for (let hour = startHour; hour <= endHour; hour++) {
         for (let minute = 0; minute < 60; minute += intervalMinutes) {
-          const formattedHour = String(hour).padStart(2, '0');
-          const formattedMinute = String(minute).padStart(2, '0');
+          const formattedHour = String(hour).padStart(2, "0");
+          const formattedMinute = String(minute).padStart(2, "0");
           hours.push(`${formattedHour}:${formattedMinute}`);
         }
       }
@@ -441,8 +450,8 @@ export default {
       .getRestaurantById(restId)
       .then((response) => {
         this.restaurant = response.data;
-        this.restLocationX = response.data.restLocationX; // 가게의 경도 정보
-        this.restLocationY = response.data.restLocationY; // 가게의 위도 정보
+        this.restLocationX = response.data.restLocationX;
+        this.restLocationY = response.data.restLocationY;
       })
       .catch((error) => {
         console.error(error);
@@ -455,19 +464,9 @@ export default {
         this.review = this.processImageData(response.data);
       })
       .catch((error) => {
-        console.error('리뷰 정보를 불러오는데 실패했습니다:', error);
+        console.error("리뷰 정보를 불러오는데 실패했습니다:", error);
       });
-    //멤버 정보 가져오기
-    // apiService
-    //   .getMemberById(memberId)
-    //   .then((response) => {
-    //     this.member = response.data;
-    //     return this.$store.state.user.id;
-    //   })
-    //   .catch((error) => {
-    //     console.error("멤버 정보를 불러오는데 실패했습니다:", error);
-    //   });
-    //메뉴 정보 가져오기
+
     apiService
       .getMenuById(restId)
       .then((response) => {
@@ -475,15 +474,15 @@ export default {
         this.menu = response.data;
       })
       .catch((error) => {
-        console.error('메뉴 정보를 불러오는데 실패했습니다:', error);
+        console.error("메뉴 정보를 불러오는데 실패했습니다:", error);
       });
   },
   async mounted() {
     this.loadExternalCSS(
-      'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css'
+      "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
     );
     this.loadExternalCSS(
-      'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.0/css/font-awesome.min.css'
+      "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.0/css/font-awesome.min.css"
     );
     this.initializeMap();
     this.createMap();
@@ -493,7 +492,7 @@ export default {
   async checkFavoriteStatus() {
     try {
       const response = await axios.get(
-        process.env.VUE_APP_API_ENDPOINT + '/restaurant/favorite',
+        process.env.VUE_APP_API_ENDPOINT + "/restaurant/favorite",
         {
           // 필요한 데이터
         }
@@ -506,8 +505,8 @@ export default {
     }
   },
   async deleteFavorite(restId) {
-    let token = sessionStorage.getItem('token');
-    let userId = sessionStorage.getItem('userId');
+    let token = sessionStorage.getItem("token");
+    let userId = sessionStorage.getItem("userId");
 
     try {
       const response = await axios.delete(
@@ -518,7 +517,7 @@ export default {
             restId: restId,
           },
           headers: {
-            'X-AUTH-TOKEN': token.toString(),
+            "X-AUTH-TOKEN": token.toString(),
           },
         }
       );
@@ -529,11 +528,11 @@ export default {
           (item) => item.restId !== restId
         );
         // 성공 메시지 또는 기타 UI 업데이트
-        console.log('즐겨찾기가 성공적으로 삭제되었습니다.');
+        console.log("즐겨찾기가 성공적으로 삭제되었습니다.");
       }
     } catch (error) {
       console.error(error);
-      alert('즐겨찾기 삭제에 실패했습니다.');
+      alert("즐겨찾기 삭제에 실패했습니다.");
     }
   },
 
@@ -541,7 +540,7 @@ export default {
     processImageData(reviewData) {
       return reviewData.map((item) => {
         // 이미지 URL이 쉼표로 구분되어 있다고 가정
-        item.revwImgs = item.revwImg.split(','); // 문자열을 배열로 변환
+        item.revwImgs = item.revwImg.split(","); // 문자열을 배열로 변환
         return item;
       });
     },
@@ -549,13 +548,13 @@ export default {
       this.isLiked = !this.isLiked;
     },
     copyToClipboard() {
-      const textarea = document.createElement('textarea');
+      const textarea = document.createElement("textarea");
       document.body.appendChild(textarea);
       textarea.value = this.restaurant.restLocationName;
       textarea.select();
-      document.execCommand('copy');
+      document.execCommand("copy");
       document.body.removeChild(textarea);
-      alert('주소가 복사 되었습니다!');
+      alert("주소가 복사 되었습니다!");
     },
     getTodayDate() {
       var today = new Date();
@@ -563,33 +562,50 @@ export default {
       var day = today.getDate();
 
       // 날짜를 원하는 형식으로 조합
-      var formattedDate = month + '/' + day + '일';
+      var formattedDate = month + "/" + day + "일";
 
       this.todayDate = formattedDate; // 데이터 속성에 오늘의 날짜 저장
     },
 
     async addToFavorites() {
       try {
-        // response 변수 제거
-        await axios.post(
-          process.env.VUE_APP_API_ENDPOINT + '/restaurant/favorite',
-          {
-            membId: sessionStorage.getItem('userId'),
-            restId: this.restaurant.restId,
-          },
-          {
-            headers: {
-              'X-AUTH-TOKEN': sessionStorage.getItem('token').toString(),
+        if (this.isLiked) {
+          // 즐겨찾기 삭제
+          await axios.delete(
+            process.env.VUE_APP_API_ENDPOINT + "/restaurant/favorite",
+            {
+              data: {
+                membId: sessionStorage.getItem("userId"),
+                restId: this.restaurant.restId,
+              },
+              headers: {
+                "X-AUTH-TOKEN": sessionStorage.getItem("token").toString(),
+              },
+            }
+          );
+          alert("즐겨찾기에서 제거되었습니다.");
+        } else {
+          // 즐겨찾기 추가
+          await axios.post(
+            process.env.VUE_APP_API_ENDPOINT + "/restaurant/favorite",
+            {
+              membId: sessionStorage.getItem("userId"),
+              restId: this.restaurant.restId,
             },
-          }
-        );
-
-        // 성공적으로 추가되었을 때의 처리
-        alert('즐겨찾기에 추가되었습니다.');
-        // 추가 처리 필요
+            {
+              headers: {
+                "X-AUTH-TOKEN": sessionStorage.getItem("token").toString(),
+              },
+            }
+          );
+          alert("즐겨찾기에 추가되었습니다.");
+        }
       } catch (error) {
         console.error(error);
-        alert('즐겨찾기 추가 실패');
+        alert("즐겨찾기 처리 실패");
+      } finally {
+        // 상태 토글은 요청 완료 후에 수행
+        this.toggleLike();
       }
     },
 
@@ -605,80 +621,63 @@ export default {
     },
 
     loadExternalCSS(url) {
-      const link = document.createElement('link');
+      const link = document.createElement("link");
       link.href = url;
-      link.rel = 'stylesheet';
-      link.type = 'text/css';
+      link.rel = "stylesheet";
+      link.type = "text/css";
       document.head.appendChild(link);
     },
     initializeMap() {
-      const script = document.createElement('script');
+      const script = document.createElement("script");
       script.onload = () => this.createMap();
       script.src =
-        'https://dapi.kakao.com/v2/maps/sdk.js?appkey=4ee6fa1017dfbe37aa5850be2d9c3350&autoload=false';
+        "https://dapi.kakao.com/v2/maps/sdk.js?appkey=4ee6fa1017dfbe37aa5850be2d9c3350&autoload=false";
       document.head.appendChild(script);
     },
     createMap() {
       kakao.maps.load(() => {
-        if (navigator.geolocation) {
-          navigator.geolocation.getCurrentPosition(
-            () => {
-              // 'map' 변수를 여기에서 정의합니다.
-              const mapContainer = document.getElementById('map');
-              const options = {
-                center: new kakao.maps.LatLng(
-                  this.restLocationY,
-                  this.restLocationX
-                ),
-                level: 3,
-              };
-              const map = new kakao.maps.Map(mapContainer, options);
+        // 가게의 실제 위치 정보를 사용합니다.
+        const restLocationX = this.restaurant.restLocationX;
+        const restLocationY = this.restaurant.restLocationY;
 
-              // 가게의 위치를 동적으로 설정합니다.
-              const restLocationX = 127.007798; // 가게의 경도 정보
-              const restLocationY = 37.575863; // 가게의 위도 정보
+        if (restLocationX && restLocationY) {
+          const mapContainer = document.getElementById("map");
+          const options = {
+            center: new kakao.maps.LatLng(restLocationY, restLocationX),
+            level: 3,
+          };
+          const map = new kakao.maps.Map(mapContainer, options);
 
-              // 마커 이미지 경로 설정
-              var MarkimageSrc = require('../../assets/images/로고마크표시.png');
-
-              // 마커 이미지 사이즈 및 옵션 설정
-              var MarkimageSize = new kakao.maps.Size(50, 53);
-              var MarkimageOption = { offset: new kakao.maps.Point(27, 69) };
-
-              const markerImage = new kakao.maps.MarkerImage(
-                MarkimageSrc,
-                MarkimageSize,
-                MarkimageOption
-              );
-
-              // 마커 생성 및 지도에 추가
-              const markerPosition = new kakao.maps.LatLng(
-                restLocationY,
-                restLocationX
-              );
-              const marker = new kakao.maps.Marker({
-                position: markerPosition,
-                image: markerImage,
-              });
-              marker.setMap(map);
-
-              // 지도의 중심을 마커의 위치로 설정합니다.
-              map.setCenter(markerPosition);
-            },
-            (error) => {
-              console.error('Geolocation failed: ' + error.message);
-            }
+          // 마커 이미지 경로 설정 및 마커 생성
+          var MarkimageSrc = require("../../assets/images/로고마크표시.png");
+          var MarkimageSize = new kakao.maps.Size(50, 53);
+          var MarkimageOption = { offset: new kakao.maps.Point(27, 69) };
+          const markerImage = new kakao.maps.MarkerImage(
+            MarkimageSrc,
+            MarkimageSize,
+            MarkimageOption
           );
+          const markerPosition = new kakao.maps.LatLng(
+            restLocationY,
+            restLocationX
+          );
+          const marker = new kakao.maps.Marker({
+            position: markerPosition,
+            image: markerImage,
+          });
+          marker.setMap(map);
+          map.setCenter(markerPosition);
         } else {
-          console.error("Your browser doesn't support geolocation.");
+          console.error("No location data available for the restaurant.");
         }
       });
     },
+
     modalOpen() {
       this.modalCheck = !this.modalCheck;
     },
     submitReservation() {
-      console.log('Reservation Submitted:', this.reservation);
+      console.log("Reservation Submitted:", this.reservation);
     },
     setReservationHour(hour) {
       this.reservation.resvHour = hour;
@@ -703,9 +702,10 @@ export default {
 };
 </script>
 
+
 <style>
 * {
-  font-family: 'BMHANNAPro';
+  font-family: "BMHANNAPro";
 }
 
 .list-group-item p {
@@ -794,7 +794,7 @@ export default {
 }
 
 .store-category p:not(:last-child)::after {
-  content: '|';
+  content: "|";
   margin-left: 10px;
   color: #333;
 }
@@ -840,7 +840,7 @@ export default {
 }
 
 .card-store-menu p::after {
-  content: ' ------------------------------------------------------------';
+  content: " ------------------------------------------------------------";
   margin-top: 1em;
 }
 
@@ -981,6 +981,7 @@ td {
 }
 
 .profile-info {
+  margin-left: 20px;
   display: flex;
   align-items: flex-start;
 }
@@ -1047,7 +1048,7 @@ td {
 }
 
 .special-pic::after {
-  content: '+'; /* 추가 텍스트 */
+  content: "+"; /* 추가 텍스트 */
   position: absolute;
   top: 50%;
   left: 50%;
@@ -1117,6 +1118,15 @@ td {
 .button-like:hover span {
   color: #ff2b8a;
 }
+.button-like:not(.liked):hover {
+  border-color: #ff2b8a;
+  background-color: transparent;
+}
+
+.button-like:not(.liked):hover .fa,
+.button-like:not(.liked):hover span {
+  color: #ff2b8a;
+}
 
 .liked {
   background-color: #ff2b8a;
@@ -1181,6 +1191,13 @@ td {
   border-bottom: 1px solid #eee; /* 연한 회색 구분선 */
   margin-bottom: 20px;
   padding-bottom: 20px;
+}
+
+.button-like.liked {
+  /* 호버된 효과 스타일 */
+  background-color: #ff2b8a;
+  border-color: #ff2b8a;
+  color: white; /* 예시: 흰색 텍스트 */
 }
 
 @media (max-width: 768px) {
