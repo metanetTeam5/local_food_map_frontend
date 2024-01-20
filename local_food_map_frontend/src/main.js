@@ -6,7 +6,7 @@ import store from "./store/modules/userStore";
 
 import BootstrapVue from "bootstrap-vue";
 // main.js or main.ts
-import "@fortawesome/fontawesome-free/css/all.css";
+// import "@fortawesome/fontawesome-free/css/all.css";
 
 // Bootstrap CSS 파일 (및 선택적으로 BootstrapVue CSS)을 가져옵니다.
 import "bootstrap/dist/css/bootstrap.css";
