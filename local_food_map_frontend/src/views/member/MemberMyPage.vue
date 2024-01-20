@@ -146,9 +146,6 @@
                 <button class="btn btn-danger" @click="deleteMember">
                   회원 탈퇴
                 </button>
-                <button class="btn btn-danger" @click="registerRestaurant">
-                  가게 등록하기
-                </button>
               </div>
             </div>
           </form>
@@ -317,9 +314,6 @@ export default {
         }
       }
     },
-    async registerRestaurant() {
-      this.$router.push('/mypage/restaurant');
-    },
     async deleteMember() {
       if (
         confirm("회원 탈퇴를 하시겠습니까? 탈퇴하면 회원 정보는 삭제됩니다.")
@@ -426,9 +420,7 @@ export default {
 
 div.create {
   justify-content: space-between;
-
 /* div.create2 { */
-
   width: 800px;
   text-align: center;
   padding: 30px;

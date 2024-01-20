@@ -51,7 +51,13 @@
       </div>
       <div class="col py-3">
         <h2>식당 정보 수정</h2>
-        <div v-if="isLoading">로딩중</div>
+        <div v-if="isLoading">로딩중
+        
+          <button class="btn btn-danger" @click="registerRestaurant">
+                  가게 등록하기
+                </button>
+        
+        </div>
         <div v-else>
           <form method="post" action="">
             <div class="container">
@@ -176,6 +182,9 @@ export default {
     };
   },
   methods: {
+    async registerRestaurant() {
+      this.$router.push('/mypage/restaurant');
+    },
     async getRestInfo() {
       let token = sessionStorage.getItem('token');
       if (token !== null) {
