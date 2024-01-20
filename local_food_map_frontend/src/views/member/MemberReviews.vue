@@ -43,6 +43,7 @@
                   <div class="ms-1 d-none d-sm-inline menu-span">나의 찜</div>
                 </router-link>
               </li>
+              
             </ul>
           </div>
         </div>

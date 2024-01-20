@@ -33,6 +33,7 @@ import BmanJoin from '../views/bman/BmanJoin';
 import BmanReviews from '../views/bman/BmanReviews';
 import Service from '../views/Service';
 import SelectJoin from '../views/login&join/SelectJoin';
+import MemberRestaurant from '../views/member/MemberRestaurant';
 
 Vue.use(Router);
 
@@ -208,5 +209,11 @@ export default new Router({
       name: 'SelectJoin',
       component: SelectJoin,
     },
+    {
+      path: '/mypage/restaurant',
+      name: 'MemberRestaurant',
+      component: MemberRestaurant,
+
+    }
   ],
 });
