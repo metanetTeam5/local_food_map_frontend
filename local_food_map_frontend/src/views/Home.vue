@@ -132,7 +132,7 @@ export default {
       }
     },
     async searchPlaces(keyword) {
-      console.log("Keyword:", keyword);
+      console.log(keyword);
       if (keyword === "") {
         console.warn("검색어를 입력해주세요.");
         return;
