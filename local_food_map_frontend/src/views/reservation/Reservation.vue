@@ -10,12 +10,27 @@
             <h5 class="mb-4">예약 정보 입력</h5>
             <div class="form-group">
               <label for="headcount">인원 수:</label>
-              <input type="number" class="form-control" id="headcount" v-model="reservation.headcount" :min="minHeadcount" required />
+              <input
+                type="number"
+                class="form-control"
+                id="headcount"
+                v-model="reservation.headcount"
+                :min="minHeadcount"
+                required
+              />
             </div>
 
             <div class="form-group">
               <label for="resvDate">날짜:</label>
-              <input type="date" class="form-control" id="resvDate" v-model="reservation.resvDate" :min="minDate" required @change="resetReservationHour" />
+              <input
+                type="date"
+                class="form-control"
+                id="resvDate"
+                v-model="reservation.resvDate"
+                :min="minDate"
+                required
+                @change="resetReservationHour"
+              />
             </div>
 
             <div class="form-group">
@@ -26,7 +41,10 @@
                   :key="hour"
                   @click="setReservationHour(hour)"
                   :disabled="isPastTime(hour) || !reservation.resvDate"
-                  :class="{ 'btn-primary': reservation.resvHour === hour, 'selected': selectedHour === hour }"
+                  :class="{
+                    'btn-primary': reservation.resvHour === hour,
+                    selected: selectedHour === hour,
+                  }"
                 >
                   {{ hour }}
                 </button>
@@ -35,7 +53,12 @@
 
             <div class="form-group">
               <label for="additionalRequirements">추가 요구사항:</label>
-              <textarea class="form-control" id="additionalRequirements" v-model="reservation.additionalRequirements" rows="3"></textarea>
+              <textarea
+                class="form-control"
+                id="additionalRequirements"
+                v-model="reservation.additionalRequirements"
+                rows="3"
+              ></textarea>
             </div>
 
             <div class="form-group">
@@ -44,9 +67,27 @@
             </div>
 
             <div class="modal-btn text-right">
-              <button type="button" class="btn btn-secondary" @click="modalOpen">닫기</button>
-              <router-link :to="{ path: '/payment', query: { resvHour: reservation.resvHour, additionalRequirements: reservation.additionalRequirements } }">
-                <button type="submit" class="btn btn-primary" :disabled="!reservation.resvHour">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                @click="modalOpen"
+              >
+                닫기
+              </button>
+              <router-link
+                :to="{
+                  path: '/payment',
+                  query: {
+                    resvHour: reservation.resvHour,
+                    additionalRequirements: reservation.additionalRequirements,
+                  },
+                }"
+              >
+                <button
+                  type="submit"
+                  class="btn btn-primary"
+                  :disabled="!reservation.resvHour"
+                >
                   <div id="pay">결제</div>
                 </button>
               </router-link>
@@ -68,9 +109,9 @@ export default {
         headcount: 1,
         resvDate: null,
         resvHour: null,
-        additionalRequirements: ""
+        additionalRequirements: "",
       },
-      selectedHour: null
+      selectedHour: null,
     };
   },
   computed: {
@@ -91,7 +132,9 @@ export default {
       return 1;
     },
     deposit() {
-      const formattedDeposit = (this.reservation.headcount * 10000).toLocaleString();
+      const formattedDeposit = (
+        this.reservation.headcount * 10000
+      ).toLocaleString();
       return `결제예정금액: ${this.reservation.headcount}(명) X 10,000 = ${formattedDeposit}원`;
     },
     availableHours() {
@@ -102,21 +145,21 @@ export default {
       const hours = [];
       for (let hour = startHour; hour <= endHour; hour++) {
         for (let minute = 0; minute < 60; minute += intervalMinutes) {
-          const formattedHour = String(hour).padStart(2, '0');
-          const formattedMinute = String(minute).padStart(2, '0');
+          const formattedHour = String(hour).padStart(2, "0");
+          const formattedMinute = String(minute).padStart(2, "0");
           hours.push(`${formattedHour}:${formattedMinute}`);
         }
       }
 
       return hours;
-    }
+    },
   },
   methods: {
     modalOpen() {
       this.modalCheck = !this.modalCheck;
     },
     submitReservation() {
-      console.log('Reservation Submitted:', this.reservation);
+      console.log("Reservation Submitted:", this.reservation);
     },
     setReservationHour(hour) {
       this.reservation.resvHour = hour;
@@ -136,8 +179,8 @@ export default {
     },
     isToday() {
       return this.reservation.resvDate === this.currentDate;
-    }
-  }
+    },
+  },
 };
 </script>
 

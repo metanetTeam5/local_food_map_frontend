@@ -1,32 +1,13 @@
-<!-- <template>
-  <div>
-    <div v-if="isReviewFormVisible">
-      <form @submit.prevent="submitReview">
-        <input type="number" step="0.1" v-model="review.revwStarRate" placeholder="별점 (0.0 ~ 5.0)" />
-        <textarea v-model="review.revwContent" placeholder="리뷰 내용"></textarea>
-        <input type="file" @change="handleFileUpload" />
-        <button type="submit">리뷰 제출</button>
-      </form>
-    </div>
-  </div>
-</template> -->
-
 <template>
   <b-container>
     <b-row class="justify-content-md-center" v-if="isReviewFormVisible">
       <b-col lg="8">
         <b-card title="리뷰 작성하기" class="mt-3">
           <b-form @submit.prevent="submitReview">
-            <b-form-group label="별점" label-for="input-star">
-              <b-form-input
-                id="input-star"
-                type="number"
-                v-model="review.revwStarRate"
-                min="0"
-                max="5"
-                step="0.1"
-                required
-              />
+            <b-form-group label="별점">
+              <star-rating :rating="review.revwStarRate" :read-only="false">
+                @rating-selected="onRatingSelected" ></star-rating
+              >
             </b-form-group>
 
             <b-form-group label="리뷰 내용" label-for="input-content">
@@ -58,15 +39,19 @@
 </template>
 
 <script>
-import axios from 'axios';
+import axios from "axios";
+import StarRating from "vue-star-rating";
 
 export default {
-  props: ['resvId', 'restId'],
+  components: {
+    "star-rating": StarRating,
+  },
+  props: ["resvId", "restId"],
   data() {
     return {
       review: {
-        revwStarRate: 0,
-        revwContent: '',
+        revwStarRate: 1,
+        revwContent: "",
         restId: this.$route.params.restId,
       },
       selectedFile: null,
@@ -88,32 +73,32 @@ export default {
     async submitReview() {
       const formData = new FormData();
       formData.append(
-        'review',
-        new Blob([JSON.stringify(this.review)], { type: 'application/json' })
+        "review",
+        new Blob([JSON.stringify(this.review)], { type: "application/json" })
       );
-      formData.append('file', this.selectedFile);
+      formData.append("file", this.selectedFile);
       console.log(this.review);
 
       try {
-        let token = sessionStorage.getItem('token');
+        let token = sessionStorage.getItem("token");
         // const response = await axios.post(`http://localhost:8088/reviewimage/reservation/${this.selectedReservationId}`, formData);
         const response = await axios.post(
           `http://localhost:8088/reviewimage/reservation/${this.selectedReservationId}`,
           formData,
           {
             headers: {
-              'X-AUTH-TOKEN': token.toString(),
+              "X-AUTH-TOKEN": token.toString(),
             },
           }
         );
         console.log(response.data);
         // 리뷰 제출 후 처리 로직
         this.isReviewFormVisible = false; // 폼 숨기기
-        this.$router.push({ name: 'MemberReservations' });
+        this.$router.push({ name: "MemberReservations" });
         this.$router.go(0);
         // 추가적인 성공 메시지나 상태 업데이트를 할 수 있습니다.
       } catch (error) {
-        console.error('리뷰 제출에 실패했습니다.', error);
+        console.error("리뷰 제출에 실패했습니다.", error);
         // 에러 처리 로직을 추가할 수 있습니다.
       }
     },

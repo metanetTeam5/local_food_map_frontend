@@ -232,7 +232,9 @@
 
         <!-- 리뷰가 없는 경우 -->
         <div v-else>
-          <p style="font-size: 20px; margin-top:20px; text-align: center;">작성된 리뷰가 없습니다.</p>
+          <p style="font-size: 20px; margin-top: 20px; text-align: center">
+            작성된 리뷰가 없습니다.
+          </p>
         </div>
       </div>
     </div>
@@ -322,7 +324,7 @@
               >
                 닫기
               </button>
-              <span  style="margin-right: 20px;"></span >
+              <span style="margin-right: 20px"></span>
               <router-link
                 :to="{
                   path: '/payment',
@@ -386,6 +388,9 @@ export default {
     };
   },
   computed: {
+    minDate() {
+      return this.currentDate;
+    },
     averageReviewScore() {
       try {
         if (!this.review || this.review.length === 0) {
@@ -535,7 +540,6 @@ export default {
       alert("즐겨찾기 삭제에 실패했습니다.");
     }
   },
-
   methods: {
     processImageData(reviewData) {
       return reviewData.map((item) => {
@@ -701,7 +705,6 @@ export default {
   },
 };
 </script>
-
 
 <style>
 * {
