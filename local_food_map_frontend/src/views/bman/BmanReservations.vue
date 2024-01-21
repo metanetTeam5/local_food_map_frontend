@@ -2,112 +2,86 @@
   <div class="container-fluid mypage-container">
     <div class="row flex-nowrap">
       <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0">
-        <div
-          class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 min-vh-100"
-        >
-          <div
-            class="nav nav-pills flex-column mb-0 align-items-center align-items-sm-start bm-logo"
-          >
+
+        <div 
+          class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 min-vh-100">
+          <div 
+            class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start bm-logo">
+
             <router-link to="/bman/reservations">
-              <img
-                src="../../assets/images/아맛무 로고.png"
-                class="img-fluid"
-              />
+              <img src="../../assets/images/아맛무 로고.png" class="img-fluid" />
             </router-link>
           </div>
-          <ul
-            class="nav nav-pills flex-column mb-0 align-items-center align-items-sm-start"
-            id="menu"
-          >
+
+          <ul 
+            class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
+
             <li class="nav-item">
-              <router-link
-                class="nav-link align-middle px-0"
-                to="/bman/reservations"
-              >
+              <router-link class="nav-link align-middle px-0" to="/bman/reservations">
                 <div class="ms-1 d-none d-sm-inline menu-span selected-menu">
                   예약 조회
-                </div></router-link
-              >
+                </div>
+              </router-link>
             </li>
             <li class="nav-item">
               <router-link class="nav-link align-middle px-0" to="/bman/info">
                 <div class="ms-1 d-none d-sm-inline menu-span">
                   식당 정보 수정
-                </div></router-link
-              >
+                </div>
+              </router-link>
             </li>
             <li class="nav-item">
-              <router-link
-                class="nav-link align-middle px-0"
-                to="/bman/reviews"
-              >
+              <router-link class="nav-link align-middle px-0" to="/bman/reviews">
                 <div class="ms-1 d-none d-sm-inline menu-span">
                   리뷰 관리
-                </div></router-link
-              >
+                </div>
+              </router-link>
             </li>
           </ul>
         </div>
       </div>
       <div class="col py-3">
+
+        <br/>
+        <h2>예약 조회</h2>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
         <div v-if="isLoading">로딩중</div>
         <div v-else>
-          <div>
-            <h2>전체 예약 {{ totalReservation }}개</h2>
-            <br />
-            <table class="table reservation-table">
-              <tr>
-                <th>예약자</th>
-                <th>인원</th>
-                <th>예약일자</th>
-                <th>예약시간</th>
-                <th>연락처</th>
-                <th>요청사항</th>
-                <th>방문확인</th>
-              </tr>
-              <tr v-for="(resv, index) in reservationList" :key="index">
-                <td>
-                  {{ resv.membEmail }}
-                </td>
-                <td>
-                  {{ resv.headCount }}
-                </td>
-                <td>
-                  {{ resv.resvDate }}
-                </td>
-                <td>
-                  {{ resv.resvHour }}
-                </td>
-                <td>
-                  {{ resv.phoneNumber }}
-                </td>
-                <td>
-                  {{ resv.requirement }}
-                </td>
-                <td>
-                  <span v-if="resv.resvStatus === 'X'"> 예약 취소 </span>
-                  <span v-else>
-                    <input
-                      id="O"
-                      type="radio"
-                      v-model="resv.resvStatus"
-                      value="O"
-                      @change="updateResvStatus(resv.resvId)"
-                    />
-                    <label for="O">방문 취소</label>
-                    <input
-                      id="C"
-                      type="radio"
-                      v-model="resv.resvStatus"
-                      value="C"
-                      @change="updateResvStatus(resv.resvId)"
-                    />
-                    <label for="C">방문 완료</label>
-                  </span>
-                </td>
-              </tr>
-            </table>
-          </div>
+
+          <div class="search-area mb-4">
+					<b-form-input v-model="searchQuery" type="search" placeholder="검색..." class="search-input">
+					</b-form-input>
+				</div>
+
+          <b-table striped hover :items="reservationList" :fields="fields" class="my-custom-table"
+          :per-page="perPage" :current-page="currentPage" :filter="searchQuery"
+          >
+            <template v-slot:cell(index)="data">
+							{{ data.index + 1 }}
+						</template>
+            <template #cell(radioButtons)="row">
+              <td>
+                <span v-if="row.item.resvStatus === 'X'"> 예약 취소 </span>
+                <span v-else>
+                  <input id="O" type="radio" v-model="row.item.resvStatus" value="O"
+                    @change="updateResvStatus(row.item.resvId)" />
+                  <label for="O">방문 취소</label>
+                  <input id="C" type="radio" v-model="row.item.resvStatus" value="C"
+                    @change="updateResvStatus(row.item.resvId)" />
+                  <label for="C">방문 완료</label>
+                </span>
+              </td>
+            </template>
+          </b-table>
+          <div class="d-flex justify-content-between align-items-center my-3">
+						<b-pagination v-model="currentPage" :total-rows="totalReservation" :per-page="perPage" aria-controls="my-table"
+							class="my-0">
+						</b-pagination>
+						<!-- <b-button variant="primary" @click="createNewNotice">글쓰기</b-button> -->
+					</div>
         </div>
       </div>
     </div>
@@ -121,6 +95,19 @@ export default {
   name: 'BmanReservations',
   data() {
     return {
+      searchQuery: '',
+			currentPage: 1,
+			perPage: 5,
+      fields: [
+        { key: 'index', lable: '번호'},
+        { key: 'membEmail', label: '이메일' },
+        { key: 'headCount', label: '인원수' },
+        { key: 'resvDate', label: '예약일자' },
+        { key: 'resvHour', label: '예약시간' },
+        { key: 'phoneNumber', label: '전화번호' },
+        { key: 'requirement', label: '요구사항' },
+        { key: 'radioButtons', label: '라디오 버튼' },
+      ],
       isLoading: true,
       reservationList: [],
       totalReservation: 0,
@@ -180,10 +167,10 @@ export default {
       try {
         response = await axios.post(
           process.env.VUE_APP_API_ENDPOINT +
-            '/member/reservation/bm/visit/' +
-            resvId +
-            '?status=' +
-            event.target.value,
+          '/member/reservation/bm/visit/' +
+          resvId +
+          '?status=' +
+          event.target.value,
           null,
           {
             headers: {
@@ -208,9 +195,11 @@ export default {
 * {
   font-family: 'BMHANNAPro';
 }
+
 .mypage-container {
   margin-top: 70px;
 }
+
 .menu-span {
   color: black;
 }
@@ -220,7 +209,8 @@ export default {
 }
 
 .join-form {
-  margin-top: 100px; /* 헤더의 높이에 따라 조절 */
+  margin-top: 100px;
+  /* 헤더의 높이에 따라 조절 */
 }
 
 .join-form h1 {
@@ -230,11 +220,10 @@ export default {
   margin-bottom: 30px;
   font-weight: normal;
 }
-div.container {
-}
 
-div.insert {
-}
+div.container {}
+
+div.insert {}
 
 div.create {
   width: 800px;
@@ -376,17 +365,20 @@ p {
 }
 
 .placehold-text {
-  display: block; /*span 으로 감싸서 크기영역을 블록요소로 만들어ㅜ저야한다*/
+  display: block;
+  /*span 으로 감싸서 크기영역을 블록요소로 만들어ㅜ저야한다*/
   position: relative;
   /* border: 1px solid #000; */
 }
 
 .placehold-text:before {
   content: '@naver.com';
-  position: absolute; /*before은 inline 요소이기 때문에 span으로 감싸줌 */
+  position: absolute;
+  /*before은 inline 요소이기 때문에 span으로 감싸줌 */
   right: 20px;
   top: 13px;
-  pointer-events: none; /*자체가 가지고 있는 pointer event 를 없애준다 */
+  pointer-events: none;
+  /*자체가 가지고 있는 pointer event 를 없애준다 */
 }
 
 .userpw {
@@ -436,15 +428,18 @@ p {
 .color-red {
   color: red;
 }
+
 .profile {
   max-width: 100px;
   max-height: 100px;
   margin-top: 10px;
   margin-bottom: 10px;
 }
+
 .heart-button {
   float: right;
 }
+
 .sidebar-logo {
   width: 576px;
 }

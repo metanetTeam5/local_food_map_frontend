@@ -13,6 +13,7 @@
         </div>
         <div class="form-group">
           <input
+          class="password-input"
             type="password"
             v-model="loginData.password"
             placeholder="비밀번호 입력"

@@ -15,6 +15,7 @@
 					</b-form-input>
 				</div>
 				<div class="table-responsive">
+					
 					<b-table striped hover :items="businessmans" :fields="fields" @row-clicked="showModal"
 						:per-page="perPage" :current-page="currentPage" :filter="searchQuery">
 						<!-- :filter="searchQuery" @row-clicked="navigateToDetail" -->
