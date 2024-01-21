@@ -2,33 +2,20 @@
   <div class="container-fluid mypage-container">
     <div class="row flex-nowrap">
       <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0">
-        <div
-          class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 min-vh-100"
-        >
-          <div
-            class="nav nav-pills flex-column mb-0 align-items-center align-items-sm-start"
-          >
+        <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 min-vh-100">
+          <div class="nav nav-pills flex-column mb-0 align-items-center align-items-sm-start">
             <router-link to="/bman/reservations">
-              <img
-                src="../../assets/images/아맛무 로고.png"
-                class="img-fluid"
-              />
+              <img src="../../assets/images/아맛무 로고.png" class="img-fluid" />
             </router-link>
           </div>
-          <br/>
-          <ul
-            class="nav nav-pills flex-column mb-0 align-items-center align-items-sm-start"
-            id="menu"
-          >
+          <br />
+          <ul class="nav nav-pills flex-column mb-0 align-items-center align-items-sm-start" id="menu">
             <li class="nav-item">
-              <router-link
-                class="nav-link align-middle px-0"
-                to="/bman/reservations"
-              >
+              <router-link class="nav-link align-middle px-0" to="/bman/reservations">
                 <div class="ms-1 d-none d-sm-inline menu-span">예약 조회</div>
               </router-link>
             </li>
-            <br/>
+            <br />
             <li class="nav-item">
               <router-link class="nav-link align-middle px-0" to="/bman/info">
                 <div class="ms-1 d-none d-sm-inline menu-span selected-menu">
@@ -36,12 +23,9 @@
                 </div>
               </router-link>
             </li>
-            <br/>
+            <br />
             <li class="nav-item">
-              <router-link
-                class="nav-link align-middle px-0"
-                to="/bman/reviews"
-              >
+              <router-link class="nav-link align-middle px-0" to="/bman/reviews">
                 <div class="ms-1 d-none d-sm-inline menu-span">리뷰 관리</div>
               </router-link>
             </li>
@@ -51,19 +35,15 @@
       <div class="col py-3 my-custom-background">
         <h2>식당 정보 수정</h2>
 
-        <br/>
-        <br/>
-        <br/>
-        <br/>
+        <br />
+        <br />
+        <br />
+        <br />
         <div v-if="isLoading">
           <br />
           <br />
           <div class="image-container">
-            <img
-              src="@/assets/images/noRestFound.png"
-              alt="가게 등록 대기 이미지"
-              class="my-image"
-            />
+            <img src="@/assets/images/noRestFound.png" alt="가게 등록 대기 이미지" class="my-image" />
           </div>
           <br />
           <br />
@@ -96,76 +76,62 @@
                         <img v-else class="profile" src="../../assets/images//아맛무 로고.png" alt="식당 이미지" />
                         <br />
                         <input type="file" id="profilePic" name="profilePic" @change="handleFileChange" />
-                        <input class="but2" type="button" value="식당 사진 변경" @click="updateRestImg" />
+                        <!-- <input class="but2" type="button" value="식당 사진 변경" @click="updateRestImg" /> -->
+                        <b-button size="sm" variant="warning" @click="updateRestImg">
+                          식당 사진 변경
+                        </b-button>
                       </td>
                     </tr>
                     <tr>
 
-                    <td class="col1">식당 이름</td>
-                    <td class="col2">
-                      {{ name }}
-                    </td>
-                  </tr>
-                  <tr>
-                    <td class="col1">식당 키워드</td>
-                    <td class="col2">
-                      {{ keyword }}
-                    </td>
-                  </tr>
-                  <tr>
-                    <td class="col1">개점시간</td>
-                    <td class="col2">
-                      <input
-                        type="text"
-                        v-model="openTime"
-                        name="pwdCheck"
-                        maxlength="16"
-                      />
-                    </td>
-                  </tr>
-                  <tr>
-                    <td class="col1">폐점시간</td>
-                    <td class="col2">
-                      <input
-                        type="text"
-                        v-model="closeTime"
-                        name="pwdCheck"
-                        maxlength="16"
-                      />
-                    </td>
-                  </tr>
-                  <tr>
-                    <td class="col1">식당 전화번호</td>
-                    <td class="col2">
-                      {{ phoneNumber }}
-                    </td>
-                  </tr>
-                  <tr>
-                    <td class="col1">식당 예약금</td>
-                    <td class="col2">
-                      <input
-                        type="text"
-                        v-model="deposit"
-                        name="pwdCheck"
-                        maxlength="16"
-                      />
-                      <span>수정된 예약금은 변경 후 적용됩니다.</span>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td class="col1">메뉴정보</td>
-                    <td class="col2">
-                      <input
-                        class="but2"
-                        type="button"
-                        value="메뉴 등록하기"
-                        @click="modalOpen"
-                      />
+                      <td class="col1">식당 이름</td>
+                      <td class="col2">
+                        {{ name }}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="col1">식당 키워드</td>
+                      <td class="col2">
+                        {{ keyword }}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="col1">개점시간</td>
+                      <td class="col2">
+                        <input type="text" v-model="openTime" name="pwdCheck" maxlength="16" />
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="col1">폐점시간</td>
+                      <td class="col2">
+                        <input type="text" v-model="closeTime" name="pwdCheck" maxlength="16" />
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="col1">식당 전화번호</td>
+                      <td class="col2">
+                        {{ phoneNumber }}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="col1">식당 예약금</td>
+                      <td class="col2">
+                        <input type="text" v-model="deposit" name="pwdCheck" maxlength="16" />
+                        <span>수정된 예약금은 변경 후 적용됩니다.</span>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="col1">메뉴정보</td>
+                      <td class="col2">
+                        <b-button size="sm" variant="warning" @click="modalOpen">
+                          메뉴 등록하기
+                        </b-button>
 
-                      <br />
-                      {{ menu }}
-                    </td>
-                  </tr>
+
+                        <br />
+                        {{ menu }}
+                      </td>
+                    </tr>
                     <!-- Your table rows -->
                   </tbody>
                 </table>
@@ -173,16 +139,13 @@
             </div>
 
             <div class="create">
-            <input
-              class="but4"
-              type="button"
-              value="수정하기"
-              @click="updateRestinfo"
-            />
-          </div>
+              <b-button size="sm" variant="warning" @click="updateRestInfo">
+                수정하기
+              </b-button>
+            </div>
 
           </form>
-          
+
         </div>
 
         <div>
@@ -190,40 +153,19 @@
             <div class="modal-container">
               <h2>메뉴 등록하기</h2>
               <label class="menuLabel">메뉴 이름</label>
-              <input
-                type="text"
-                v-model="menuName"
-                name="pwdCheck"
-                maxlength="16"
-              />
+              <input type="text" v-model="menuName" name="pwdCheck" maxlength="16" />
               <br />
               <label class="menuLabel">메뉴 가격</label>
-              <input
-                type="text"
-                v-model="menuPrice"
-                name="pwdCheck"
-                maxlength="16"
-              />
+              <input type="text" v-model="menuPrice" name="pwdCheck" maxlength="16" />
               <br />
               <label class="menuLabel">메뉴 사진</label>
-              <input
-                type="file"
-                id="profilePic"
-                name="profilePic"
-                @change="handleMenuChange"
-              />
+              <input type="file" id="profilePic" name="profilePic" @change="handleMenuChange" />
 
               <div class="modal-btn">
-                <button
-                  class="btn btn-primary mt-3 small-button"
-                  @click="registerMenu"
-                >
+                <button class="btn btn-primary mt-3 small-button" @click="registerMenu">
                   등록
                 </button>
-                <button
-                  class="btn btn-primary mt-3 small-button"
-                  @click="modalClose"
-                >
+                <button class="btn btn-primary mt-3 small-button" @click="modalClose">
                   닫기
                 </button>
               </div>
@@ -318,8 +260,8 @@ export default {
 
         await axios.put(
           process.env.VUE_APP_API_ENDPOINT +
-            "/bm/update/restaurant/image/" +
-            this.restId,
+          "/bm/update/restaurant/image/" +
+          this.restId,
           formData,
           {
             headers: {
@@ -431,11 +373,9 @@ export default {
   font-weight: normal;
 }
 
-div.container {
-}
+div.container {}
 
-div.insert {
-}
+div.insert {}
 
 div.create {
   width: 800px;
@@ -680,32 +620,34 @@ p {
   background-color: white;
   /* Set the background color to white */
 
-.bm-logo {
-  margin-bottom: 0;
-}
-.modal-wrap {
-  position: fixed;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.4);
-}
+  .bm-logo {
+    margin-bottom: 0;
+  }
 
-.modal-container {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 550px;
-  background: #fff;
-  border-radius: 10px;
-  padding: 20px;
-  box-sizing: border-box;
-}
-.menuLabel {
-  margin-right: 10px;
+  .modal-wrap {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.4);
+  }
 
-}
+  .modal-container {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 550px;
+    background: #fff;
+    border-radius: 10px;
+    padding: 20px;
+    box-sizing: border-box;
+  }
+
+  .menuLabel {
+    margin-right: 10px;
+
+  }
 }
 </style>

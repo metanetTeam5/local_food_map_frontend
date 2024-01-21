@@ -142,6 +142,7 @@ export default {
         { key: 'phoneNumber', label: '전화번호' },
         { key: 'requirement', label: '요구사항' },
         { key: 'radioButtons', label: '방문 여부' },
+
       ],
       isLoading: true,
       reservationList: [],
