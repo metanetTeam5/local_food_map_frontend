@@ -6,7 +6,7 @@
           class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 min-vh-100"
         >
           <div
-            class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start"
+            class="nav nav-pills flex-column mb-0 align-items-center align-items-sm-start bm-logo"
           >
             <router-link to="/bman/reservations">
               <img
@@ -16,7 +16,7 @@
             </router-link>
           </div>
           <ul
-            class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start"
+            class="nav nav-pills flex-column mb-0 align-items-center align-items-sm-start"
             id="menu"
           >
             <li class="nav-item">
@@ -54,7 +54,7 @@
         <div v-if="isLoading">로딩중</div>
         <div v-else>
           <div>
-            <table class="table">
+            <table class="table revw-table">
               <tr>
                 <th>작성자 아이디</th>
                 <th>작성자 닉네임</th>
@@ -79,7 +79,9 @@
                   {{ revw.revwCreateDate }}
                 </td>
                 <td>
-                  <button @click="deleteReview(revw.revwId)">삭제 요청</button>
+                  <button class="delete-btn" @click="deleteReview(revw.revwId)">
+                    삭제 요청
+                  </button>
                 </td>
               </tr>
             </table>
@@ -397,5 +399,14 @@ p {
 }
 .sidebar-logo {
   width: 576px;
+}
+.bm-logo {
+  margin-bottom: 0;
+}
+.delete-btn {
+  background-color: #fff2df;
+}
+.revw-table {
+  text-align: center;
 }
 </style>

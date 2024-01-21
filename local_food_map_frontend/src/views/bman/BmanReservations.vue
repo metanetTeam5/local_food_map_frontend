@@ -6,7 +6,7 @@
           class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 min-vh-100"
         >
           <div
-            class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start"
+            class="nav nav-pills flex-column mb-0 align-items-center align-items-sm-start bm-logo"
           >
             <router-link to="/bman/reservations">
               <img
@@ -16,7 +16,7 @@
             </router-link>
           </div>
           <ul
-            class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start"
+            class="nav nav-pills flex-column mb-0 align-items-center align-items-sm-start"
             id="menu"
           >
             <li class="nav-item">
@@ -50,12 +50,12 @@
         </div>
       </div>
       <div class="col py-3">
-        <h2>예약 조회</h2>
         <div v-if="isLoading">로딩중</div>
         <div v-else>
           <div>
             <h2>전체 예약 {{ totalReservation }}개</h2>
-            <table class="table">
+            <br />
+            <table class="table reservation-table">
               <tr>
                 <th>예약자</th>
                 <th>인원</th>
@@ -447,5 +447,13 @@ p {
 }
 .sidebar-logo {
   width: 576px;
+}
+
+.bm-logo {
+  margin-bottom: 0;
+}
+
+.reservation-table {
+  text-align: center;
 }
 </style>

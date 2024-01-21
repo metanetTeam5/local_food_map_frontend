@@ -2,18 +2,29 @@
   <div class="container-fluid mypage-container">
     <div class="row flex-nowrap">
       <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0">
-        <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 min-vh-100">
-          <div class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start">
+        <div
+          class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 min-vh-100"
+        >
+          <div
+            class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start"
+          >
             <router-link to="/bman/reservations">
-              <img src="../../assets/images/아맛무 로고.png" class="img-fluid" />
+              <img
+                src="../../assets/images/아맛무 로고.png"
+                class="img-fluid"
+              />
             </router-link>
           </div>
-          <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
+          <ul
+            class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start"
+            id="menu"
+          >
             <li class="nav-item">
-              <router-link class="nav-link align-middle px-0" to="/bman/reservations">
-                <div class="ms-1 d-none d-sm-inline menu-span">
-                  예약 조회
-                </div>
+              <router-link
+                class="nav-link align-middle px-0"
+                to="/bman/reservations"
+              >
+                <div class="ms-1 d-none d-sm-inline menu-span">예약 조회</div>
               </router-link>
             </li>
             <li class="nav-item">
@@ -24,10 +35,11 @@
               </router-link>
             </li>
             <li class="nav-item">
-              <router-link class="nav-link align-middle px-0" to="/bman/reviews">
-                <div class="ms-1 d-none d-sm-inline menu-span">
-                  리뷰 관리
-                </div>
+              <router-link
+                class="nav-link align-middle px-0"
+                to="/bman/reviews"
+              >
+                <div class="ms-1 d-none d-sm-inline menu-span">리뷰 관리</div>
               </router-link>
             </li>
           </ul>
@@ -39,7 +51,11 @@
           <br />
           <br />
           <div class="image-container">
-            <img src="@/assets/images/noRestFound.png" alt="가게 등록 대기 이미지" class="my-image" />
+            <img
+              src="@/assets/images/noRestFound.png"
+              alt="가게 등록 대기 이미지"
+              class="my-image"
+            />
           </div>
 
           <div class="button-container">
@@ -47,7 +63,6 @@
               가게 등록하기
             </button>
           </div>
-
         </div>
         <div v-else>
           <form method="post" action="">
@@ -57,11 +72,31 @@
                   <tr>
                     <td class="col1">식당 사진</td>
                     <td class="col2">
-                      <img v-if="restImg" class="profile" :src="restImg" alt="식당 이미지" />
-                      <img v-else class="profile" src="../../assets/images//아맛무 로고.png" alt="식당 이미지" />
+                      <img
+                        v-if="restImg"
+                        class="profile"
+                        :src="restImg"
+                        alt="식당 이미지"
+                      />
+                      <img
+                        v-else
+                        class="profile"
+                        src="../../assets/images//아맛무 로고.png"
+                        alt="식당 이미지"
+                      />
                       <br />
-                      <input type="file" id="profilePic" name="profilePic" @change="handleFileChange" />
-                      <input class="but2" type="button" value="식당 사진 변경" @click="updateRestImg" />
+                      <input
+                        type="file"
+                        id="profilePic"
+                        name="profilePic"
+                        @change="handleFileChange"
+                      />
+                      <input
+                        class="but2"
+                        type="button"
+                        value="식당 사진 변경"
+                        @click="updateRestImg"
+                      />
                     </td>
                   </tr>
                   <tr>
@@ -79,13 +114,23 @@
                   <tr>
                     <td class="col1">개점시간</td>
                     <td class="col2">
-                      <input type="text" v-model="openTime" name="pwdCheck" maxlength="16" />
+                      <input
+                        type="text"
+                        v-model="openTime"
+                        name="pwdCheck"
+                        maxlength="16"
+                      />
                     </td>
                   </tr>
                   <tr>
                     <td class="col1">폐점시간</td>
                     <td class="col2">
-                      <input type="text" v-model="closeTime" name="pwdCheck" maxlength="16" />
+                      <input
+                        type="text"
+                        v-model="closeTime"
+                        name="pwdCheck"
+                        maxlength="16"
+                      />
                     </td>
                   </tr>
                   <tr>
@@ -97,20 +142,86 @@
                   <tr>
                     <td class="col1">식당 예약금</td>
                     <td class="col2">
-                      {{ deposit }}
+                      <input
+                        type="text"
+                        v-model="deposit"
+                        name="pwdCheck"
+                        maxlength="16"
+                      />
+                      <span>수정된 예약금은 변경 후 적용됩니다.</span>
                     </td>
                   </tr>
                   <tr>
                     <td class="col1">메뉴정보</td>
-                    <td class="col2">{{ menu }}</td>
+                    <td class="col2">
+                      <input
+                        class="but2"
+                        type="button"
+                        value="메뉴 등록하기"
+                        @click="modalOpen"
+                      />
+
+                      <br />
+                      {{ menu }}
+                    </td>
                   </tr>
                 </table>
               </div>
               <div class="create">
-                <input class="but4" type="button" value="수정하기" @click="updateRestinfo" />
+                <input
+                  class="but4"
+                  type="button"
+                  value="수정하기"
+                  @click="updateRestinfo"
+                />
               </div>
             </div>
           </form>
+        </div>
+        <div>
+          <div v-if="modalCheck" class="modal-wrap">
+            <div class="modal-container">
+              <h2>메뉴 등록하기</h2>
+              <label class="menuLabel">메뉴 이름</label>
+              <input
+                type="text"
+                v-model="menuName"
+                name="pwdCheck"
+                maxlength="16"
+              />
+              <br />
+              <label class="menuLabel">메뉴 가격</label>
+              <input
+                type="text"
+                v-model="menuPrice"
+                name="pwdCheck"
+                maxlength="16"
+              />
+              <br />
+              <label class="menuLabel">메뉴 사진</label>
+              <input
+                type="file"
+                id="profilePic"
+                name="profilePic"
+                @change="handleMenuChange"
+              />
+
+              <div class="modal-btn">
+                <button
+                  class="btn btn-primary mt-3 small-button"
+                  @click="registerMenu"
+                >
+                  등록
+                </button>
+                <button
+                  class="btn btn-primary mt-3 small-button"
+                  @click="modalClose"
+                >
+                  닫기
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -135,6 +246,11 @@ export default {
       restImg: '',
       restId: '',
       newRestImg: '',
+      menuName: '',
+      menuPrice: '',
+      menuImg: null,
+      menuImgUrl: '',
+      modalCheck: false,
     };
   },
   methods: {
@@ -192,8 +308,8 @@ export default {
 
         await axios.put(
           process.env.VUE_APP_API_ENDPOINT +
-          '/bm/update/restaurant/image/' +
-          this.restId,
+            '/bm/update/restaurant/image/' +
+            this.restId,
           formData,
           {
             headers: {
@@ -216,11 +332,57 @@ export default {
           restId: this.restId,
           restOpenTime: this.openTime,
           restCloseTime: this.closeTime,
+          restDeposit: this.deposit,
         }
       );
 
       alert('식당 정보 수정 완료');
       this.$router.go(0);
+    },
+    async registerMenu() {
+      let response;
+      if (this.menuImg !== null) {
+        let formData = new FormData();
+        formData.append('file', this.menuImg);
+
+        response = await axios.post(
+          process.env.VUE_APP_API_ENDPOINT + '/menu/image/insert',
+          formData,
+          {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            },
+          }
+        );
+
+        this.menuImgUrl = response.data;
+      }
+
+      response = await axios.post(
+        process.env.VUE_APP_API_ENDPOINT + '/menu/register/' + this.restId,
+        {
+          menuName: this.menuName,
+          menuPrice: this.menuPrice,
+          menuImg: this.menuImgUrl,
+        }
+      );
+      this.modalClose();
+      alert('메뉴 등록 완료');
+      this.$router.go(0);
+    },
+    modalOpen() {
+      this.modalCheck = !this.modalCheck;
+    },
+    modalClose() {
+      this.menuName = '';
+      this.menuPrice = '';
+      this.menuImg = null;
+      this.menuImgUrl = '';
+      this.modalCheck = !this.modalCheck;
+    },
+    handleMenuChange(event) {
+      const selectedFile = event.target.files[0];
+      this.menuImg = selectedFile;
     },
   },
   mounted() {
@@ -259,9 +421,11 @@ export default {
   font-weight: normal;
 }
 
-div.container {}
+div.container {
+}
 
-div.insert {}
+div.insert {
+}
 
 div.create {
   width: 800px;
@@ -497,5 +661,32 @@ p {
 .image-container {
   text-align: center;
   /* 이미지를 수평 중앙으로 정렬 */
+}
+
+.bm-logo {
+  margin-bottom: 0;
+}
+.modal-wrap {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+}
+/* modal or popup */
+.modal-container {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 550px;
+  background: #fff;
+  border-radius: 10px;
+  padding: 20px;
+  box-sizing: border-box;
+}
+.menuLabel {
+  margin-right: 10px;
 }
 </style>
