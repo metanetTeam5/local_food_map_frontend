@@ -2,28 +2,35 @@
   <div class="container-fluid mypage-container">
     <div class="row flex-nowrap">
       <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0">
-
-        <div 
-          class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 min-vh-100">
-          <div 
-            class="nav nav-pills flex-column  mb-0 align-items-center align-items-sm-start bm-logo">
-
+        <div
+          class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 min-vh-100"
+        >
+          <div
+            class="nav nav-pills flex-column mb-0 align-items-center align-items-sm-start bm-logo"
+          >
             <router-link to="/bman/reservations">
-              <img src="../../assets/images/아맛무 로고.png" class="img-fluid" />
+              <img
+                src="../../assets/images/아맛무 로고.png"
+                class="img-fluid"
+              />
             </router-link>
           </div>
-          <br/>
-          <ul 
-            class="nav nav-pills flex-column  mb-0 align-items-center align-items-sm-start" id="menu">
-
+          <br />
+          <ul
+            class="nav nav-pills flex-column mb-0 align-items-center align-items-sm-start"
+            id="menu"
+          >
             <li class="nav-item">
-              <router-link class="nav-link align-middle px-0" to="/bman/reservations">
+              <router-link
+                class="nav-link align-middle px-0"
+                to="/bman/reservations"
+              >
                 <div class="ms-1 d-none d-sm-inline menu-span selected-menu">
                   예약 조회
                 </div>
               </router-link>
             </li>
-            <br/>
+            <br />
             <li class="nav-item">
               <router-link class="nav-link align-middle px-0" to="/bman/info">
                 <div class="ms-1 d-none d-sm-inline menu-span">
@@ -31,59 +38,85 @@
                 </div>
               </router-link>
             </li>
-            <br/>
+            <br />
             <li class="nav-item">
-              <router-link class="nav-link align-middle px-0" to="/bman/reviews">
-                <div class="ms-1 d-none d-sm-inline menu-span">
-                  리뷰 관리
-                </div>
+              <router-link
+                class="nav-link align-middle px-0"
+                to="/bman/reviews"
+              >
+                <div class="ms-1 d-none d-sm-inline menu-span">리뷰 관리</div>
               </router-link>
             </li>
           </ul>
         </div>
       </div>
       <div class="col py-3">
-
-        <br/>
+        <br />
         <h2>예약 조회</h2>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
+        <br />
+        <br />
+        <br />
+        <br />
         <div v-if="isLoading">로딩중</div>
         <div v-else>
-
           <div class="search-area mb-4">
-					<b-form-input v-model="searchQuery" type="search" placeholder="검색..." class="search-input">
-					</b-form-input>
-				</div>
+            <b-form-input
+              v-model="searchQuery"
+              type="search"
+              placeholder="검색..."
+              class="search-input"
+            >
+            </b-form-input>
+          </div>
 
-          <b-table striped hover :items="reservationList" :fields="fields" class="my-custom-table"
-          :per-page="perPage" :current-page="currentPage" :filter="searchQuery"
+          <b-table
+            striped
+            hover
+            :items="reservationList"
+            :fields="fields"
+            class="my-custom-table"
+            :per-page="perPage"
+            :current-page="currentPage"
+            :filter="searchQuery"
           >
             <template v-slot:cell(index)="data">
-							{{ data.index + 1 }}
-						</template>
+              {{ data.index + 1 }}
+            </template>
             <template #cell(radioButtons)="row">
-              <td>
+              <td style="background-color: transparent">
                 <span v-if="row.item.resvStatus === 'X'"> 예약 취소 </span>
                 <span v-else>
-                  <input id="O" type="radio" v-model="row.item.resvStatus" value="O"
-                    @change="updateResvStatus(row.item.resvId)" />
+                  <input
+                    id="O"
+                    type="radio"
+                    v-model="row.item.resvStatus"
+                    value="O"
+                    @change="updateResvStatus(row.item.resvId)"
+                  />
                   <label for="O">방문 취소</label>
-                  <input id="C" type="radio" v-model="row.item.resvStatus" value="C"
-                    @change="updateResvStatus(row.item.resvId)" />
+                  <input
+                    id="C"
+                    type="radio"
+                    v-model="row.item.resvStatus"
+                    value="C"
+                    @change="updateResvStatus(row.item.resvId)"
+                  />
                   <label for="C">방문 완료</label>
                 </span>
               </td>
             </template>
           </b-table>
           <div class="d-flex justify-content-between align-items-center my-3">
-						<b-pagination v-model="currentPage" :total-rows="totalReservation" :per-page="perPage" aria-controls="my-table"
-							class="my-0">
-						</b-pagination>
-						<!-- <b-button variant="primary" @click="createNewNotice">글쓰기</b-button> -->
-					</div>
+            <b-pagination
+              v-model="currentPage"
+              :total-rows="totalReservation"
+              :per-page="perPage"
+              aria-controls="my-table"
+              class="my-0"
+            >
+            </b-pagination>
+            <!-- <b-button variant="primary" @click="createNewNotice">글쓰기</b-button> -->
+          </div>
         </div>
       </div>
     </div>
@@ -98,17 +131,18 @@ export default {
   data() {
     return {
       searchQuery: '',
-			currentPage: 1,
-			perPage: 5,
+      currentPage: 1,
+      perPage: 5,
       fields: [
-        { key: 'index', lable: '번호'},
+        { key: 'index', label: '번호' },
         { key: 'membEmail', label: '이메일' },
         { key: 'headCount', label: '인원수' },
         { key: 'resvDate', label: '예약일자' },
         { key: 'resvHour', label: '예약시간' },
         { key: 'phoneNumber', label: '전화번호' },
         { key: 'requirement', label: '요구사항' },
-        { key: 'radioButtons', label: '예약 승인' },
+        { key: 'radioButtons', label: '방문 여부' },
+
       ],
       isLoading: true,
       reservationList: [],
@@ -169,10 +203,10 @@ export default {
       try {
         response = await axios.post(
           process.env.VUE_APP_API_ENDPOINT +
-          '/member/reservation/bm/visit/' +
-          resvId +
-          '?status=' +
-          event.target.value,
+            '/member/reservation/bm/visit/' +
+            resvId +
+            '?status=' +
+            event.target.value,
           null,
           {
             headers: {
@@ -223,9 +257,11 @@ export default {
   font-weight: normal;
 }
 
-div.container {}
+div.container {
+}
 
-div.insert {}
+div.insert {
+}
 
 div.create {
   width: 800px;
