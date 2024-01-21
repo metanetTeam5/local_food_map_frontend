@@ -5,7 +5,7 @@
         <table class="table table-bordered">
           <thead class="thead-light">
             <tr>
-              <th colspan="2" class="text-center">회원가입</th>
+              <th colspan="2" class="text-center">개인회원 회원가입</th>
             </tr>
           </thead>
           <tbody>
@@ -624,5 +624,6 @@ p {
 
 .check-button {
   border-radius: 0.375rem;
+  font-size: 13px;
 }
 </style>
