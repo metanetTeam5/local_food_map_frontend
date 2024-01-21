@@ -2,61 +2,52 @@
   <div class="container-fluid mypage-container">
     <div class="row flex-nowrap">
       <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0">
-        <div
-          class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 min-vh-100"
-        >
-          <div
-            class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start"
-          >
+        <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 min-vh-100">
+          <div class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start">
             <router-link to="/bman/reservations">
-              <img
-                src="../../assets/images/아맛무 로고.png"
-                class="img-fluid"
-              />
+              <img src="../../assets/images/아맛무 로고.png" class="img-fluid" />
             </router-link>
           </div>
-          <ul
-            class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start"
-            id="menu"
-          >
+          <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
             <li class="nav-item">
-              <router-link
-                class="nav-link align-middle px-0"
-                to="/bman/reservations"
-              >
+              <router-link class="nav-link align-middle px-0" to="/bman/reservations">
                 <div class="ms-1 d-none d-sm-inline menu-span">
                   예약 조회
-                </div></router-link
-              >
+                </div>
+              </router-link>
             </li>
             <li class="nav-item">
               <router-link class="nav-link align-middle px-0" to="/bman/info">
                 <div class="ms-1 d-none d-sm-inline menu-span selected-menu">
                   식당 정보 수정
-                </div></router-link
-              >
+                </div>
+              </router-link>
             </li>
             <li class="nav-item">
-              <router-link
-                class="nav-link align-middle px-0"
-                to="/bman/reviews"
-              >
+              <router-link class="nav-link align-middle px-0" to="/bman/reviews">
                 <div class="ms-1 d-none d-sm-inline menu-span">
                   리뷰 관리
-                </div></router-link
-              >
+                </div>
+              </router-link>
             </li>
           </ul>
         </div>
       </div>
       <div class="col py-3">
         <h2>식당 정보 수정</h2>
-        <div v-if="isLoading">로딩중
-        
-          <button class="btn btn-danger" @click="registerRestaurant">
-                  가게 등록하기
-                </button>
-        
+        <div v-if="isLoading">
+          <br />
+          <br />
+          <div class="image-container">
+            <img src="@/assets/images/noRestFound.png" alt="가게 등록 대기 이미지" class="my-image" />
+          </div>
+
+          <div class="button-container">
+            <button class="btn btn-danger" @click="registerRestaurant">
+              가게 등록하기
+            </button>
+          </div>
+
         </div>
         <div v-else>
           <form method="post" action="">
@@ -66,31 +57,11 @@
                   <tr>
                     <td class="col1">식당 사진</td>
                     <td class="col2">
-                      <img
-                        v-if="restImg"
-                        class="profile"
-                        :src="restImg"
-                        alt="식당 이미지"
-                      />
-                      <img
-                        v-else
-                        class="profile"
-                        src="../../assets/images//아맛무 로고.png"
-                        alt="식당 이미지"
-                      />
+                      <img v-if="restImg" class="profile" :src="restImg" alt="식당 이미지" />
+                      <img v-else class="profile" src="../../assets/images//아맛무 로고.png" alt="식당 이미지" />
                       <br />
-                      <input
-                        type="file"
-                        id="profilePic"
-                        name="profilePic"
-                        @change="handleFileChange"
-                      />
-                      <input
-                        class="but2"
-                        type="button"
-                        value="식당 사진 변경"
-                        @click="updateRestImg"
-                      />
+                      <input type="file" id="profilePic" name="profilePic" @change="handleFileChange" />
+                      <input class="but2" type="button" value="식당 사진 변경" @click="updateRestImg" />
                     </td>
                   </tr>
                   <tr>
@@ -108,23 +79,13 @@
                   <tr>
                     <td class="col1">개점시간</td>
                     <td class="col2">
-                      <input
-                        type="text"
-                        v-model="openTime"
-                        name="pwdCheck"
-                        maxlength="16"
-                      />
+                      <input type="text" v-model="openTime" name="pwdCheck" maxlength="16" />
                     </td>
                   </tr>
                   <tr>
                     <td class="col1">폐점시간</td>
                     <td class="col2">
-                      <input
-                        type="text"
-                        v-model="closeTime"
-                        name="pwdCheck"
-                        maxlength="16"
-                      />
+                      <input type="text" v-model="closeTime" name="pwdCheck" maxlength="16" />
                     </td>
                   </tr>
                   <tr>
@@ -146,12 +107,7 @@
                 </table>
               </div>
               <div class="create">
-                <input
-                  class="but4"
-                  type="button"
-                  value="수정하기"
-                  @click="updateRestinfo"
-                />
+                <input class="but4" type="button" value="수정하기" @click="updateRestinfo" />
               </div>
             </div>
           </form>
@@ -236,8 +192,8 @@ export default {
 
         await axios.put(
           process.env.VUE_APP_API_ENDPOINT +
-            '/bm/update/restaurant/image/' +
-            this.restId,
+          '/bm/update/restaurant/image/' +
+          this.restId,
           formData,
           {
             headers: {
@@ -277,9 +233,11 @@ export default {
 * {
   font-family: 'BMHANNAPro';
 }
+
 .mypage-container {
   margin-top: 70px;
 }
+
 .menu-span {
   color: black;
 }
@@ -289,7 +247,8 @@ export default {
 }
 
 .join-form {
-  margin-top: 100px; /* 헤더의 높이에 따라 조절 */
+  margin-top: 100px;
+  /* 헤더의 높이에 따라 조절 */
 }
 
 .join-form h1 {
@@ -299,11 +258,10 @@ export default {
   margin-bottom: 30px;
   font-weight: normal;
 }
-div.container {
-}
 
-div.insert {
-}
+div.container {}
+
+div.insert {}
 
 div.create {
   width: 800px;
@@ -445,17 +403,20 @@ p {
 }
 
 .placehold-text {
-  display: block; /*span 으로 감싸서 크기영역을 블록요소로 만들어ㅜ저야한다*/
+  display: block;
+  /*span 으로 감싸서 크기영역을 블록요소로 만들어ㅜ저야한다*/
   position: relative;
   /* border: 1px solid #000; */
 }
 
 .placehold-text:before {
   content: '@naver.com';
-  position: absolute; /*before은 inline 요소이기 때문에 span으로 감싸줌 */
+  position: absolute;
+  /*before은 inline 요소이기 때문에 span으로 감싸줌 */
   right: 20px;
   top: 13px;
-  pointer-events: none; /*자체가 가지고 있는 pointer event 를 없애준다 */
+  pointer-events: none;
+  /*자체가 가지고 있는 pointer event 를 없애준다 */
 }
 
 .userpw {
@@ -505,16 +466,36 @@ p {
 .color-red {
   color: red;
 }
+
 .profile {
   max-width: 100px;
   max-height: 100px;
   margin-top: 10px;
   margin-bottom: 10px;
 }
+
 .heart-button {
   float: right;
 }
+
 .sidebar-logo {
   width: 576px;
+}
+
+.my-image {
+  max-width: 500px;
+  /* 예시로 500px로 설정 */
+  height: auto;
+  /* 이미지의 비율을 유지하면서 높이 조절 */
+}
+
+.button-container {
+  text-align: center;
+  /* 버튼을 수평 중앙으로 정렬 */
+}
+
+.image-container {
+  text-align: center;
+  /* 이미지를 수평 중앙으로 정렬 */
 }
 </style>

@@ -1,5 +1,6 @@
 <template>
-	<div>
+	
+	<div class="background-image">
 		<br />
 		<br />
 
@@ -266,59 +267,15 @@ button:hover {
 		/* 또는 원하는 최대 너비 값으로 설정 */
 	}
 }
+
+.background-image {
+  background-image: url('~@/assets/images/restRegister.png'); /* 이미지 경로 */
+  background-size: cover; /* 이미지가 컨테이너를 가득 채우도록 */
+  background-position: center; /* 이미지가 중앙에 위치하도록 */
+  background-repeat: no-repeat; /* 이미지가 반복되지 않도록 */
+}
+
+
+
 </style>
 
-
-
-<!-- 
-<style scoped>
-div {
-  background-color: #fffbe7; /* 연한 노랑색 배경 */
-  max-width: 600px;
-  margin: 20px auto;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-h2 {
-  color: #333;
-  text-align: center;
-  margin-bottom: 20px;
-}
-
-form {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-input[type="text"], input[type="file"] {
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  font-size: 16px;
-}
-
-button {
-  background-color: #ffeb99; /* 밝은 노랑색 버튼 */
-  color: #333;
-  padding: 10px 15px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-weight: bold;
-  font-size: 16px;
-  transition: background-color 0.3s;
-}
-
-button:hover {
-  background-color: #ffd700;
-}
-
-@media (max-width: 768px) {
-  div {
-    width: 90%;
-  }
-}
-</style> -->
