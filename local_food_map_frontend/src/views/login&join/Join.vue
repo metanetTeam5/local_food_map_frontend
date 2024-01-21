@@ -1,10 +1,14 @@
 <template>
   <div class="join-form">
-    <h1>회원가입</h1>
     <form method="post" action="">
-      <div class="container">
-        <div class="insert">
-          <table>
+      <div class="insert">
+        <table class="table table-bordered">
+          <thead class="thead-light">
+            <tr>
+              <th colspan="2" class="text-center">개인회원 회원가입</th>
+            </tr>
+          </thead>
+          <tbody>
             <tr>
               <td class="col1">이메일<span class="num">*</span></td>
               <td class="col2">
@@ -22,7 +26,7 @@
                   <small class="color-red">이미 사용 중인 이메일입니다.</small>
                 </span>
                 <input
-                  class="but1"
+                  class="but1 check-button"
                   type="button"
                   value="중복확인"
                   @click="checkEmailDuplicate"
@@ -76,7 +80,7 @@
                   <small class="color-red">이미 사용 중인 닉네임입니다.</small>
                 </span>
                 <input
-                  class="but1"
+                  class="but1 check-button"
                   type="button"
                   value="중복확인"
                   @click="checkNicknameDuplicate"
@@ -122,12 +126,15 @@
             <tr>
               <td class="col1">프로필 사진</td>
               <td class="col2">
-                <input
-                  type="file"
-                  id="profilePic"
-                  name="profilePic"
-                  @change="handleFileChange"
-                />
+                <div class="mt-2">
+                  <input
+                    type="file"
+                    id="profilePic"
+                    name="profilePic"
+                    class="form-control"
+                    @change="handleFileChange"
+                  />
+                </div>
               </td>
             </tr>
             <tr>
@@ -140,7 +147,7 @@
                   >
                 </span>
                 <input
-                  class="but1"
+                  class="but1 check-button"
                   type="button"
                   value="중복확인"
                   @click="checkPhoneNumberDuplicate"
@@ -158,22 +165,23 @@
                 />
                 <input
                   id="checkPasswordBtn"
-                  class="but2"
+                  class="but2 check-button"
                   type="button"
                   value="인증번호 전송"
                   @click="sendAuthCode"
                 />
-                <span class="authTime"></span>
+                <span v-if="authCodeSended">{{ timeLeft }}초</span>
                 <br />
                 <input
                   id="checkAuthCodeBtn"
-                  class="but1"
+                  class="but1 check-button"
                   type="button"
                   value="확인"
                   @click="checkAuthCode"
                 />
               </td>
             </tr>
+
           </table>
         </div>
         
@@ -187,6 +195,7 @@
           />
           <input class="but3" type="reset" value="가입취소" />
         </div>
+
     </form>
   </div>
 </template>
@@ -214,6 +223,9 @@ export default {
       phoneNumberDuplicate: null,
       validPassword: true,
       authCodeChecked: false,
+      authCodeSended: false,
+      timeLeft: 0,
+      timerId: null,
     };
   },
   methods: {
@@ -289,6 +301,16 @@ export default {
                 '/member/sendauthcode/' +
                 this.phoneNumber
             );
+            this.authCodeSended = true;
+            this.timeLeft = 120;
+            this.timerId = setInterval(() => {
+              this.timeLeft--;
+              if (this.timeLeft <= 0) {
+                clearInterval(this.timerId);
+                this.timerId = null;
+              }
+            }, 1000);
+
             alert(
               '입력한 휴대전화 번호로 인증번호 전송했습니다.(인증 시간 : 2분)'
             );
@@ -303,6 +325,7 @@ export default {
         alert('휴대전화 번호를 입력해주세요.');
       }
     },
+    timer() {},
     async checkAuthCode() {
       if (this.authCode) {
         try {
@@ -442,21 +465,6 @@ td {
 
 caption {
   text-align: left;
-}
-
-.col1 {
-  background-color: white;
-  border: solid 2px #fce205;
-  padding: 10px;
-  text-align: center;
-  font-weight: bold;
-  font-size: 0.8em;
-}
-
-.col2 {
-  text-align: left;
-  border: solid 2px #fce205;
-  padding: 5px;
 }
 
 .but1 {
@@ -622,5 +630,10 @@ p {
 
 .color-red {
   color: red;
+}
+
+.check-button {
+  border-radius: 0.375rem;
+  font-size: 13px;
 }
 </style>

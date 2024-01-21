@@ -56,6 +56,7 @@
           <div>
             <table class="table2">
               <h2 class="mb-4">나의 예약 내역</h2>
+
               <tr v-for="(resv, index) in reservationList" :key="index">
                 <td>
                   <div class="d-flex align-items-start review-context">
@@ -133,21 +134,34 @@
                             type="button"
                             class="btn btn-danger"
                             @click="cancelReservation(resv.resvId)"
+
                           >
-                            예약 취소
-                          </button>
                         </div>
-                      </span>
-                      <span
-                        v-else-if="resv.resvStatus === 'X'"
-                        style="color: red"
-                        >예약 상태 : 예약 취소</span
-                      >
-                    </div>
-                  </div>
-                </td>
-              </tr>
+                      </div>
+                    </td>
+                  </tr>
+                </div>
+              </tbody>
             </table>
+            <div class="pagination justify-content-center">
+              <button
+                @click="fetchPrevPage"
+                :disabled="currentPage === 1"
+                class="btn btn-primary"
+              >
+                이전
+              </button>
+              <span class="mx-3"
+                >페이지 {{ currentPage }} / {{ totalPages }}</span
+              >
+              <button
+                @click="fetchNextPage"
+                :disabled="currentPage === totalPages"
+                class="btn btn-primary"
+              >
+                다음
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -155,6 +169,7 @@
     <div>
       <div v-if="modalCheck" class="modal-wrap">
         <div class="modal-container">
+
           <div class="modal-content">
             <div class="modal-flex-container">
               <!-- 모달창 content -->
@@ -211,6 +226,7 @@
                 닫기
               </button>
             </div>
+
           </div>
         </div>
       </div>
@@ -301,11 +317,11 @@
 
 <script>
 // import router from '@/router/router';
-import axios from "axios";
+import axios from 'axios';
 
 export default {
-  props: ["resvId", "restId"],
-  name: "MemberReservations",
+  props: ['resvId', 'restId'],
+  name: 'MemberReservations',
   data() {
     return {
       review: {
@@ -320,23 +336,48 @@ export default {
         headcount: 0,
         resvDate: null,
         resvHour: null,
-        additionalRequirements: "",
+        additionalRequirements: '',
         resvId: null,
       },
       selectedHour: null,
+      currentPage: 1,
+      pageSize: 5,
     };
   },
   methods: {
+    fetchReservations() {
+      const start = (this.currentPage - 1) * this.pageSize;
+      const end = start + this.pageSize;
+
+      // Fetch reviews for the current page range
+      const reservationsForPage = this.reservationList.slice(start, end);
+      this.isLoading = false;
+      this.paginatedReservations = reservationsForPage;
+    },
+    fetchPrevPage() {
+      if (this.currentPage > 1) {
+        this.currentPage--;
+        this.fetchReservations();
+      }
+    },
+
+    // Fetch the next page of reviews
+    fetchNextPage() {
+      if (this.currentPage < this.totalPages) {
+        this.currentPage++;
+        this.fetchReservations();
+      }
+    },
     async getReservations() {
-      let token = sessionStorage.getItem("token");
+      let token = sessionStorage.getItem('token');
       if (token !== null) {
         let response;
         try {
           response = await axios.get(
-            process.env.VUE_APP_API_ENDPOINT + "/member/reservation/list",
+            process.env.VUE_APP_API_ENDPOINT + '/member/reservation/list',
             {
               headers: {
-                "X-AUTH-TOKEN": token.toString(),
+                'X-AUTH-TOKEN': token.toString(),
               },
             }
           );
@@ -350,8 +391,8 @@ export default {
           console.error(error);
         }
       } else {
-        alert("로그인 후 이용 가능합니다.");
-        this.$router.push({ name: "HomePage" });
+        alert('로그인 후 이용 가능합니다.');
+        this.$router.push({ name: 'HomePage' });
         this.$router.go(0);
       }
     },
@@ -362,11 +403,11 @@ export default {
       //     params: { resvId: resv.resvId, restId: resv.restId }
       //   })
 
-      this.$router.push("/review-create/" + resv.resvId + "/" + resv.restId);
+      this.$router.push('/review-create/' + resv.resvId + '/' + resv.restId);
     },
     async modalOpen(revwId, restName) {
       let response = await axios.get(
-        process.env.VUE_APP_API_ENDPOINT + "/review/search/" + revwId
+        process.env.VUE_APP_API_ENDPOINT + '/review/search/' + revwId
       );
 
       console.log(response.data);
@@ -381,13 +422,13 @@ export default {
       this.selectedReview = null;
     },
     async updateReservation(resvId) {
-      let token = sessionStorage.getItem("token");
+      let token = sessionStorage.getItem('token');
       if (token !== null) {
         let response;
         try {
           response = await axios.put(
             process.env.VUE_APP_API_ENDPOINT +
-              "/member/reservation/update/" +
+              '/member/reservation/update/' +
               resvId,
             {
               resvDate: this.reservation.resvDate,
@@ -396,7 +437,7 @@ export default {
             },
             {
               headers: {
-                "X-AUTH-TOKEN": token.toString(),
+                'X-AUTH-TOKEN': token.toString(),
               },
             }
           );
@@ -408,24 +449,24 @@ export default {
           console.error(error);
         }
       } else {
-        alert("로그인 후 이용 가능합니다.");
-        this.$router.push({ name: "HomePage" });
+        alert('로그인 후 이용 가능합니다.');
+        this.$router.push({ name: 'HomePage' });
         this.$router.go(0);
       }
     },
     async cancelReservation(resvId) {
-      let token = sessionStorage.getItem("token");
+      let token = sessionStorage.getItem('token');
       if (token !== null) {
         let response;
         try {
           response = await axios.post(
             process.env.VUE_APP_API_ENDPOINT +
-              "/member/reservation/cancel/" +
+              '/member/reservation/cancel/' +
               resvId,
             null,
             {
               headers: {
-                "X-AUTH-TOKEN": token.toString(),
+                'X-AUTH-TOKEN': token.toString(),
               },
             }
           );
@@ -437,14 +478,14 @@ export default {
           console.error(error);
         }
       } else {
-        alert("로그인 후 이용 가능합니다.");
-        this.$router.push({ name: "HomePage" });
+        alert('로그인 후 이용 가능합니다.');
+        this.$router.push({ name: 'HomePage' });
         this.$router.go(0);
       }
     },
     async modalReservationOpen(resvId) {
       let response = await axios.get(
-        process.env.VUE_APP_API_ENDPOINT + "/member/reservation/info/" + resvId
+        process.env.VUE_APP_API_ENDPOINT + '/member/reservation/info/' + resvId
       );
       this.reservation.headcount = response.data.resvHeadCount;
       this.reservation.additionalRequirements = response.data.resvRequirement;
@@ -453,7 +494,7 @@ export default {
       this.modalReservationCheck = !this.modalReservationCheck;
     },
     submitReservation() {
-      console.log("Reservation Submitted:", this.reservation);
+      console.log('Reservation Submitted:', this.reservation);
     },
     setReservationHour(hour) {
       this.reservation.resvHour = hour;
@@ -488,14 +529,14 @@ export default {
     currentDate() {
       const today = new Date();
       const year = today.getFullYear();
-      const month = String(today.getMonth() + 1).padStart(2, "0");
-      const day = String(today.getDate()).padStart(2, "0");
+      const month = String(today.getMonth() + 1).padStart(2, '0');
+      const day = String(today.getDate()).padStart(2, '0');
       return `${year}-${month}-${day}`;
     },
     currentTime() {
       const now = new Date();
-      const hours = String(now.getHours()).padStart(2, "0");
-      const minutes = String(now.getMinutes()).padStart(2, "0");
+      const hours = String(now.getHours()).padStart(2, '0');
+      const minutes = String(now.getMinutes()).padStart(2, '0');
       return `${hours}:${minutes}`;
     },
     minHeadcount() {
@@ -515,20 +556,29 @@ export default {
       const hours = [];
       for (let hour = startHour; hour <= endHour; hour++) {
         for (let minute = 0; minute < 60; minute += intervalMinutes) {
-          const formattedHour = String(hour).padStart(2, "0");
-          const formattedMinute = String(minute).padStart(2, "0");
+          const formattedHour = String(hour).padStart(2, '0');
+          const formattedMinute = String(minute).padStart(2, '0');
           hours.push(`${formattedHour}:${formattedMinute}`);
         }
       }
 
       return hours;
     },
+    paginatedReservations() {
+      const start = (this.currentPage - 1) * this.pageSize;
+      const end = start + this.pageSize;
+      return this.reservationList.slice(start, end);
+    },
+    // Calculate the total number of pages
+    totalPages() {
+      return Math.ceil(this.reservationList.length / this.pageSize);
+    },
   },
 };
 </script>
 <style>
 * {
-  font-family: "BMHANNAPro";
+  font-family: 'BMHANNAPro';
 }
 .reserv-restName {
   font-size: 30px;
@@ -710,7 +760,7 @@ p {
 }
 
 .placehold-text:before {
-  content: "@naver.com";
+  content: '@naver.com';
   position: absolute; /*before은 inline 요소이기 때문에 span으로 감싸줌 */
   right: 20px;
   top: 13px;
@@ -741,7 +791,7 @@ p {
 }
 
 .member-footer div a:after {
-  content: "|";
+  content: '|';
   font-size: 10px;
   color: #bbb;
   margin-right: 5px;

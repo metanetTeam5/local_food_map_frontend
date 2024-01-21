@@ -22,7 +22,7 @@ export default {
       payMethod: "card",
       escrow: false,
       vbankDue: "",
-      bizNum: "",
+      bizNum: "3일",
       quota: "0",
       merchantUid: `mid_${new Date().getTime()}`,
       name: "아맛무-보증금 결제",

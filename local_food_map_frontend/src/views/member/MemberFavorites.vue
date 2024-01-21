@@ -56,43 +56,63 @@
             <table class="table2">
               <h2 class="mb-4">나의 찜 관리</h2>
               <tbody>
-             
-              <tr v-for="(fav, index) in favoriteList" :key="index"  style="background-color: #ffffff;">
-                <td>
-                  <img
-                    v-if="fav.restImg"
-                    class="profile3"
-                    :src="fav.restImg"
-                    alt="식당 이미지"
-                    style="float: left"
-                  />
-                  <img
-                    v-else
-                    class="profile3"
-                    src="../../assets/images/아맛무 로고.png"
-                    alt="기본 식당 이미지"
-                    style="float: left"
-                  />
-                  <div id="intro" style="float: left">
-                    {{ fav.restName }}
-                    <br />
-                    <div class="rest-hash">
-                    {{ fav.restKeyword }}
-                  </div>
-                  </div>
-                  <button
-                    @click="deleteFavorite(fav.restId)"
-                    class="btn btn-danger"
-                    style="float: right"
-                  >
-                    찜 제거
-                  </button>
-                </td>
-              
-              </tr>
-          
-            </tbody>
+                <tr
+                  v-for="(fav, index) in paginatedFavorites"
+                  :key="index"
+                  style="background-color: #ffffff"
+                >
+                  <td>
+                    <img
+                      v-if="fav.restImg"
+                      class="profile3"
+                      :src="fav.restImg"
+                      alt="식당 이미지"
+                      style="float: left"
+                    />
+                    <img
+                      v-else
+                      class="profile3"
+                      src="../../assets/images/아맛무 로고.png"
+                      alt="기본 식당 이미지"
+                      style="float: left"
+                    />
+                    <div id="intro" style="float: left">
+                      {{ fav.restName }}
+                      <br />
+                      <div class="rest-hash">
+                        {{ fav.restKeyword }}
+                      </div>
+                    </div>
+                    <button
+                      @click="deleteFavorite(fav.restId)"
+                      class="btn btn-danger"
+                      style="float: right"
+                    >
+                      찜 제거
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
             </table>
+            <div class="pagination justify-content-center">
+              <button
+                @click="fetchPrevPage"
+                :disabled="currentPage === 1"
+                class="btn btn-primary"
+              >
+                이전
+              </button>
+              <span class="mx-3"
+                >페이지 {{ currentPage }} / {{ totalPages }}</span
+              >
+              <button
+                @click="fetchNextPage"
+                :disabled="currentPage === totalPages"
+                class="btn btn-primary"
+              >
+                다음
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -101,27 +121,29 @@
 </template>
 
 <script>
-import axios from "axios";
+import axios from 'axios';
 
 export default {
-  name: "MemberFavorites",
+  name: 'MemberFavorites',
   data() {
     return {
       isLoading: true,
       favoriteList: [],
+      currentPage: 1,
+      pageSize: 5,
     };
   },
   methods: {
     async getFavorites() {
-      let token = sessionStorage.getItem("token");
+      let token = sessionStorage.getItem('token');
       if (token !== null) {
         let response;
         try {
           response = await axios.get(
-            process.env.VUE_APP_API_ENDPOINT + "/restaurant/favorites",
+            process.env.VUE_APP_API_ENDPOINT + '/restaurant/favorites',
             {
               headers: {
-                "X-AUTH-TOKEN": token.toString(),
+                'X-AUTH-TOKEN': token.toString(),
               },
             }
           );
@@ -135,25 +157,25 @@ export default {
           console.error(error);
         }
       } else {
-        alert("로그인 후 이용 가능합니다.");
-        this.$router.push({ name: "HomePage" });
+        alert('로그인 후 이용 가능합니다.');
+        this.$router.push({ name: 'HomePage' });
         this.$router.go(0);
       }
     },
     async deleteFavorite(restId) {
-      let token = sessionStorage.getItem("token");
-      let userId = sessionStorage.getItem("userId");
+      let token = sessionStorage.getItem('token');
+      let userId = sessionStorage.getItem('userId');
       let response;
       try {
         response = await axios.delete(
-          process.env.VUE_APP_API_ENDPOINT + "/restaurant/favorite",
+          process.env.VUE_APP_API_ENDPOINT + '/restaurant/favorite',
           {
             data: {
               membId: userId,
               restId: restId,
             },
             headers: {
-              "X-AUTH-TOKEN": token.toString(),
+              'X-AUTH-TOKEN': token.toString(),
             },
           }
         );
@@ -162,23 +184,54 @@ export default {
         this.$router.go(0);
       } catch (error) {
         console.error(error);
-        alert("찜 삭제 실패");
+        alert('찜 삭제 실패');
+      }
+    },
+    fetchFavorites() {
+      const start = (this.currentPage - 1) * this.pageSize;
+      const end = start + this.pageSize;
+      const favoritesForPage = this.favoriteList.slice(start, end);
+      this.isLoading = false;
+      this.paginatedFavorites = favoritesForPage;
+    },
+
+    fetchPrevPage() {
+      if (this.currentPage > 1) {
+        this.currentPage--;
+        this.fetchFavorites();
+      }
+    },
+    fetchNextPage() {
+      if (this.currentPage < this.totalPages) {
+        this.currentPage++;
+        this.fetchFavorites();
       }
     },
   },
   mounted() {
     this.getFavorites();
   },
+  computed: {
+    // Calculate the paginated reviews based on the currentPage
+    paginatedFavorites() {
+      const start = (this.currentPage - 1) * this.pageSize;
+      const end = start + this.pageSize;
+      return this.favoriteList.slice(start, end);
+    },
+    // Calculate the total number of pages
+    totalPages() {
+      return Math.ceil(this.favoriteList.length / this.pageSize);
+    },
+  },
 };
 </script>
 
 <style>
 * {
-  font-family: "NanumFont";
+  font-family: 'NanumFont';
 }
-.favorite-tr{
+.favorite-tr {
   background: #fff;
-  
 }
 .mypage-container {
   margin-top: 70px;
@@ -354,7 +407,7 @@ p {
 }
 
 .placehold-text:before {
-  content: "@naver.com";
+  content: '@naver.com';
   position: absolute; /*before은 inline 요소이기 때문에 span으로 감싸줌 */
   right: 20px;
   top: 13px;
@@ -385,7 +438,7 @@ p {
 }
 
 .member-footer div a:after {
-  content: "|";
+  content: '|';
   font-size: 10px;
   color: #bbb;
   margin-right: 5px;
@@ -422,7 +475,7 @@ p {
   margin-left: 20px;
   margin-top: 20px;
 }
-.rest-hash{
-  color:#ff5757
+.rest-hash {
+  color: #ff5757;
 }
 </style>
