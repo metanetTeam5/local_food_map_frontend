@@ -6,7 +6,7 @@
           class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 min-vh-100"
         >
           <div
-            class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start"
+            class="nav nav-pills flex-column mb-0 align-items-center align-items-sm-start bm-logo"
           >
             <router-link to="/bman/reservations">
               <img
@@ -16,7 +16,7 @@
             </router-link>
           </div>
           <ul
-            class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start"
+            class="nav nav-pills flex-column mb-0 align-items-center align-items-sm-start"
             id="menu"
           >
             <li class="nav-item">
@@ -51,39 +51,48 @@
       </div>
       <div class="col py-3">
         <h2>리뷰 관리</h2>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
         <div v-if="isLoading">로딩중</div>
         <div v-else>
-          <div>
-            <table class="table">
-              <tr>
-                <th>작성자 아이디</th>
-                <th>작성자 닉네임</th>
-                <th>리뷰 내용</th>
-                <th>리뷰 별점</th>
-                <th>작성 날짜</th>
-              </tr>
-              <tr v-for="(revw, index) in reviewList" :key="index">
-                <td>
-                  {{ revw.membEmail }}
-                </td>
-                <td>
-                  {{ revw.membNickname }}
-                </td>
-                <td>
-                  {{ revw.revwContent }}
-                </td>
-                <td>
-                  {{ revw.revwStarRate }}
-                </td>
-                <td>
-                  {{ revw.revwCreateDate }}
-                </td>
-                <td>
-                  <button @click="deleteReview(revw.revwId)">삭제 요청</button>
-                </td>
-              </tr>
-            </table>
-          </div>
+
+          
+          <div class="search-area mb-4">
+					<b-form-input v-model="searchQuery" type="search" placeholder="검색..." class="search-input">
+					</b-form-input>
+				</div>
+
+          <b-table
+            striped
+            hover
+            :items="reviewList"
+            :fields="fields"
+            class="my-custom-table"
+            :per-page="perPage" 
+            :current-page="currentPage" 
+            :filter="searchQuery"
+          >
+          <template v-slot:cell(index)="data">
+            {{ data.value + 1 }}
+          </template>
+          <template #cell(delete)="data">
+            <b-button size="sm" variant="danger" @click="deleteReview(data.item.revwId)">
+              삭제
+            </b-button>
+          </template>
+        </b-table>
+
+        <div class="d-flex justify-content-between align-items-center my-3">
+					<b-pagination v-model="currentPage" :total-rows="totalRows" :per-page="perPage" aria-controls="my-table"
+						class="my-0">
+					</b-pagination>
+					<!-- <b-button variant="primary" @click="createNewNotice">글쓰기</b-button> -->
+				</div>
+
+
         </div>
       </div>
     </div>
@@ -97,8 +106,21 @@ export default {
   name: 'BmanReviews',
   data() {
     return {
+      searchQuery: '',
+			currentPage: 1,
+			perPage: 5,
+			rows: 0, // 총 데이터 수
+      fields:[
+        { key: 'membEmail', label: '이메일' },
+        { key: 'membNickname', label: '닉네임' },
+        { key: 'revwContent', label: '내용' },
+        { key: 'revwStarRate', label: '별점' },
+        { key: 'revwCreateDate', label: '작성일' },
+        { key: 'delete', label: '삭제'}
+      ],
       isLoading: true,
       reviewList: [],
+      totalRows: 0,
     };
   },
   methods: {
@@ -117,6 +139,7 @@ export default {
           );
           console.log(response.data);
           this.reviewList = response.data;
+          this.totalRows = this.reviewList.length;
 
           this.isLoading = false;
         } catch (error) {
@@ -398,4 +421,43 @@ p {
 .sidebar-logo {
   width: 576px;
 }
+
+
+
+
+.my-custom-table thead th {
+  background-color: #343a40;
+  color: #fff;
+}
+
+.my-custom-table td, .my-custom-table th {
+  border-top: none;
+}
+
+.my-custom-table tr {
+  transition: background-color .3s ease;
+}
+
+.my-custom-table tr:hover {
+  background-color: #f5f5f5;
+}
+
+.my-custom-table .btn-danger {
+  padding: .25rem .5rem;
+  font-size: .875rem;
+  line-height: 1.5;
+  border-radius: .2rem;
+}
+
+
+.bm-logo {
+  margin-bottom: 0;
+}
+.delete-btn {
+  background-color: #fff2df;
+}
+.revw-table {
+  text-align: center;
+}
+
 </style>

@@ -15,6 +15,7 @@
 					</b-form-input>
 				</div>
 				<div class="table-responsive">
+					
 					<b-table striped hover :items="businessmans" :fields="fields" @row-clicked="showModal"
 						:per-page="perPage" :current-page="currentPage" :filter="searchQuery">
 						<!-- :filter="searchQuery" @row-clicked="navigateToDetail" -->
@@ -25,7 +26,7 @@
 							<b-button variant="danger" @click="acceptPartnership(row.item.businessmanId)">제휴</b-button>
 						</template>
 						<template v-slot:cell(deny)="row">
-							<b-button variant="danger" @click="denyPartnership(row.item.businessmanId)">제휴</b-button>
+							<b-button variant="danger" @click="denyPartnership(row.item.businessmanId)">반려</b-button>
 						</template>
 					</b-table>
 
