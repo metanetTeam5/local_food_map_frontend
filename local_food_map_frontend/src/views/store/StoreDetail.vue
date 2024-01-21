@@ -465,12 +465,21 @@ export default {
     apiService
       .getReviewById(restId)
       .then((response) => {
-        // this.review = response.data;
+        this.review = response.data;
         this.review = this.processImageData(response.data);
       })
       .catch((error) => {
         console.error("리뷰 정보를 불러오는데 실패했습니다:", error);
       });
+    // apiService
+    //   .getReviewById(restId)
+    //   .then((response) => {
+    //     // this.review = response.data;
+    //     this.review = this.processImageData(response.data);
+    //   })
+    //   .catch((error) => {
+    //     console.error("리뷰 정보를 불러오는데 실패했습니다:", error);
+    //   });
 
     // 리뷰 정보 가져오기
     apiService
@@ -1001,9 +1010,14 @@ td {
 }
 
 .profile-pic {
-  height: 100px;
+  /* height: 100px;
   margin-right: 10px;
-  border-radius: 100%;
+  border-radius: 100%; */
+  width: 100px; /* 가로 크기를 100px로 설정 */
+  height: 100px; /* 세로 크기를 100px로 설정 */
+  border-radius: 50%; /* 이미지를 원형으로 만듦 */
+  margin-right: 10px;
+  object-fit: cover; /* 이미지 비율을 유지하면서 요소에 맞춤 */
 }
 
 .profile-details {
