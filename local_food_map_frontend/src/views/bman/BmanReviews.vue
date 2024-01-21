@@ -14,11 +14,11 @@
                 class="img-fluid"
               />
             </router-link>
+            <br/>
           </div>
-          <ul
-            class="nav nav-pills flex-column mb-0 align-items-center align-items-sm-start"
-            id="menu"
-          >
+          <ul 
+            class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
+
             <li class="nav-item">
               <router-link
                 class="nav-link align-middle px-0"
@@ -29,6 +29,7 @@
                 </div></router-link
               >
             </li>
+            <br/>
             <li class="nav-item">
               <router-link class="nav-link align-middle px-0" to="/bman/info">
                 <div class="ms-1 d-none d-sm-inline menu-span">
@@ -36,6 +37,7 @@
                 </div></router-link
               >
             </li>
+            <br/>
             <li class="nav-item">
               <router-link
                 class="nav-link align-middle px-0"

@@ -6,7 +6,7 @@
           class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 min-vh-100"
         >
           <div
-            class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start"
+            class="nav nav-pills flex-column mb-0 align-items-center align-items-sm-start"
           >
             <router-link to="/bman/reservations">
               <img
@@ -15,8 +15,9 @@
               />
             </router-link>
           </div>
+          <br/>
           <ul
-            class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start"
+            class="nav nav-pills flex-column mb-0 align-items-center align-items-sm-start"
             id="menu"
           >
             <li class="nav-item">
@@ -27,6 +28,7 @@
                 <div class="ms-1 d-none d-sm-inline menu-span">예약 조회</div>
               </router-link>
             </li>
+            <br/>
             <li class="nav-item">
               <router-link class="nav-link align-middle px-0" to="/bman/info">
                 <div class="ms-1 d-none d-sm-inline menu-span selected-menu">
@@ -34,6 +36,7 @@
                 </div>
               </router-link>
             </li>
+            <br/>
             <li class="nav-item">
               <router-link
                 class="nav-link align-middle px-0"
