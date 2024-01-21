@@ -84,13 +84,15 @@
                       요청사항 : {{ resv.resvRequirement }} <br />
                       <span v-if="resv.resvStatus === 'C'" style="color: blue"
                         >예약 상태 : 방문 완료
+                        <br/>
                         <button
                           v-if="resv.reviewCreated"
+                          class="btn btn-primary mt-3 small-button"
                           @click="modalOpen(resv.revwId, resv.restName)"
                         >
                           리뷰 보기
                         </button>
-                        <button v-else @click="registerReview(resv)">
+                        <button v-else class="btn btn-primary mt-3 small-button" @click="registerReview(resv)">
                           리뷰 작성하기
                         </button>
                       </span>
@@ -156,7 +158,7 @@
           작성 날짜 : {{ selectedReview.revwCreateDate }}
 
           <div class="modal-btn">
-            <button @click="modalClose">닫기</button>
+            <button class="btn btn-primary mt-3 small-button" @click="modalClose">닫기</button>
           </div>
         </div>
       </div>
@@ -738,5 +740,10 @@ p {
   margin-left: 10%;
   margin-top: 2%;
   font-size: 15px;
+}
+
+.small-button {
+  padding: 0.25rem 0.5rem; /* 작은 패딩 값 조절 */
+  font-size: 12px; /* 작은 글꼴 크기 조절 */
 }
 </style>

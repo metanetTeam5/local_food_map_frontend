@@ -5,38 +5,34 @@
         <div
           class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 min-vh-100"
         >
-          <ul
-            class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start"
-            id="menu"
-          >
+        <ul id="menu" class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" style="width: 100%;">
             <li class="nav-item">
-              <router-link class="nav-link align-middle px-0" to="/mypage">
+              <!-- <router-link class="nav-link align-middle px-0" to="/mypage">
                 <div class="ms-1 d-none d-sm-inline menu-span selected-menu">
+                  개인정보수정
+                </div>
+              </router-link> -->
+              <router-link class="nav-link align-middle px-0" to="/mypage">
+                <div
+                  class="ms-1 d-none d-sm-inline menu-span"
+                  :class="{ 'selected-menu': currentPath === '/mypage' }"
+                >
                   개인정보수정
                 </div>
               </router-link>
             </li>
             <li class="nav-item">
-              <router-link
-                class="nav-link align-middle px-0"
-                to="/mypage/reservations"
-              >
+              <router-link class="nav-link align-middle px-0" to="/mypage/reservations">
                 <div class="ms-1 d-none d-sm-inline menu-span">예약 내역</div>
               </router-link>
             </li>
             <li class="nav-item">
-              <router-link
-                class="nav-link align-middle px-0"
-                to="/mypage/reviews"
-              >
+              <router-link class="nav-link align-middle px-0" to="/mypage/reviews">
                 <div class="ms-1 d-none d-sm-inline menu-span">리뷰 관리</div>
               </router-link>
             </li>
             <li class="nav-item">
-              <router-link
-                class="nav-link align-middle px-0"
-                to="/mypage/favorites"
-              >
+              <router-link class="nav-link align-middle px-0" to="/mypage/favorites">
                 <div class="ms-1 d-none d-sm-inline menu-span">나의 찜</div>
               </router-link>
             </li>
@@ -60,32 +56,15 @@
                       <td class="col1">프로필 사진</td>
                       <td class="col2">
                         <div class="profile5">
-                          <img
-                            v-if="profileImg"
-                            class="profile img-fluid rounded-circle"
-                            :src="profileImg"
-                            alt="프로필 이미지"
-                          />
-                          <img
-                            v-else
-                            class="profile img-fluid rounded-circle"
-                            src="../../assets/images/default-profile-picture.png"
-                            alt="프로필 이미지"
-                          />
+                          <img v-if="profileImg" class="profile img-fluid rounded-circle" :src="profileImg"
+                            alt="프로필 이미지" />
+                          <img v-else class="profile img-fluid rounded-circle"
+                            src="../../assets/images/default-profile-picture.png" alt="프로필 이미지" />
                         </div>
                         <div class="mt-2">
-                          <input
-                            type="file"
-                            id="profilePic"
-                            name="profilePic"
-                            class="form-control"
-                            @change="handleFileChange"
-                          />
-                          <button
-                            class="btn btn-secondary mt-2"
-                            type="button"
-                            @click="updateProfileImg"
-                          >
+                          <input type="file" id="profilePic" name="profilePic" class="form-control"
+                            @change="handleFileChange" />
+                          <button class="btn btn-secondary mt-2" type="button" @click="updateProfileImg">
                             프로필 저장
                           </button>
                         </div>
@@ -100,51 +79,30 @@
                     <tr>
                       <td class="col1">현재 비밀번호</td>
                       <td class="col2">
-                        <input
-                          type="password"
-                          v-model="password"
-                          name="pwdCheck"
-                          maxlength="16"
-                        />
+                        <input type="password" v-model="password" name="pwdCheck" maxlength="16" />
                       </td>
                     </tr>
                     <tr>
                       <td class="col1">새 비밀번호</td>
                       <td class="col2">
-                        <input
-                          type="password"
-                          v-model="newPassword"
-                          name="pwdCheck"
-                          maxlength="16"
-                          @input="checkPassword"
-                        />
+                        <input type="password" v-model="newPassword" name="pwdCheck" maxlength="16"
+                          @input="checkPassword" />
                         <p>
                           ※비밀번호는
-                          <span class="num"
-                            >문자, 숫자, 특수문자(~!@#$%^&*)의 조합 8 ~
-                            16자리</span
-                          >로 입력이 가능합니다.
+                          <span class="num">문자, 숫자, 특수문자(~!@#$%^&*)의 조합 8 ~
+                            16자리</span>로 입력이 가능합니다.
                         </p>
                         <p>
-                          <span class="num" v-if="!checkPasswordPattern"
-                            >* 비밀번호 형식에 맞게 작성해주세요.</span
-                          >
+                          <span class="num" v-if="!checkPasswordPattern">* 비밀번호 형식에 맞게 작성해주세요.</span>
                         </p>
                       </td>
                     </tr>
                     <tr>
                       <td class="col1">새 비밀번호 확인</td>
                       <td class="col2">
-                        <input
-                          type="password"
-                          v-model="newPasswordCheck"
-                          name="pwdCheck"
-                          maxlength="16"
-                          @input="checkPassword"
-                        />
-                        <span class="num" v-if="!validPassword"
-                          >* 비밀번호가 일치하지 않습니다.</span
-                        >
+                        <input type="password" v-model="newPasswordCheck" name="pwdCheck" maxlength="16"
+                          @input="checkPassword" />
+                        <span class="num" v-if="!validPassword">* 비밀번호가 일치하지 않습니다.</span>
                       </td>
                     </tr>
                     <tr>
@@ -154,24 +112,12 @@
                     <tr>
                       <td class="col1">닉네임</td>
                       <td class="col2">
-                        <input
-                          type="text"
-                          v-model="newNickname"
-                          maxlength="20"
-                          @input="writeNickname"
-                        />
+                        <input type="text" v-model="newNickname" maxlength="20" @input="writeNickname" />
                         <span v-if="nicknameDuplicate">
-                          <small class="color-red"
-                            >이미 사용 중인 닉네임입니다.</small
-                          >
+                          <small class="color-red">이미 사용 중인 닉네임입니다.</small>
                         </span>
-                        <input
-                          v-if="nickname !== newNickname"
-                          class="but1 rounded"
-                          type="button"
-                          value="중복확인"
-                          @click="checkNicknameDuplicate"
-                        />
+                        <input v-if="nickname !== newNickname" class="but1 rounded" type="button" value="중복확인"
+                          @click="checkNicknameDuplicate" />
                       </td>
                     </tr>
                     <tr>
@@ -193,7 +139,7 @@
                   </tbody>
                 </table>
               </div>
-              <div class="create2">
+              <div class="create">
                 <button class="btn btn-warning" @click="updateMemberInfo">
                   회원정보 수정
                 </button>
@@ -235,8 +181,15 @@ export default {
       validPassword: true,
       changeNickname: false,
       checkPasswordPattern: true,
+      currentPath: this.$route.path,
     };
   },
+  watch: {
+    $route(to) {
+      this.currentPath = to.path;
+    },
+  },
+
   methods: {
     async getInfo() {
       let token = sessionStorage.getItem("token");
@@ -317,7 +270,7 @@ export default {
       try {
         await axios.get(
           process.env.VUE_APP_API_ENDPOINT +
-            '/member/checknickname?nickname=' +
+            "/member/checknickname?nickname=" +
             this.newNickname
         );
 
@@ -427,20 +380,33 @@ export default {
 <style>
 * {
   font-family: "BMHANNAPro";
+
 }
+.px-sm-2 {
+  background: #ffe1b3;
+}
+.py-3 {
+  background: #fff2df;
+
+
+}
+
 .mypage-container {
   margin-top: 70px;
 }
+
 .menu-span {
   color: black;
 }
 
 .selected-menu {
+
   color: #6c757d;
 }
 
 .join-form {
-  margin-top: 100px; /* 헤더의 높이에 따라 조절 */
+  margin-top: 100px;
+  /* 헤더의 높이에 따라 조절 */
 }
 
 .join-form h1 {
@@ -451,11 +417,23 @@ export default {
   font-weight: normal;
 }
 
-div.create2 {
+
+div.create {
+  justify-content: space-between;
+/* div.create2 { */
   width: 800px;
   text-align: center;
   padding: 30px;
   margin: auto;
+}
+.btn-warning {
+  /* 회원정보수정 버튼 */
+  margin-right: 20px; /* 오른쪽에 20px의 간격 추가 */
+}
+
+.btn-danger {
+  /* 회원 탈퇴 버튼 */
+  margin-left: 20px;
 }
 
 table {
@@ -531,17 +509,20 @@ p {
 }
 
 .placehold-text {
-  display: block; /*span 으로 감싸서 크기영역을 블록요소로 만들어ㅜ저야한다*/
+  display: block;
+  /*span 으로 감싸서 크기영역을 블록요소로 만들어ㅜ저야한다*/
   position: relative;
   /* border: 1px solid #000; */
 }
 
 .placehold-text:before {
-  content: "@naver.com";
-  position: absolute; /*before은 inline 요소이기 때문에 span으로 감싸줌 */
+  content: '@naver.com';
+  position: absolute;
+  /*before은 inline 요소이기 때문에 span으로 감싸줌 */
   right: 20px;
   top: 13px;
-  pointer-events: none; /*자체가 가지고 있는 pointer event 를 없애준다 */
+  pointer-events: none;
+  /*자체가 가지고 있는 pointer event 를 없애준다 */
 }
 
 .userpw {

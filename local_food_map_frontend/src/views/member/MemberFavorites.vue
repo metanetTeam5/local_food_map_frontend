@@ -55,8 +55,9 @@
           <div>
             <table class="table2">
               <h2 class="mb-4">나의 찜 관리</h2>
-              <tbody></tbody>
-              <tr v-for="(fav, index) in favoriteList" :key="index">
+              <tbody>
+             
+              <tr v-for="(fav, index) in favoriteList" :key="index"  style="background-color: #ffffff;">
                 <td>
                   <img
                     v-if="fav.restImg"
@@ -75,7 +76,9 @@
                   <div id="intro" style="float: left">
                     {{ fav.restName }}
                     <br />
+                    <div class="rest-hash">
                     {{ fav.restKeyword }}
+                  </div>
                   </div>
                   <button
                     @click="deleteFavorite(fav.restId)"
@@ -85,7 +88,10 @@
                     찜 제거
                   </button>
                 </td>
+              
               </tr>
+          
+            </tbody>
             </table>
           </div>
         </div>
@@ -170,6 +176,10 @@ export default {
 * {
   font-family: "NanumFont";
 }
+.favorite-tr{
+  background: #fff;
+  
+}
 .mypage-container {
   margin-top: 70px;
 }
@@ -213,7 +223,7 @@ table {
 }
 
 td {
-  border-bottom: 1px dotted black;
+  border-bottom: 1px solid rgb(0, 0, 0);
 }
 
 caption {
@@ -409,6 +419,10 @@ p {
   float: right;
 }
 #intro {
+  margin-left: 20px;
   margin-top: 20px;
+}
+.rest-hash{
+  color:#ff5757
 }
 </style>
