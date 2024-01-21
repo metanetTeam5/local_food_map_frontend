@@ -56,85 +56,99 @@
           <div>
             <table class="table2">
               <h2 class="mb-4">나의 예약 내역</h2>
-
-              <tr v-for="(resv, index) in reservationList" :key="index">
-                <td>
-                  <div class="d-flex align-items-start review-context">
-                    <div class="mr-3">
-                      <img
-                        v-if="resv.restImg"
-                        class="rounded profileImg"
-                        :src="resv.restImg"
-                        alt="식당 이미지"
-                      />
-                      <img
-                        v-else
-                        class="rounded profileImg"
-                        src="../../assets/images/아맛무 로고.png"
-                        alt="기본 식당 이미지"
-                      />
-                    </div>
-                    <div id="reservation">
-                      <div class="reserv-restName">
-                        식당 이름 : {{ resv.restName }} <br />
-                      </div>
-                      예약 날짜 : {{ resv.resvDate }} <br />
-                      예약 시간 : {{ resv.resvHour }} <br />
-                      인원 수 : {{ resv.resvHeadCount }}명 <br />
-                      예약 한 날짜 : {{ resv.resvCreateDate }} <br />
-                      예약금 :
-                      {{ resv.resvPayAmount.toLocaleString() }} 원<br />
-                      <p style="font-size: 20px; margin-bottom: 0px">
-                        요청사항
-                      </p>
-                      <div class="request-box">
-                        <span>{{ resv.resvRequirement }}</span>
-                      </div>
-                      <br />
-
-                      <span v-if="resv.resvStatus === 'C'" style="color: blue"
-                        >예약 상태 : 방문 완료
-                        <br />
-                        <div class="review-button-container">
-                          <button
-                            v-if="resv.reviewCreated"
-                            class="btn btn-primary mt-3 small-button"
-                            @click="modalOpen(resv.revwId, resv.restName)"
-                          >
-                            리뷰 보기
-                          </button>
-
-                          <button
+              <tbody>
+                <div class="my-rest">
+                  <tr
+                    v-for="(resv, index) in paginatedReservations"
+                    :key="index"
+                  >
+                    <td>
+                      <div class="d-flex align-items-start review-context">
+                        <div class="mr-3">
+                          <img
+                            v-if="resv.restImg"
+                            class="rounded profileImg"
+                            :src="resv.restImg"
+                            alt="식당 이미지"
+                          />
+                          <img
                             v-else
-                            class="btn btn-primary mt-3 small-button"
-                            @click="registerReview(resv)"
-                          >
-                            리뷰 작성하기
-                          </button>
+                            class="rounded profileImg"
+                            src="../../assets/images/아맛무 로고.png"
+                            alt="기본 식당 이미지"
+                          />
                         </div>
-                      </span>
-                      <span
-                        v-else-if="resv.resvStatus === 'O'"
-                        style="color: green"
-                        >예약 상태 : 예약 완료
-                        <br />
-                        <div
-                          class="btn-group"
-                          role="group"
-                          aria-label="Reservation Buttons"
-                        >
-                          <button
-                            type="button"
-                            class="btn btn-primary"
-                            @click="modalReservationOpen(resv.resvId)"
-                          >
-                            예약 수정
-                          </button>
-                          <button
-                            type="button"
-                            class="btn btn-danger"
-                            @click="cancelReservation(resv.resvId)"
+                        <div id="reservation">
+                          <div class="reserv-restName">
+                            식당 이름 : {{ resv.restName }} <br />
+                          </div>
+                          예약 날짜 : {{ resv.resvDate }} <br />
+                          예약 시간 : {{ resv.resvHour }} <br />
+                          인원 수 : {{ resv.resvHeadCount }}명 <br />
+                          예약 한 날짜 : {{ resv.resvCreateDate }} <br />
+                          예약금 :
+                          {{ resv.resvPayAmount.toLocaleString() }} 원<br />
+                          <p style="font-size: 20px; margin-bottom: 0px">
+                            요청사항
+                          </p>
+                          <div class="request-box">
+                            <span>{{ resv.resvRequirement }}</span>
+                          </div>
+                          <br />
 
+                          <span
+                            v-if="resv.resvStatus === 'C'"
+                            style="color: blue"
+                            >예약 상태 : 방문 완료
+                            <br />
+                            <div class="review-button-container">
+                              <button
+                                v-if="resv.reviewCreated"
+                                class="btn btn-primary mt-3 small-button"
+                                @click="modalOpen(resv.revwId, resv.restName)"
+                              >
+                                리뷰 보기
+                              </button>
+
+                              <button
+                                v-else
+                                class="btn btn-primary mt-3 small-button"
+                                @click="registerReview(resv)"
+                              >
+                                리뷰 작성하기
+                              </button>
+                            </div>
+                          </span>
+                          <span
+                            v-else-if="resv.resvStatus === 'O'"
+                            style="color: green"
+                            >예약 상태 : 예약 완료
+                            <br />
+                            <div
+                              class="btn-group"
+                              role="group"
+                              aria-label="Reservation Buttons"
+                            >
+                              <button
+                                type="button"
+                                class="btn btn-primary"
+                                @click="modalReservationOpen(resv.resvId)"
+                              >
+                                예약 수정
+                              </button>
+                              <button
+                                type="button"
+                                class="btn btn-danger"
+                                @click="cancelReservation(resv.resvId)"
+                              >
+                                예약 취소
+                              </button>
+                            </div>
+                          </span>
+                          <span
+                            v-else-if="resv.resvStatus === 'X'"
+                            style="color: red"
+                            >예약 상태 : 예약 취소</span
                           >
                         </div>
                       </div>
@@ -169,7 +183,6 @@
     <div>
       <div v-if="modalCheck" class="modal-wrap">
         <div class="modal-container">
-
           <div class="modal-content">
             <div class="modal-flex-container">
               <!-- 모달창 content -->
@@ -226,7 +239,6 @@
                 닫기
               </button>
             </div>
-
           </div>
         </div>
       </div>
@@ -919,7 +931,7 @@ p {
 }
 
 .star-half-active {
-  color:rgb(255, 191, 0); /* 반 별의 색상 (필요에 따라 다른 색상 지정 가능) */
+  color: rgb(255, 191, 0); /* 반 별의 색상 (필요에 따라 다른 색상 지정 가능) */
 }
 
 .star-inactive {
