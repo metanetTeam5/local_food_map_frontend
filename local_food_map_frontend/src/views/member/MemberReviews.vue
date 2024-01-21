@@ -43,7 +43,6 @@
                   <div class="ms-1 d-none d-sm-inline menu-span">나의 찜</div>
                 </router-link>
               </li>
-              
             </ul>
           </div>
         </div>
@@ -417,7 +416,7 @@ export default {
   border-radius: 10px; /* 둥근 모서리 */
   padding: 10px; /* 내부 여백 */
   background-color: #fff2c8; /* 배경색 */
-  font-size: 14px;
+  font-size: 18px;
 }
 
 .store-star .fa-star {

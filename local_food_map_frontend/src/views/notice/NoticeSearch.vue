@@ -92,6 +92,10 @@ export default {
 </script>
 
 <style scoped>
+.content-area{
+  padding-left: 30px;
+  padding-right: 30px;
+}
 .mb-3 {
   margin-bottom: 1rem;
 }

@@ -215,10 +215,12 @@ input[type='search']::-webkit-search-cancel-button {
 }
 
 .navbar-nav .nav-link {
-  margin-right: 20px;
-  color: #000000;
-  font-family: 'BMHANNAPro';
-}
+    margin-right: 20px;
+    color: #000000;
+    font-family: 'BMHANNAPro';
+    padding: 5px 10px; /* 좌우 패딩을 추가하여 넓이를 늘림 */
+    white-space: nowrap; /* 텍스트가 한 줄로 나타나도록 설정 */
+  }
 .navbar-nav .nav-link:focus {
   outline: none;
 }

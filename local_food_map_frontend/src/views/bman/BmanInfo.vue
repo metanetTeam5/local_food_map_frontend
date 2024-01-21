@@ -50,6 +50,7 @@
       </div>
       <div class="col py-3 my-custom-background">
         <h2>식당 정보 수정</h2>
+
         <br/>
         <br/>
         <br/>
@@ -71,6 +72,7 @@
               가게 등록하기
             </button>
           </div>
+
         </div>
 
 
@@ -169,10 +171,18 @@
                 </table>
               </div>
             </div>
-            <div class="create text-center">
-                <input class="btn btn-primary" type="button" value="수정하기" @click="updateRestinfo" />
-              </div>
+
+            <div class="create">
+            <input
+              class="but4"
+              type="button"
+              value="수정하기"
+              @click="updateRestinfo"
+            />
+          </div>
+
           </form>
+          
         </div>
 
         <div>
@@ -227,13 +237,14 @@
 </template>
 
 <script>
-import axios from 'axios';
+import axios from "axios";
 
 export default {
-  name: 'BmanInfo',
+  name: "BmanInfo",
   data() {
     return {
       isLoading: true,
+
       name: '',
       keyword: '',
       openTime: '',
@@ -249,22 +260,23 @@ export default {
       menuImg: null,
       menuImgUrl: '',
       modalCheck: false,
+
     };
   },
   methods: {
     async registerRestaurant() {
-      this.$router.push('/mypage/restaurant');
+      this.$router.push("/mypage/restaurant");
     },
     async getRestInfo() {
-      let token = sessionStorage.getItem('token');
+      let token = sessionStorage.getItem("token");
       if (token !== null) {
         let response;
         try {
           response = await axios.get(
-            process.env.VUE_APP_API_ENDPOINT + '/bm/restaurant/info',
+            process.env.VUE_APP_API_ENDPOINT + "/bm/restaurant/info",
             {
               headers: {
-                'X-AUTH-TOKEN': token.toString(),
+                "X-AUTH-TOKEN": token.toString(),
               },
             }
           );
@@ -279,7 +291,7 @@ export default {
           this.restId = response.data.restId;
 
           response = await axios.get(
-            process.env.VUE_APP_API_ENDPOINT + '/menu/namelist/' + this.restId
+            process.env.VUE_APP_API_ENDPOINT + "/menu/namelist/" + this.restId
           );
 
           this.menu = response.data;
@@ -289,8 +301,8 @@ export default {
           console.error(error);
         }
       } else {
-        alert('로그인 후 이용 가능합니다.');
-        this.$router.push({ name: 'HomePage' });
+        alert("로그인 후 이용 가능합니다.");
+        this.$router.push({ name: "HomePage" });
         this.$router.go(0);
       }
     },
@@ -302,30 +314,30 @@ export default {
     async updateRestImg() {
       if (this.newProfileImg !== null) {
         let formData = new FormData();
-        formData.append('restImg', this.newRestImg);
+        formData.append("restImg", this.newRestImg);
 
         await axios.put(
           process.env.VUE_APP_API_ENDPOINT +
-            '/bm/update/restaurant/image/' +
+            "/bm/update/restaurant/image/" +
             this.restId,
           formData,
           {
             headers: {
-              'Content-Type': 'multipart/form-data',
+              "Content-Type": "multipart/form-data",
             },
           }
         );
 
-        alert('식당 사진 변경 완료');
+        alert("식당 사진 변경 완료");
         this.$router.go(0);
       } else {
-        alert('선택된 파일이 없습니다.');
+        alert("선택된 파일이 없습니다.");
       }
     },
 
     async updateRestinfo() {
       await axios.put(
-        process.env.VUE_APP_API_ENDPOINT + '/bm/restaurant/info/update',
+        process.env.VUE_APP_API_ENDPOINT + "/bm/restaurant/info/update",
         {
           restId: this.restId,
           restOpenTime: this.openTime,
@@ -334,7 +346,7 @@ export default {
         }
       );
 
-      alert('식당 정보 수정 완료');
+      alert("식당 정보 수정 완료");
       this.$router.go(0);
     },
     async registerMenu() {
@@ -391,7 +403,7 @@ export default {
 
 <style>
 * {
-  font-family: 'BMHANNAPro';
+  font-family: "BMHANNAPro";
 }
 
 .mypage-container {
@@ -572,9 +584,11 @@ p {
 }
 
 .placehold-text:before {
+
   content: '@naver.com';
   position: absolute;
   /*before은 inline 요소이기 때문에 span으로 감싸줌 */
+
   right: 20px;
   top: 13px;
   pointer-events: none;
@@ -605,7 +619,7 @@ p {
 }
 
 .member-footer div a:after {
-  content: '|';
+  content: "|";
   font-size: 10px;
   color: #bbb;
   margin-right: 5px;

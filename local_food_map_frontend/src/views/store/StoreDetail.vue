@@ -462,14 +462,23 @@ export default {
         console.error(error);
       });
     // 리뷰 정보 가져오기
+    // apiService
+    //   .getReviewById(restId)
+    //   .then((response) => {
+    //     // this.review = response.data;
+    //     this.review = this.processImageData(response.data);
+    //   })
+    //   .catch((error) => {
+    //     console.error("리뷰 정보를 불러오는데 실패했습니다:", error);
+    //   });
     apiService
       .getReviewById(restId)
       .then((response) => {
-        // this.review = response.data;
-        this.review = this.processImageData(response.data);
+        this.review = response.data;
+        // this.review = this.processImageData(response.data);
       })
       .catch((error) => {
-        console.error("리뷰 정보를 불러오는데 실패했습니다:", error);
+        console.error('리뷰 정보를 불러오는데 실패했습니다:', error);
       });
 
     apiService
@@ -486,9 +495,7 @@ export default {
     this.loadExternalCSS(
       "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
     );
-    this.loadExternalCSS(
-      "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.0/css/font-awesome.min.css"
-    );
+   
     this.initializeMap();
     this.createMap();
     this.getTodayDate();

@@ -270,6 +270,7 @@
                 />
               </td>
             </tr>
+
           </tbody>
         </table>
       </div>
@@ -277,6 +278,7 @@
         <button class="btn btn-warning" @click="register">회원가입</button>
         <button class="btn btn-danger" type="reset">가입취소</button>
       </div>
+
     </form>
   </div>
 </template>
@@ -772,8 +774,10 @@ p {
   color: red;
 }
 
+
 .check-button {
   border-radius: 0.375rem;
   font-size: 13px;
 }
 </style>
+
