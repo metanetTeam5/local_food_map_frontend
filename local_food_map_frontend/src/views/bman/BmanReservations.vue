@@ -108,7 +108,7 @@ export default {
         { key: 'resvHour', label: '예약시간' },
         { key: 'phoneNumber', label: '전화번호' },
         { key: 'requirement', label: '요구사항' },
-        { key: 'radioButtons', label: '라디오 버튼' },
+        { key: 'radioButtons', label: '예약 승인' },
       ],
       isLoading: true,
       reservationList: [],
