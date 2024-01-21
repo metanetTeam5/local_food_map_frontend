@@ -6,7 +6,7 @@
           class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 min-vh-100"
         >
           <div
-            class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start"
+            class="nav nav-pills flex-column mb-0 align-items-center align-items-sm-start bm-logo"
           >
             <router-link to="/bman/reservations">
               <img
@@ -16,7 +16,7 @@
             </router-link>
           </div>
           <ul
-            class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start"
+            class="nav nav-pills flex-column mb-0 align-items-center align-items-sm-start"
             id="menu"
           >
             <li class="nav-item">
@@ -58,6 +58,7 @@
         <br/>
         <div v-if="isLoading">로딩중</div>
         <div v-else>
+<!-- <<<<<<< jong2 -->
           
           <div class="search-area mb-4">
 					<b-form-input v-model="searchQuery" type="search" placeholder="검색..." class="search-input">
@@ -91,6 +92,41 @@
 					<!-- <b-button variant="primary" @click="createNewNotice">글쓰기</b-button> -->
 				</div>
 
+<!-- =======
+          <div>
+            <table class="table revw-table">
+              <tr>
+                <th>작성자 아이디</th>
+                <th>작성자 닉네임</th>
+                <th>리뷰 내용</th>
+                <th>리뷰 별점</th>
+                <th>작성 날짜</th>
+              </tr>
+              <tr v-for="(revw, index) in reviewList" :key="index">
+                <td>
+                  {{ revw.membEmail }}
+                </td>
+                <td>
+                  {{ revw.membNickname }}
+                </td>
+                <td>
+                  {{ revw.revwContent }}
+                </td>
+                <td>
+                  {{ revw.revwStarRate }}
+                </td>
+                <td>
+                  {{ revw.revwCreateDate }}
+                </td>
+                <td>
+                  <button class="delete-btn" @click="deleteReview(revw.revwId)">
+                    삭제 요청
+                  </button>
+                </td>
+              </tr>
+            </table>
+          </div>
+>>>>>>> main -->
         </div>
       </div>
     </div>
@@ -419,6 +455,7 @@ p {
 .sidebar-logo {
   width: 576px;
 }
+/* <<<<<<< jong2 */
 
 
 
@@ -446,4 +483,15 @@ p {
   border-radius: .2rem;
 }
 
+/* ======= */
+.bm-logo {
+  margin-bottom: 0;
+}
+.delete-btn {
+  background-color: #fff2df;
+}
+.revw-table {
+  text-align: center;
+}
+/* >>>>>>> main */
 </style>

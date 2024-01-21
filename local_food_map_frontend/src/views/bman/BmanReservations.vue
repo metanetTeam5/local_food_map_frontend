@@ -2,13 +2,32 @@
   <div class="container-fluid mypage-container">
     <div class="row flex-nowrap">
       <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0">
-        <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 min-vh-100">
-          <div class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start">
+<!-- <<<<<<< jong2 -->
+        <div 
+          class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 min-vh-100">
+          <div 
+            class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start bm-logo">
+<!-- =======
+        <div
+          class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 min-vh-100"
+        >
+          <div
+            class="nav nav-pills flex-column mb-0 align-items-center align-items-sm-start bm-logo"
+          >
+>>>>>>> main -->
             <router-link to="/bman/reservations">
               <img src="../../assets/images/아맛무 로고.png" class="img-fluid" />
             </router-link>
           </div>
-          <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
+<!-- <<<<<<< jong2 -->
+          <ul 
+            class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
+<!-- ======= -->
+          <!-- <ul
+            class="nav nav-pills flex-column mb-0 align-items-center align-items-sm-start"
+            id="menu"
+          > -->
+<!-- >>>>>>> main -->
             <li class="nav-item">
               <router-link class="nav-link align-middle px-0" to="/bman/reservations">
                 <div class="ms-1 d-none d-sm-inline menu-span selected-menu">
@@ -34,6 +53,7 @@
         </div>
       </div>
       <div class="col py-3">
+<!-- <<<<<<< jong2 -->
         <br/>
         <h2>예약 조회</h2>
         <br/>
@@ -74,6 +94,66 @@
 						</b-pagination>
 						<!-- <b-button variant="primary" @click="createNewNotice">글쓰기</b-button> -->
 					</div>
+<!-- ======= -->
+        <!-- <div v-if="isLoading">로딩중</div>
+        <div v-else>
+          <div>
+            <h2>전체 예약 {{ totalReservation }}개</h2>
+            <br />
+            <table class="table reservation-table">
+              <tr>
+                <th>예약자</th>
+                <th>인원</th>
+                <th>예약일자</th>
+                <th>예약시간</th>
+                <th>연락처</th>
+                <th>요청사항</th>
+                <th>방문확인</th>
+              </tr>
+              <tr v-for="(resv, index) in reservationList" :key="index">
+                <td>
+                  {{ resv.membEmail }}
+                </td>
+                <td>
+                  {{ resv.headCount }}
+                </td>
+                <td>
+                  {{ resv.resvDate }}
+                </td>
+                <td>
+                  {{ resv.resvHour }}
+                </td>
+                <td>
+                  {{ resv.phoneNumber }}
+                </td>
+                <td>
+                  {{ resv.requirement }}
+                </td>
+                <td>
+                  <span v-if="resv.resvStatus === 'X'"> 예약 취소 </span>
+                  <span v-else>
+                    <input
+                      id="O"
+                      type="radio"
+                      v-model="resv.resvStatus"
+                      value="O"
+                      @change="updateResvStatus(resv.resvId)"
+                    />
+                    <label for="O">방문 취소</label>
+                    <input
+                      id="C"
+                      type="radio"
+                      v-model="resv.resvStatus"
+                      value="C"
+                      @change="updateResvStatus(resv.resvId)"
+                    />
+                    <label for="C">방문 완료</label>
+                  </span>
+                </td>
+              </tr>
+            </table>
+          </div> -->
+<!-- >>>>>>> main -->
         </div>
       </div>
     </div>
@@ -434,5 +514,13 @@ p {
 
 .sidebar-logo {
   width: 576px;
+}
+
+.bm-logo {
+  margin-bottom: 0;
+}
+
+.reservation-table {
+  text-align: center;
 }
 </style>
