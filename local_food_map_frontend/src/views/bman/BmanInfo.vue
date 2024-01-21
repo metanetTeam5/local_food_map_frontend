@@ -77,7 +77,6 @@
           <form method="post" action="">
             <div class="container">
               <div class="insert">
-<!-- <<<<<<< jong2 -->
                 <table class="table table-bordered">
                   <thead class="thead-light">
                     <tr>
@@ -96,40 +95,7 @@
                       </td>
                     </tr>
                     <tr>
-<!-- =======
-                <table>
-                  <tr>
-                    <td class="col1">식당 사진</td>
-                    <td class="col2">
-                      <img
-                        v-if="restImg"
-                        class="profile"
-                        :src="restImg"
-                        alt="식당 이미지"
-                      />
-                      <img
-                        v-else
-                        class="profile"
-                        src="../../assets/images//아맛무 로고.png"
-                        alt="식당 이미지"
-                      />
-                      <br />
-                      <input
-                        type="file"
-                        id="profilePic"
-                        name="profilePic"
-                        @change="handleFileChange"
-                      />
-                      <input
-                        class="but2"
-                        type="button"
-                        value="식당 사진 변경"
-                        @click="updateRestImg"
-                      />
-                    </td>
-                  </tr>
-                  <tr>
->>>>>>> main -->
+
                     <td class="col1">식당 이름</td>
                     <td class="col2">
                       {{ name }}
@@ -199,28 +165,13 @@
                   </tbody>
                 </table>
               </div>
-<!-- <<<<<<< jong2
-              
-======= -->
-              <!-- <div class="create">
-                <input
-                  class="but4"
-                  type="button"
-                  value="수정하기"
-                  @click="updateRestinfo"
-                />
-              </div> -->
-<!-- >>>>>>> main -->
             </div>
             <div class="create text-center">
                 <input class="btn btn-primary" type="button" value="수정하기" @click="updateRestinfo" />
               </div>
           </form>
         </div>
-<!-- <<<<<<< jong2
 
-
-======= -->
         <div>
           <div v-if="modalCheck" class="modal-wrap">
             <div class="modal-container">
@@ -266,7 +217,7 @@
             </div>
           </div>
         </div>
-<!-- >>>>>>> main -->
+
       </div>
     </div>
   </div>
@@ -707,11 +658,11 @@ p {
   /* 이미지를 수평 중앙으로 정렬 */
 }
 
-/* <<<<<<< jong2 */
+
 .my-custom-background {
   background-color: white;
   /* Set the background color to white */
-/* ======= */
+
 .bm-logo {
   margin-bottom: 0;
 }
@@ -723,7 +674,7 @@ p {
   height: 100%;
   background: rgba(0, 0, 0, 0.4);
 }
-/* modal or popup */
+
 .modal-container {
   position: fixed;
   top: 50%;
@@ -737,7 +688,7 @@ p {
 }
 .menuLabel {
   margin-right: 10px;
-/* >>>>>>> main */
+
 }
 }
 </style>
