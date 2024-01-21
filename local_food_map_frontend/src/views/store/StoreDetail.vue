@@ -134,108 +134,9 @@
     > -->
     <div class="card store-card">
       <div class="card-body">
-        <!-- 리뷰가 있는 경우 -->
-        <div v-if="review && review.length > 0">
-          <div class="card-title-store">
-            <h5 class="card-title store-title">
-              {{ review.length }}건의 방문자 평가
-            </h5>
-            <hr class="review-title-divider" />
-          </div>
-
-          <!-- 개별 리뷰 항목 반복 -->
-          <div class="riview-sectionContainer">
-            <div
-              v-for="reviewItem in review"
-              :key="reviewItem.revwId"
-              class="review-section"
-              :class="{ 'review-divider': index < review.length - 1 }"
-            >
-              <!-- 리뷰 프로필 및 정보 -->
-              <div class="profile">
-                <div class="profile-info">
-                  <img class="profile-pic" :src="reviewItem.membProfileImg" />
-                  <div class="profile-details">
-                    <h3 class="mt-2 mb-0">{{ reviewItem.membNickname }}</h3>
-                    <div class="review-info">
-                      <div class="review-score">
-                        <span class="text-muted">{{
-                          reviewItem.revwStarRate
-                        }}</span>
-                      </div>
-                      <!-- <span class="fa fa-star star-active ml-3"></span>
-                    <span class="fa fa-star star-active"></span>
-                    <span class="fa fa-star star-active"></span>
-                    <span class="fa fa-star star-active"></span>
-                    <span class="fa fa-star star-inactive"></span> -->
-                      <!-- <div
-                      v-if="
-                        typeof restaurant.restMaxResv === 'number' &&
-                        restaurant.restMaxResv >= 0
-                      "
-                      class="store-star"
-                    > -->
-                      <!-- 활성 별 (노란색) -->
-                      <div
-                        v-if="
-                          typeof reviewItem.revwStarRate === 'number' &&
-                          reviewItem.revwStarRate >= 0
-                        "
-                        class="store-star"
-                      >
-                        <span
-                          v-for="star in reviewItem.revwStarRate"
-                          :key="`active-${star}`"
-                          class="fa fa-star star-active ml-3"
-                        ></span>
-
-                        <!-- 비활성 별 (회색) -->
-                        <span
-                          v-for="star in 5 - reviewItem.revwStarRate"
-                          :key="`inactive-${star}`"
-                          class="fa fa-star star-inactive"
-                        ></span>
-                      </div>
-                      <div class="review-date">
-                        <p class="profile-write">
-                          {{ reviewItem.revwCreateDate }}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="rivew-content">
-                <p>{{ reviewItem.revwContent }}</p>
-              </div>
-              <!-- 리뷰 이미지 -->
-              <div class="review--images">
-                <img
-                  v-for="(img, index) in reviewItem.revwImgs"
-                  :key="index"
-                  :src="img"
-                  :class="{
-                    pic: index < 4,
-                    'special-pic':
-                      index === 3 && reviewItem.revwImgs.length > 4,
-                  }"
-                  @click="
-                    index === 3 && reviewItem.revwImgs.length > 4
-                      ? openModal()
-                      : null
-                  "
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- 리뷰가 없는 경우 -->
-        <div v-else>
-          <p style="font-size: 20px; margin-top: 20px; text-align: center">
-            작성된 리뷰가 없습니다.
-          </p>
-        </div>
+        <div class="card-img-review">
+       <img src="../../assets/images/우식리뷰.png">
+      </div>
       </div>
     </div>
 
@@ -1227,7 +1128,13 @@ td {
   border-color: #ff2b8a;
   color: white; /* 예시: 흰색 텍스트 */
 }
+.card-img-review{
+  width: 100%;
 
+}
+.card-img-review img{
+  width:80%;
+}
 @media (max-width: 768px) {
   .card {
     /* 모바일 화면에서 적용될 스타일 */
