@@ -774,5 +774,6 @@ p {
 
 .check-button {
   border-radius: 0.375rem;
+  font-size: 13px;
 }
 </style>
