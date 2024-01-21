@@ -6,7 +6,7 @@
           class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 min-vh-100"
         >
           <div
-            class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start"
+            class="nav nav-pills flex-column mb-0 align-items-center align-items-sm-start bm-logo"
           >
             <router-link to="/bman/reservations">
               <img
@@ -16,7 +16,7 @@
             </router-link>
           </div>
           <ul
-            class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start"
+            class="nav nav-pills flex-column mb-0 align-items-center align-items-sm-start"
             id="menu"
           >
             <li class="nav-item">
@@ -58,6 +58,7 @@
         <br/>
         <div v-if="isLoading">로딩중</div>
         <div v-else>
+
           
           <div class="search-area mb-4">
 					<b-form-input v-model="searchQuery" type="search" placeholder="검색..." class="search-input">
@@ -90,6 +91,7 @@
 					</b-pagination>
 					<!-- <b-button variant="primary" @click="createNewNotice">글쓰기</b-button> -->
 				</div>
+
 
         </div>
       </div>
@@ -422,6 +424,7 @@ p {
 
 
 
+
 .my-custom-table thead th {
   background-color: #343a40;
   color: #fff;
@@ -444,6 +447,17 @@ p {
   font-size: .875rem;
   line-height: 1.5;
   border-radius: .2rem;
+}
+
+
+.bm-logo {
+  margin-bottom: 0;
+}
+.delete-btn {
+  background-color: #fff2df;
+}
+.revw-table {
+  text-align: center;
 }
 
 </style>

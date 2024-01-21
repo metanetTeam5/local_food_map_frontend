@@ -2,13 +2,20 @@
   <div class="container-fluid mypage-container">
     <div class="row flex-nowrap">
       <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0">
-        <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 min-vh-100">
-          <div class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start">
+
+        <div 
+          class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 min-vh-100">
+          <div 
+            class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start bm-logo">
+
             <router-link to="/bman/reservations">
               <img src="../../assets/images/아맛무 로고.png" class="img-fluid" />
             </router-link>
           </div>
-          <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
+
+          <ul 
+            class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
+
             <li class="nav-item">
               <router-link class="nav-link align-middle px-0" to="/bman/reservations">
                 <div class="ms-1 d-none d-sm-inline menu-span selected-menu">
@@ -34,6 +41,7 @@
         </div>
       </div>
       <div class="col py-3">
+
         <br/>
         <h2>예약 조회</h2>
         <br/>
@@ -434,5 +442,13 @@ p {
 
 .sidebar-logo {
   width: 576px;
+}
+
+.bm-logo {
+  margin-bottom: 0;
+}
+
+.reservation-table {
+  text-align: center;
 }
 </style>
