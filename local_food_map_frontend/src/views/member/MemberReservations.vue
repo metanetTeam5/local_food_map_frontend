@@ -84,7 +84,7 @@
                       요청사항 : {{ resv.resvRequirement }} <br />
                       <span v-if="resv.resvStatus === 'C'" style="color: blue"
                         >예약 상태 : 방문 완료
-                        <br/>
+                        <br />
                         <button
                           v-if="resv.reviewCreated"
                           class="btn btn-primary mt-3 small-button"
@@ -92,7 +92,11 @@
                         >
                           리뷰 보기
                         </button>
-                        <button v-else class="btn btn-primary mt-3 small-button" @click="registerReview(resv)">
+                        <button
+                          v-else
+                          class="btn btn-primary mt-3 small-button"
+                          @click="registerReview(resv)"
+                        >
                           리뷰 작성하기
                         </button>
                       </span>
@@ -116,7 +120,7 @@
                           <button
                             type="button"
                             class="btn btn-danger"
-                            @click="cancelReservation(resv.resvId)"
+                            @click="confirmCancelReservation(resv.resvId)"
                           >
                             예약 취소
                           </button>
@@ -158,7 +162,12 @@
           작성 날짜 : {{ selectedReview.revwCreateDate }}
 
           <div class="modal-btn">
-            <button class="btn btn-primary mt-3 small-button" @click="modalClose">닫기</button>
+            <button
+              class="btn btn-primary mt-3 small-button"
+              @click="modalClose"
+            >
+              닫기
+            </button>
           </div>
         </div>
       </div>
@@ -399,6 +408,13 @@ export default {
       this.reservation.resvId = resvId;
 
       this.modalReservationCheck = !this.modalReservationCheck;
+    },
+    async confirmCancelReservation(resvId) {
+      const userConfirmed = confirm("예약을 취소하시겠습니까?");
+      if (userConfirmed) {
+        this.cancelReservation(resvId);
+        alert("예약이 취소 되었으며, \n환불 요청 처리가 완성 되었습니다!");
+      }
     },
     submitReservation() {
       console.log("Reservation Submitted:", this.reservation);
