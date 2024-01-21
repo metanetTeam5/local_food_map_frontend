@@ -84,7 +84,6 @@ export default {
   data() {
     return {
       menulists: [
-
         { menutext: "공지사항", link: "/notice" },
         { menutext: "서비스 소개", link: "/introduce" },
       ],
@@ -165,8 +164,7 @@ export default {
 
 <style scoped>
 * {
-
-  box-sizing: border-box; 
+  box-sizing: border-box;
   overflow-x: hidden;
 
   box-sizing: border-box;
@@ -264,7 +262,6 @@ a.nav-link {
   width: 90%;
   max-width: 800px;
   margin-top: 300px;
-
 }
 .button-container3 {
   font-size: 20px;
@@ -310,4 +307,3 @@ img {
   border-radius: 10%;
 }
 </style>
-
