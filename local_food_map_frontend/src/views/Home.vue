@@ -41,37 +41,37 @@
     <div class="button-container2" type="submit">
       <button class="round-button2" @click="searchPlaces('한식')">
         한식
-        <img src="../assets/images/koreanfood.jpg" alt="한식" />
+        <img src="../assets/images/한식.png" alt="한식" />
       </button>
       <button class="round-button2" @click="searchPlaces('중식')">
-        중식 <img src="../assets/images/chinesefood.png" alt="중식" />
+        중식 <img src="../assets/images/중식.png" alt="중식" />
       </button>
       <button class="round-button2" @click="searchPlaces('일식')">
         일식
-        <img src="../assets/images/japanesefood.png" alt="일식" />
+        <img src="../assets/images/일식.png" alt="일식" />
       </button>
       <button class="round-button2" @click="searchPlaces('동남아')">
         동남아
-        <img src="../assets/images/southAsianfood.png" alt="동남아" />
+        <img src="../assets/images/동남아.png" alt="동남아" />
       </button>
     </div>
 
     <div class="button-container3">
       <button class="round-button2" @click="searchPlaces('맛집')">
         맛집
-        <img src="../assets/images/goodtaste.png" alt="맛집" />
+        <img src="../assets/images/맛집.png" alt="맛집" />
       </button>
       <button class="round-button2" @click="searchPlaces('가성비')">
         가성비
-        <img src="../assets/images/costgood.png" alt="가성비" />
+        <img src="../assets/images/가성비.png" alt="가성비" />
       </button>
       <button class="round-button2" @click="searchPlaces('데이트')">
         데이트
-        <img src="../assets/images/date.png" alt="데이트" />
+        <img src="../assets/images/데이트.png" alt="데이트" />
       </button>
       <button class="round-button2" @click="searchPlaces('모임')">
         모임
-        <img src="../assets/images/group.png" alt="Button 8" />
+        <img src="../assets/images/모임.png" alt="Button 8" />
       </button>
     </div>
   </div>
@@ -177,6 +177,7 @@ export default {
   /* justify-content: space-between; */
   justify-content: center;
   align-items: center;
+  background: #fff2d8;
 }
 
 .main-header-nav {
@@ -185,7 +186,8 @@ export default {
   left: 0;
   width: 100%;
   z-index: 1000;
-  background: #fce7bc;
+  /* background: #fce7bc; */
+  background: #ffbe46;
 }
 
 a.nav-link {
@@ -197,7 +199,8 @@ a.nav-link {
 
 .nav {
   height: 45px;
-  background: #e8dfce;
+  background: #ece3d0;
+ 
 }
 .nav-item {
   display: flex;
@@ -234,16 +237,33 @@ a.nav-link {
   padding: 10px 40px;
   border: none;
   border-radius: 20px;
-  background-color: #555;
-  color: #fff;
+  /* background-color: #d0d0d0; */
+  background: #ffe5a8;
+  color: #020202;
   cursor: pointer;
   font-family: "BMHANNAPro";
   text-decoration: none;
 }
 
 .round-button:hover {
-  background-color: #333;
+  background-color: #ffffff;
+  color: #ff6200;
 }
+.round-button:hover p {
+  color: #ff6200;
+}
+.round-button2 img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease; /* 부드러운 전환 효과 추가 */
+  border-radius: 10%; /* 이미지의 모서리 둥글게 */
+}
+
+.round-button2:hover img {
+  transform: scale(1.1); /* 호버 시 이미지를 10% 확대 */
+}
+
 .main-headertext {
   color: #333;
   font-size: 24px;

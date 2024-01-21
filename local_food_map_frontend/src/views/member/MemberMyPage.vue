@@ -22,17 +22,26 @@
               </router-link>
             </li>
             <li class="nav-item">
-              <router-link class="nav-link align-middle px-0" to="/mypage/reservations">
+              <router-link
+                class="nav-link align-middle px-0"
+                to="/mypage/reservations"
+              >
                 <div class="ms-1 d-none d-sm-inline menu-span">예약 내역</div>
               </router-link>
             </li>
             <li class="nav-item">
-              <router-link class="nav-link align-middle px-0" to="/mypage/reviews">
+              <router-link
+                class="nav-link align-middle px-0"
+                to="/mypage/reviews"
+              >
                 <div class="ms-1 d-none d-sm-inline menu-span">리뷰 관리</div>
               </router-link>
             </li>
             <li class="nav-item">
-              <router-link class="nav-link align-middle px-0" to="/mypage/favorites">
+              <router-link
+                class="nav-link align-middle px-0"
+                to="/mypage/favorites"
+              >
                 <div class="ms-1 d-none d-sm-inline menu-span">나의 찜</div>
               </router-link>
             </li>
@@ -56,15 +65,32 @@
                       <td class="col1">프로필 사진</td>
                       <td class="col2">
                         <div class="profile5">
-                          <img v-if="profileImg" class="profile img-fluid rounded-circle" :src="profileImg"
-                            alt="프로필 이미지" />
-                          <img v-else class="profile img-fluid rounded-circle"
-                            src="../../assets/images/default-profile-picture.png" alt="프로필 이미지" />
+                          <img
+                            v-if="profileImg"
+                            class="profile img-fluid rounded-circle"
+                            :src="profileImg"
+                            alt="프로필 이미지"
+                          />
+                          <img
+                            v-else
+                            class="profile img-fluid rounded-circle"
+                            src="../../assets/images/default-profile-picture.png"
+                            alt="프로필 이미지"
+                          />
                         </div>
                         <div class="mt-2">
-                          <input type="file" id="profilePic" name="profilePic" class="form-control"
-                            @change="handleFileChange" />
-                          <button class="btn btn-secondary mt-2" type="button" @click="updateProfileImg">
+                          <input
+                            type="file"
+                            id="profilePic"
+                            name="profilePic"
+                            class="form-control"
+                            @change="handleFileChange"
+                          />
+                          <button
+                            class="btn btn-secondary mt-2"
+                            type="button"
+                            @click="updateProfileImg"
+                          >
                             프로필 저장
                           </button>
                         </div>
@@ -79,30 +105,51 @@
                     <tr>
                       <td class="col1">현재 비밀번호</td>
                       <td class="col2">
-                        <input type="password" v-model="password" name="pwdCheck" maxlength="16" />
+                        <input
+                          type="password"
+                          v-model="password"
+                          name="pwdCheck"
+                          maxlength="16"
+                        />
                       </td>
                     </tr>
                     <tr>
                       <td class="col1">새 비밀번호</td>
                       <td class="col2">
-                        <input type="password" v-model="newPassword" name="pwdCheck" maxlength="16"
-                          @input="checkPassword" />
+                        <input
+                          type="password"
+                          v-model="newPassword"
+                          name="pwdCheck"
+                          maxlength="16"
+                          @input="checkPassword"
+                        />
                         <p>
                           ※비밀번호는
-                          <span class="num">문자, 숫자, 특수문자(~!@#$%^&*)의 조합 8 ~
-                            16자리</span>로 입력이 가능합니다.
+                          <span class="num"
+                            >문자, 숫자, 특수문자(~!@#$%^&*)의 조합 8 ~
+                            16자리</span
+                          >로 입력이 가능합니다.
                         </p>
                         <p>
-                          <span class="num" v-if="!checkPasswordPattern">* 비밀번호 형식에 맞게 작성해주세요.</span>
+                          <span class="num" v-if="!checkPasswordPattern"
+                            >* 비밀번호 형식에 맞게 작성해주세요.</span
+                          >
                         </p>
                       </td>
                     </tr>
                     <tr>
                       <td class="col1">새 비밀번호 확인</td>
                       <td class="col2">
-                        <input type="password" v-model="newPasswordCheck" name="pwdCheck" maxlength="16"
-                          @input="checkPassword" />
-                        <span class="num" v-if="!validPassword">* 비밀번호가 일치하지 않습니다.</span>
+                        <input
+                          type="password"
+                          v-model="newPasswordCheck"
+                          name="pwdCheck"
+                          maxlength="16"
+                          @input="checkPassword"
+                        />
+                        <span class="num" v-if="!validPassword"
+                          >* 비밀번호가 일치하지 않습니다.</span
+                        >
                       </td>
                     </tr>
                     <tr>
@@ -112,12 +159,24 @@
                     <tr>
                       <td class="col1">닉네임</td>
                       <td class="col2">
-                        <input type="text" v-model="newNickname" maxlength="20" @input="writeNickname" />
+                        <input
+                          type="text"
+                          v-model="newNickname"
+                          maxlength="20"
+                          @input="writeNickname"
+                        />
                         <span v-if="nicknameDuplicate">
-                          <small class="color-red">이미 사용 중인 닉네임입니다.</small>
+                          <small class="color-red"
+                            >이미 사용 중인 닉네임입니다.</small
+                          >
                         </span>
-                        <input v-if="nickname !== newNickname" class="but1 rounded" type="button" value="중복확인"
-                          @click="checkNicknameDuplicate" />
+                        <input
+                          v-if="nickname !== newNickname"
+                          class="but1 rounded"
+                          type="button"
+                          value="중복확인"
+                          @click="checkNicknameDuplicate"
+                        />
                       </td>
                     </tr>
                     <tr>
@@ -138,14 +197,16 @@
                     </tr>
                   </tbody>
                 </table>
-              </div>
-              <div class="create">
-                <button class="btn btn-warning" @click="updateMemberInfo">
-                  회원정보 수정
-                </button>
-                <button class="btn btn-danger" @click="deleteMember">
-                  회원 탈퇴
-                </button>
+
+                <div class="create">
+                  <button class="btn btn-warning" @click="updateMemberInfo">
+                    회원정보 수정
+                  </button>
+                  <button class="btn btn-danger" @click="deleteMember">
+                    회원 탈퇴
+                  </button>
+                </div>
+
               </div>
             </div>
           </form>
@@ -390,11 +451,9 @@ export default {
 
 
 }
-
 .mypage-container {
   margin-top: 70px;
 }
-
 .menu-span {
   color: black;
 }
@@ -405,8 +464,7 @@ export default {
 }
 
 .join-form {
-  margin-top: 100px;
-  /* 헤더의 높이에 따라 조절 */
+  margin-top: 100px; /* 헤더의 높이에 따라 조절 */
 }
 
 .join-form h1 {
@@ -420,7 +478,9 @@ export default {
 
 div.create {
   justify-content: space-between;
+
 /* div.create2 { */
+
   width: 800px;
   text-align: center;
   padding: 30px;
@@ -509,20 +569,17 @@ p {
 }
 
 .placehold-text {
-  display: block;
-  /*span 으로 감싸서 크기영역을 블록요소로 만들어ㅜ저야한다*/
+  display: block; /*span 으로 감싸서 크기영역을 블록요소로 만들어ㅜ저야한다*/
   position: relative;
   /* border: 1px solid #000; */
 }
 
 .placehold-text:before {
-  content: '@naver.com';
-  position: absolute;
-  /*before은 inline 요소이기 때문에 span으로 감싸줌 */
+  content: "@naver.com";
+  position: absolute; /*before은 inline 요소이기 때문에 span으로 감싸줌 */
   right: 20px;
   top: 13px;
-  pointer-events: none;
-  /*자체가 가지고 있는 pointer event 를 없애준다 */
+  pointer-events: none; /*자체가 가지고 있는 pointer event 를 없애준다 */
 }
 
 .userpw {

@@ -251,7 +251,7 @@ export default {
       });
 
       var infowindow = new kakao.maps.InfoWindow({
-        content: `<div style="padding:5px;">${restaurant.restName}</div>`,
+        content: `<div style="text-align: center; padding:5px;">${restaurant.restName}</div>`,
       });
 
       kakao.maps.event.addListener(marker, "click", () => {

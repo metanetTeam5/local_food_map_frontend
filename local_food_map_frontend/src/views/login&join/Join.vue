@@ -176,7 +176,9 @@
             </tr>
           </table>
         </div>
-        <div class="create">
+        
+      </div>
+      <div class="create">
           <input
             class="but4"
             type="button"
@@ -185,7 +187,6 @@
           />
           <input class="but3" type="reset" value="가입취소" />
         </div>
-      </div>
     </form>
   </div>
 </template>
@@ -402,6 +403,8 @@ export default {
 </script>
 
 <style scoped>
+
+
 .join-form {
   margin-top: 100px; /* 헤더의 높이에 따라 조절 */
 }
